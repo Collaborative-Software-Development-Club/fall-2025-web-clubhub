@@ -28,5 +28,14 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.8",
     "typescript": "^5"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "printWidth": 80,
+    "singleQuote": false,
+    "jsxSingleQuote": false,
+    "semi": true,
+    "trailingComma": "all",
+    "tabWidth": 4
   }
 }
