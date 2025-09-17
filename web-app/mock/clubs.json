@@ -1,0 +1,227 @@
+[
+    {
+        "Club Name": "Collaborative Software Development Club",
+        "Campus": "Columbus",
+        "Status": "Pending",
+        "Purpose Statement": "This organization will provide a platform for students to collaborate on software projects independent of the OSU curriculum for the purpose of experience and portfolio-building. Meetings will be held every week; members will present their progress on current projects before splitting up into project groups. While some coding experience is recommended, we will accept members of all skill levels.",
+        "Leaders": {
+            "Primary Leader": "Samuel Baccei",
+            "Secondary Leader": "Lorenzo Di Francesco Mion",
+            "Treasurer Leader": "Tristan Leedy"
+        },
+        "Advisors": {
+            "Advisor": "Timothy Carpenter",
+            "Co-Advisor": "Jeremy Morris"
+        },
+        "Contact Information": {
+            "Organization Email": [
+                "csdcosu@gmail.com",
+                "ENG-collabsoftwareclub@osu.edu"
+            ],
+            "Instagram": "https://www.instagram.com/csdosu/",
+            "Other": "https://www.linkedin.com/groups/14285824/",
+            "Website": "https://www.csdclub.tech/"
+        },
+        "Categories": {
+            "Primary Type": "Technology",
+            "Secondary Types": "Special Interest"
+        },
+        "Make Up": "Undergraduate",
+        "Meeting Information": {
+            "Meeting Time and Place": "Wednesday, 6:00-7:30pm, Friday 6:00pm-7:30pm, 2009 Millikin Road, Columbus, OH 43210"
+        },
+        "Office Location": "1739 N. High Street, Columbus, OH 43210",
+        "Membership Details": {
+            "Membership Type": "Open Membership",
+            "Membership Contact": "Join our discord at https://discord.gg/ZU8fCvceQJ",
+            "Time of Year for New Membership": "Students can become members at any time of the year.",
+            "How does a Prospective Member Apply": "No applications needed! Join our discord at https://discord.gg/ZU8fCvceQJ",
+            "Charge Dues": "No"
+        }
+    },
+    {
+        "Club Name": "Buckeye FinTech",
+        "Campus": "Columbus",
+        "Status": "Active I",
+        "Purpose Statement": "Buckeye FinTech is dedicated to fostering a community of students who are interested in exploring the field of financial technology. Our mission is to empower members by providing them with practical skills and knowledge through interactive workshops, networking events, and collaborative projects. We aim to bridge the fields of finance and technology in order to contribute meaningful insights to the FinTech ecosystem.",
+        "Leaders": {
+            "Primary Leader": "Prajval Kesireddy",
+            "Secondary Leader": "Gowrish Rajagopal",
+            "Treasurer Leader": "Samuel Berlin"
+        },
+        "Advisors": {
+            "Advisor": "Taner Pirim"
+        },
+        "Contact Information": {
+            "Organization Email": "buckeyefintech@gmail.com",
+            "Instagram": "https://www.instagram.com/buckeyefintech/",
+            "Other": "https://www.linkedin.com/company/buckeye-fintech/",
+            "Website": "https://www.buckeyefintech.org/"
+        },
+        "Categories": {
+            "Primary Type": "Academic/College",
+            "Secondary Types": ["Special Interest", "Technology"]
+        },
+        "Make Up": "Undergraduate",
+        "Constitution": "2025_03_03_12_15_23_8323.pdf",
+        "Meeting Information": {
+            "Meeting Time and Place": "Wednesdays bi-weekly 7:30-8:30, Columbus, OH 43210"
+        },
+        "Office Location": "1739 N. High Street, Columbus, OH 43210",
+        "Membership Details": {
+            "Membership Type": "Open Membership",
+            "Membership Contact": "Not Listed",
+            "Time of Year for New Membership": "Not Listed",
+            "How does a Prospective Member Apply": "Not Listed",
+            "Charge Dues": "No"
+        }
+    },
+    {
+        "Club Name": "Artificial Intelligence Club",
+        "Campus": "Columbus",
+        "Status": "Active - Established",
+        "Purpose Statement": "Our purpose is to facilitate discussion, learning, and interest in the field of artificial intelligence, organize AI experts and researchers to present their findings and thoughts to educate students, to build and assist others with projects related to artificial intelligence, and to connect students with opportunities to do research in this field. Some examples of the events we host include speakers within the field, artificial intelligence technology workshops to teach students how to use and incorporate AI, and more.",
+        "Leaders": {
+            "Primary Leader": "Alexander Fizer",
+            "Secondary Leader": "Kathleen Duffey",
+            "Treasurer Leader": "Aayush Paul"
+        },
+        "Advisors": {
+            "Advisor": "Wei-Lun Chao",
+            "Co-Advisor": "Sachin Kumar"
+        },
+        "Contact Information": {
+            "Organization Email": "osuaiclub@gmail.com",
+            "Instagram": "https://www.instagram.com/ohiostateaiclub/",
+            "Other": "https://www.linkedin.com/company/artificial-intelligence-club/",
+            "Website": "https://www.osuaiclub.com/"
+        },
+        "Categories": {
+            "Primary Type": "Academic/College",
+            "Secondary Types": [
+                "Academic/College",
+                "Special Interest",
+                "Technology"
+            ]
+        },
+        "Make Up": "Undergraduate",
+        "Constitution": "2025_04_21_04_55_13_5904.pdf",
+        "Meeting Information": {
+            "Meeting Time and Place": "Every Tuesday 6-7pm @ Hitchcock 035, Columbus, OH 43210"
+        },
+        "Office Location": "395 Dreese Laboratory, 2015 Neil Avenue, Columbus, OH 43210",
+        "Membership Details": {
+            "Membership Type": "Open Membership",
+            "Membership Contact": "For questions, contact osuaiclub@gmail.com",
+            "Time of Year for New Membership": "New members are welcome at every meeting. Come to meetings to learn more about the perks of being an official Active Member!",
+            "How does a Prospective Member Apply": "No application/selection process. Just come to our weekly meetings and events! WWednesday 7-8pm @ Baker Systems 198 or Zoom. Registration Form: https://go.osu.edu/aiclubnew Slack: https://go.osu.edu/aiclubslack Newsletter: https://go.osu.edu/aiclub",
+            "Charge Dues": "No"
+        }
+    },
+    {
+        "Club Name": "The AutoDrive Challenge Team at The Ohio State University",
+        "Campus": "Columbus",
+        "Status": "Pending",
+        "Purpose Statement": "Ever wonder how an Autonomous Vehicle works? How engineers ensure that the vehicle makes the right decisions? Want to get exposure into this new and exciting space? The Buckeye AutoDrive team at The Ohio State University is one of ten collegiate motorsport teams in North America taking part in the SAE/GM AutoDrive Challenge II. Over the course of 5 years, we are tasked with converting a 2022 Chevy Bolt EUV into a fully autonomous (Level 4) vehicle. We bring students from various disciplines (Computer Science, Electrical Engineering, Mechanical Engineering, and other majors) to achieve this feat.",
+        "Leaders": {
+            "Primary Leader": "David Allen",
+            "Secondary Leader": "Derin Durak",
+            "Treasurer Leader": "Gowrav Mannem"
+        },
+        "Advisors": {
+            "Advisor": "Qadeer Ahmed",
+            "Co-Advisor": "Lisa Fiorentini"
+        },
+        "Contact Information": {
+            "Instagram": "https://www.instagram.com/buckeyeautodrive/",
+            "Website": "https://sites.google.com/view/buckeyeautodrive/home"
+        },
+        "Categories": {
+            "Primary Type": "Academic/College",
+            "Secondary Types": ["Technology"]
+        },
+        "Make Up": "Undergraduate",
+        "Meeting Information": {
+            "Meeting Time and Place": "Sundays 1:30 to 4:30pm, 930 Kinnear Road, Columbus, OH 43210"
+        },
+        "Office Location": "930 Kinnear Road, Columbus, OH 43210",
+        "Membership Details": {
+            "Membership Type": "Application/Selection Process",
+            "Membership Contact": "If you are interested in joining the team, please contact Gowrav Mannem (Lead Project Manager) at mannem.3@osu.edu or Shreya Rawale (Sr. Project Manager) at rawale.5@osu.edu.",
+            "Time of Year for New Membership": "We are open to onboard new team members throughout the academic year. However, we primarily focus on onboarding during the first 3 weeks of the Autumn Semester.",
+            "How does a Prospective Member Apply": "New team members will go through 2 onboarding sessions to learn how the team and vehicle functions. After this, students will be asked to pick open positions on the team that match their interests. Team Leaders will try their best to place members into the role they are interested while ensuring the entire team is staffed appropriately. Students will then undergo 4-6 weeks of training, After this, they are officially a member of the team.",
+            "Charge Dues": "No"
+        }
+    },
+    {
+        "Club Name": "Big Data and Analytics Association",
+        "Campus": "Columbus",
+        "Status": "Active - Established",
+        "Purpose Statement": "We aim to inspire students to think analytically, empower them through hands on training, and connect them to potential employers.",
+        "Leaders": {
+            "Primary Leader": "Suvan Dommeti",
+            "Secondary Leader": "Pratty Giriraj",
+            "Treasurer Leader": "Rohan Mawalkar"
+        },
+        "Advisors": {
+            "Advisor": "Ralph Greco"
+        },
+        "Contact Information": {
+            "Organization Email": "ohiostatebdaa@gmail.com",
+            "Instagram": "https://www.instagram.com/bdaaosu/",
+            "Website": "http://bdaaosu.org"
+        },
+        "Categories": {
+            "Primary Type": "Technology",
+            "Secondary Types": ["Special Interest", "Academic/College"]
+        },
+        "Make Up": "Undergraduate",
+        "Constitution": "2022_04_05_03_03_31_5145.docx",
+        "Meeting Information": {
+            "Meeting Time and Place": "Tuesdays at 7:30pm, 1760 Neil Ave Columbus, OH 43210, Columbus, OH 43210"
+        },
+        "Office Location": "1760 Neil Ave, Columbus, OH 43210, Columbus, OH 43210",
+        "Membership Details": {
+            "Membership Type": "Open Membership",
+            "Membership Contact": "bdaaosu.org",
+            "Time of Year for New Membership": "Meetings are always open to new members",
+            "How does a Prospective Member Apply": "Our meetings are open to everyone",
+            "Charge Dues": "No"
+        }
+    },
+    {
+        "Club Name": "Baseball - Sport Club",
+        "Campus": "Columbus",
+        "Status": "Pending",
+        "Purpose Statement": "The Sport Club program is designed to serve individual interests in different sports and recreational activities. Participation in the program enhances and promotes the element of good sportsmanship, the development of skills, the well-being derived from physical activity, and the social aspect within each sport. If competition is desired, opportunities exist in varying degrees within individual clubs.",
+        "Leaders": {
+            "Primary Leader": "Connor Breneman",
+            "Secondary Leader": "Adam Knaak",
+            "Treasurer Leader": "Logan Adams"
+        },
+        "Advisors": {
+            "Advisor": "Jason Goodman"
+        },
+        "Contact Information": {
+            "Organization Email": "baseballclub@osu.edu",
+            "Facebook Group Page": "https://www.facebook.com/osuclubbaseball/?fref=ts",
+            "Website": "https://www.osuclubbaseball.org"
+        },
+        "Categories": {
+            "Primary Type": "Sports and Recreation",
+            "Secondary Types": ["Academic/College"]
+        },
+        "Make Up": "Undergraduate",
+        "Meeting Information": {
+            "Meeting Time and Place": "W 7:30 PM-10:00 PM Su 10:00 AM-12:00 PM, 855 Woody Hayes Drive, Columbus, OH 43210, Columbus, OH 43210"
+        },
+        "Office Location": "337 West 17th Avenue, Columbus, OH 43201",
+        "Membership Details": {
+            "Membership Type": "Application/Selection Process",
+            "Membership Contact": "Baseballclub@osu.edu; gray.1473@osu.edu",
+            "Time of Year for New Membership": "Must attend tryouts at the beginning of the fall semester or request private tryout.",
+            "How does a Prospective Member Apply": "Tryouts will be held in the Fall shortly following the start of school.",
+            "Charge Dues": "Yes"
+        }
+    }
+]
