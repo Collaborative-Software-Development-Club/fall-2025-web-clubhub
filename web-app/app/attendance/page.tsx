@@ -1,7 +1,7 @@
 import { mockAttendance } from "@/data/sample-attendance";
 import { StudentRow } from "@/components/StudentRow";
 
-export default function Attendance() {
+export default function AttendancePage() {
     const code = "0000";
     const meeting_date = "Sept. 24, 2025";
 
