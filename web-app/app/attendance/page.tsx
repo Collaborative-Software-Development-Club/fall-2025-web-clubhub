@@ -1,5 +1,5 @@
 import { mockAttendance } from "@/data/sample-attendance";
-import { StudentRow } from "@/components/StudentRow";
+import { StudentRow } from "@/components/attendance/StudentRow";
 
 export default function AttendancePage() {
     const code = "0000";
