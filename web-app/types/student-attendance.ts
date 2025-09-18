@@ -1,7 +1,9 @@
+export type AttendanceStatus = "present" | "absent" | "late" | "no-response";
+
 export interface StudentProps {
     name: string;
     dotNumber: string;
-    status: "present" | "absent" | "late" | "no-response";
+    status: AttendanceStatus;
     timestamp: string | null;
     streak: number;
 }
