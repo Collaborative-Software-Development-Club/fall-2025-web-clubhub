@@ -16,7 +16,7 @@ const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
                 };
             case "late":
                 return {
-                    variant: "secondary" as const,
+                    variant: "default" as const,
                     text: "Late",
                     className: "bg-yellow-500 text-white",
                     icon: <Clock size={14} />
@@ -70,7 +70,7 @@ export function StudentRow({
             <div className="flex items-center gap-6">
                 <StatusBadge status={status} />
                 <p className="text-sm text-gray-600">{timestamp ?? "--:--"}</p>
-                <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-200">
+                <Badge variant="default" className="bg-orange-100 text-orange-700 border-orange-200">
                     <Flame size={14} />
                     {streak}
                 </Badge>
