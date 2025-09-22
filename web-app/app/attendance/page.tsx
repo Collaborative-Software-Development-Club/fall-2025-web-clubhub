@@ -16,6 +16,7 @@ export default function AttendancePage() {
             <div className="w-full space-y-4">
                 {mockAttendance
                     .filter((student) => student.status != "no-response")
+                    .sort((a, b) => (b.timestamp ?? "").localeCompare(a.timestamp ?? ""))
                     .map((student) => (
                         <StudentRow key={student.dotNumber} {...student} />
                     ))}
