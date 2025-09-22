@@ -62,7 +62,7 @@ export function StudentRow({
 }: StudentProps) {
     return (
         <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-baseline gap-2">
                 <p className="font-medium">{name}</p>
                 <p className="text-sm text-gray-400">{dotNumber}</p>
             </div>
