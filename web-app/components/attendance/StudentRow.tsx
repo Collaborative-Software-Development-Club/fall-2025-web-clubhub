@@ -2,7 +2,7 @@
 
 import { AttendanceStatus, StudentProps } from "@/types/student-attendance";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Clock, XCircle, HelpCircle } from "lucide-react";
+import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
 
 const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
     const getVariantAndText = (status: AttendanceStatus) => {
@@ -70,7 +70,10 @@ export function StudentRow({
             <div className="flex items-center gap-6">
                 <StatusBadge status={status} />
                 <p className="text-sm text-gray-600">{timestamp ?? "--:--"}</p>
-                <p className="text-sm text-gray-600">🔥 {streak}</p>
+                <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-200">
+                    <Flame size={14} />
+                    {streak}
+                </Badge>
             </div>
         </div>
     );
