@@ -2,7 +2,7 @@
 
 import { SignInButton, SignOutButton, SignUpButton } from "@clerk/nextjs";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
     return (
@@ -46,9 +46,9 @@ function Content() {
       <header className="w-full flex items-center justify-between py-4">
         <h1 className="text-2xl font-semibold">ClubHub</h1>
         <nav className="flex items-center gap-4">
-          <a href="/attendance" className="text-blue-600 hover:underline">
+          <Link href="/attendance" className="text-blue-600 hover:underline">
             Attendance
-          </a>
+          </Link>
           <SignOutButton>
             <button className="bg-foreground text-background px-3 py-1 rounded-md">
               Sign out
