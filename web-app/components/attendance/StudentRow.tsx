@@ -4,55 +4,6 @@ import { AttendanceStatus, StudentProps } from "@/types/student-attendance";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
 
-const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
-    const getVariantAndText = (status: AttendanceStatus) => {
-        switch (status) {
-            case "present":
-                return {
-                    variant: "default" as const,
-                    text: "Present",
-                    className: "bg-green-500 text-white",
-                    icon: <CheckCircle size={14} />
-                };
-            case "late":
-                return {
-                    variant: "default" as const,
-                    text: "Late",
-                    className: "bg-yellow-500 text-white",
-                    icon: <Clock size={14} />
-                };
-            case "absent":
-                return {
-                    variant: "destructive" as const,
-                    text: "Absent",
-                    icon: <XCircle size={14} />
-                };
-            case "no-response":
-                return {
-                    variant: "outline" as const,
-                    text: "No Response",
-                    className: "text-gray-500",
-                    icon: <HelpCircle size={14} />
-                };
-            default:
-                return {
-                    variant: "outline" as const,
-                    text: "Unknown",
-                    icon: <HelpCircle size={14} />
-                };
-        }
-    };
-
-    const { variant, text, className, icon } = getVariantAndText(status);
-
-    return (
-        <Badge variant={variant} className={className}>
-            {icon}
-            {text}
-        </Badge>
-    );
-}
-
 export function StudentRow({
     name,
     dotNumber,
@@ -78,3 +29,42 @@ export function StudentRow({
         </div>
     );
 }
+
+const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
+    const statusConfig = {
+        present: {
+            variant: "default" as const,
+            text: "Present",
+            className: "bg-green-500 text-white",
+            icon: <CheckCircle size={14} />,
+        },
+        late: {
+            variant: "default" as const,
+            text: "Late",
+            className: "bg-yellow-500 text-white",
+            icon: <Clock size={14} />,
+        },
+        absent: {
+            variant: "destructive" as const,
+            text: "Absent",
+            icon: <XCircle size={14} />,
+        },
+        "no-response": {
+            variant: "outline" as const,
+            text: "No Response",
+            className: "text-gray-500",
+            icon: <HelpCircle size={14} />,
+        },
+    }[status] || {
+        variant: "outline" as const,
+        text: "Unknown",
+        icon: <HelpCircle size={14} />,
+    };
+
+    return (
+        <Badge variant={statusConfig.variant} className={statusConfig.className}>
+            {statusConfig.icon}
+            {statusConfig.text}
+        </Badge>
+    );
+};
