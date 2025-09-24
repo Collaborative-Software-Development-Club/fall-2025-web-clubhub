@@ -58,4 +58,11 @@ export const mockAttendance: StudentProps[] = [
         timestamp: null,
         streak: 0,
     },
+    {
+        name: "Charlie Campbell",
+        dotNumber: "Campbell.2899",
+        status: "late",
+        timestamp: "10:01",
+        streak: 9,
+    },
 ];
