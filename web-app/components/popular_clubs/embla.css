@@ -1,0 +1,33 @@
+/* Carousel Styling */
+/* TODO: figure out how many slides we want to display on the screen */
+.embla {
+    width: 100%;
+    margin: auto;
+    --slide-height: 10rem;
+    --slide-spacing: 0.5rem;
+    --slide-size: 300px;
+    --detail-medium-contrast: #ccc;
+    padding-inline: 0.5rem;
+}
+.embla__viewport {
+    overflow: hidden;
+}
+.embla__container {
+    display: flex;
+    touch-action: pan-y pinch-zoom;
+    margin-left: calc(var(--slide-spacing) * -1);
+}
+.embla__slide {
+    transform: translate3d(0, 0, 0);
+    flex: 0 0 var(--slide-size);
+    min-width: 0;
+    padding-left: var(--slide-spacing);
+}
+
+/* Slide Styling */
+.embla__slide > * {
+    height: 100%;
+    border-radius: 0.5rem;
+    border-color: lightgray;
+    border-width: 4;
+}
