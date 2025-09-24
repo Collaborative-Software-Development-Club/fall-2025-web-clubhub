@@ -32,7 +32,8 @@ export default function RootLayout({
                     <h1>Site Header</h1>
                     <nav>
                         <Link href="/">Home</Link> |{" "}
-                        <Link href="/attendance">Attendance</Link>
+                        <Link href="/attendance">Attendance</Link> |{" "}
+                        <Link href="/browse">Browse</Link>
                     </nav>
                 </header>
                 <main>{children}</main>{" "}
