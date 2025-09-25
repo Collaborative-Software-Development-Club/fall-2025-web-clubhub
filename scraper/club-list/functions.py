@@ -62,6 +62,8 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
 
     rows = table.find_all('tr')[1:]  # skip header row
 
+    i = 0
+
     for row in rows:
         cols = row.find_all('td')
         if len(cols) != 3:
@@ -80,8 +82,13 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
         # Search subpage for more information
         subpage_dict = get_subpage_info(page_url=url)
         
+        #debug line 
+        print("Retrived club " + name)
 
 
+        if (i == 10): 
+            break 
+        i += 1
         clubs.append(
             Club(
                 name=name,
@@ -115,6 +122,8 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
 
             )
         )
+
+    
     return clubs
 
 def get_subpage_info(page_url: str, base_url: Union[str, None] = None):
@@ -156,8 +165,9 @@ def get_subpage_info(page_url: str, base_url: Union[str, None] = None):
     for row in rows: 
         # get all tds 
         row_name = row.find("th").text.split(":")[0].lower().replace("\n", "")
-        row_value = row.find("td").text.lstrip()
+        row_value = row.find("td").text.lstrip().replace("\n", "").replace("\r", "")
         info_dict[row_name] = row_value
+    
 
         
     return info_dict
