@@ -240,6 +240,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=d5eb65a4-d50e-4e48-9d79-48cc423dad3b&v=list&c=Columbus&page=0"
     },
     {
+        "name": "AI in Medicine Interest Group",
+        "purpose_statement": "The AI in Medicine Interest Group is dedicated to exploring how artificial intelligence is changing the field of medicine and healthcare. Ou...",
+        "affiliation": "Columbus",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=9f86600b-6ee6-467a-9035-5ac490a26bd6&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "Aikido Club at Ohio State",
         "purpose_statement": "The Sport Club program is designed to serve individual interests in different sports and recreational activities. Participation in the progr...",
         "affiliation": "Columbus, Sports and Recreation, Ethnic/Cultural, Special Interest,",
@@ -654,16 +660,16 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=d6b5f6f8-4fd3-4149-8a39-2e8f9cf44937&v=list&c=Columbus&page=0"
     },
     {
-        "name": "Animal Welfare and Behavior Club",
-        "purpose_statement": "To educate and promote animal welfare science to the University and greater community.",
-        "affiliation": "Columbus, Academic/College, Awareness/Activism, Special Interest",
-        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=bd0f7cd6-ecee-496a-bb0b-193844b82766&v=list&c=Columbus&page=0"
-    },
-    {
         "name": "Animation Club at The Ohio State University",
         "purpose_statement": "To sponsor educational workshops, collaborate on creative projects, and enjoy animation in its limitless forms.",
         "affiliation": "Columbus, Creative and Performing Arts, Technology, Media, Journalism, and Creative Writing,",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=73f11888-9788-40d2-9cb7-3187664556f6&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "Applied Sports Psychology & Performance Club",
+        "purpose_statement": "The Applied Sports Psychology & Performance Club exists to create a network of students passionate about sports psychology, coaching, and pe...",
+        "affiliation": "Columbus, Special Interest, Academic/College, Sports and Recreation",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=04ff3623-8d78-424a-bc4a-888a12c5b476&v=list&c=Columbus&page=0"
     },
     {
         "name": "Arab Dental Society",
@@ -832,6 +838,12 @@
         "purpose_statement": "AAM-OSU’s aim is to eradicate misconceptions about Islam, to show a good example of a Muslim’s demeanor, and to show a good example of Islam...",
         "affiliation": "Columbus, Religious/Spiritual, Awareness/Activism, Community Service/Service Learning, Special Interest",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=1e1421eb-809d-4dca-a9d8-59551bbad6d0&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "The Assembly Club",
+        "purpose_statement": "By uniting students with diverse interests across low-level systems, emerging AI practices, and ethical computing, the Assembly Club seeks n...",
+        "affiliation": "Columbus, Technology, Academic/College, Special Interest",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=8e6e14d9-1684-465d-8de5-de3b12e6ec65&v=list&c=Columbus&page=0"
     },
     {
         "name": "Associated Press Sports Editors",
@@ -1165,8 +1177,8 @@
     },
     {
         "name": "Bite Right",
-        "purpose_statement": "Bite Right a student organization that explores how nutrition connects to oral, mental and physical health. Our mission is to make healthy c...",
-        "affiliation": "Columbus, Community Service/Service Learning, Creative and Performing Arts, Special Interest",
+        "purpose_statement": "Bite Right a student organization that explores how nutrition connects to all aspects of health (mental, physical, oral, etc). Our mission i...",
+        "affiliation": "Columbus, Community Service/Service Learning, Special Interest, Awareness/Activism,",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=487ab8eb-827a-4242-b943-d5eee53b7962&v=list&c=Columbus&page=0"
     },
     {
@@ -1598,7 +1610,7 @@
     {
         "name": "Buckeye Engineering Buddies",
         "purpose_statement": "Buckeye Engineering Buddies is focused on empowering young individuals with disabilities to use Engineering and STEM principles and skills i...",
-        "affiliation": "Columbus",
+        "affiliation": "Columbus, Awareness/Activism, Academic/College, Community Service/Service Learning",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=64a3ef30-7182-4f6a-8731-3fe9b0e221dc&v=list&c=Columbus&page=0"
     },
     {
@@ -1738,6 +1750,12 @@
         "purpose_statement": "We represent Ohio State's chapter of Precious Plastic, an international organization committed to addressing the escalating issue of plastic...",
         "affiliation": "Columbus, Awareness/Activism, Academic/College, Community Service/Service Learning, Technology",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=c5c60505-5728-48c9-9cb3-a05aa6e58ecf&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "Buckeye Product Management Club",
+        "purpose_statement": "The Buckeye Product Management Club aims to equip Ohio State students with the knowledge, skills, and experiences needed to explore and purs...",
+        "affiliation": "Columbus, Academic/College, Special Interest, Technology",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=748b3c6c-0ecb-477b-a6ff-250d1c083c64&v=list&c=Columbus&page=0"
     },
     {
         "name": "Buckeye Professional Advancement and Development",
@@ -2356,6 +2374,12 @@
         "purpose_statement": "To build a platform for psychology students and students who interested in psychology to discuss academic knowledge, to find opportunities f...",
         "affiliation": "Columbus, Academic/College, Community Service/Service Learning, Ethnic/Cultural",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=0c5ad8c4-d6f2-450b-803a-af1c34c3320e&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "Chinese Students and Scholars Society",
+        "purpose_statement": "Chinese Students & Scholars Society aimes at promoting the diversity of the Ohio State University. \nThe initial goal of CSSS is to build a b...",
+        "affiliation": "Columbus, Ethnic/Cultural, Academic/College, Sports and Recreation, Governance Organizations",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=065f558e-43d8-4170-86ec-81cd49b347ba&v=list&c=Columbus&page=0"
     },
     {
         "name": "Chinese TCG Club at Ohio State",
@@ -4050,6 +4074,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=115f88bc-8baa-402a-b827-21cd6a5243e0&v=list&c=Columbus&page=0"
     },
     {
+        "name": "Frassati at Ohio State",
+        "purpose_statement": "Frassati at Ohio State is a Christ-centered mountaineering and outdoor adventure club dedicated to forming great saints in the likeness of S...",
+        "affiliation": "Columbus, Religious/Spiritual, Special Interest, Sports and Recreation",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=ca72a821-f8ac-4747-8db5-bade31d1e8d3&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "French and Italian Graduate Student Association",
         "purpose_statement": "The purpose of FIGSA is: \nA) to develop in its members an understanding of the organization and functioning of the Department of French and ...",
         "affiliation": "Columbus, Academic/College, Ethnic/Cultural,",
@@ -4560,12 +4590,6 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=af2b32cc-229f-4018-92c8-2e668ac3efbd&v=list&c=Columbus&page=0"
     },
     {
-        "name": "HARVEST",
-        "purpose_statement": "N/A",
-        "affiliation": "Columbus, Community Service/Service Learning, Awareness/Activism",
-        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=9ceb7fec-8b09-4bf5-b033-5befa91c044f&v=list&c=Columbus&page=0"
-    },
-    {
         "name": "Health Advocates for Volunteering, Education, and Networking",
         "purpose_statement": "HAVEN's purpose is to serve as a bridge between the academic aspirations of pre-health students and the real-world healthcare, biotechnology...",
         "affiliation": "Columbus, Community Service/Service Learning",
@@ -4628,7 +4652,7 @@
     {
         "name": "Help Save The Next Girl Chapter at The Ohio State University",
         "purpose_statement": "Our mission is to foster a safe, supportive, and empowering community dedicated to raising awareness of predatory behavior, preventing explo...",
-        "affiliation": "Columbus",
+        "affiliation": "Columbus, Awareness/Activism, Special Interest",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=f36de4c4-623a-4482-94eb-c3b3df86084e&v=list&c=Columbus&page=0"
     },
     {
@@ -4966,6 +4990,12 @@
         "purpose_statement": "The IBE Program teaches technical skills and problem solving through an interdisciplinary approach while emphasizing creativity, innovation,...",
         "affiliation": "Columbus, Academic/College, Honoraries/Honor Societies",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=3a646315-dbc5-4373-8c44-d63327ca886a&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "Integrative health society",
+        "purpose_statement": "This group exists to promote medical student awareness of complementary and alternative medicine (CAM) beyond what is normally taught in the...",
+        "affiliation": "Columbus, Academic/College, Special Interest",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=68ed5f89-2b71-4b85-b888-e67fc29ae891&v=list&c=Columbus&page=0"
     },
     {
         "name": "Integrity Advocates Club at Ohio State",
@@ -6032,7 +6062,7 @@
     {
         "name": "Minorities in Agriculture, Natural Resources, and Related Sciences",
         "purpose_statement": "MANRRS is the premier worldwide organization, partnered with academia,\ngovernmental agencies and industry, dedicated to career, personal and...",
-        "affiliation": "Columbus, Academic/College, Community Service/Service Learning, Ethnic/Cultural",
+        "affiliation": "Columbus, Ethnic/Cultural, Academic/College, Community Service/Service Learning,",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=9af78517-9da2-4b8f-97a9-3b21420b6f08&v=list&c=Columbus&page=0"
     },
     {
@@ -6126,6 +6156,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=ade83d2f-08b6-4cb5-be8d-747934eba775&v=list&c=Columbus&page=0"
     },
     {
+        "name": "Momentum Mentorship Program",
+        "purpose_statement": "Our mission is to increase retention and success in the undergraduate physics program at Ohio State by providing support and mentorship thro...",
+        "affiliation": "Columbus",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=34b15c78-fa77-4507-ab1d-7db8aea054f5&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "Moritz College of Law Criminal Law Society",
         "purpose_statement": "The purpose of the Criminal Law Society is to provide law students at the Ohio State University Moritz College of Law with an apolitical for...",
         "affiliation": "Columbus, Academic/College, Special Interest, Awareness/Activism",
@@ -6206,7 +6242,7 @@
     {
         "name": "Mu Sigma Lambda",
         "purpose_statement": "Our goal is to create a collaborative environment where students can bridge the gap between education and the sports industry. We achieve th...",
-        "affiliation": "Columbus",
+        "affiliation": "Columbus, Special Interest",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=a56c135e-10cb-4dbc-938c-729be1010ada&v=list&c=Columbus&page=0"
     },
     {
@@ -6745,7 +6781,7 @@
     },
     {
         "name": "The One Piece Club",
-        "purpose_statement": "Our goal is to unite the students of Ohio State through our shared love for the One Piece manga, anime, and card game. We want people who ar...",
+        "purpose_statement": "Our goal is to unite the students of Ohio State through our shared love for the One Piece manga, show, and card game. We want people who are...",
         "affiliation": "Columbus, Special Interest",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=f6627230-a711-4bce-844a-43872dd6c12b&v=list&c=Columbus&page=0"
     },
@@ -6766,6 +6802,12 @@
         "purpose_statement": "In a world where technology increases its reach into our personal lives, encroaching on our privacy, accessibility, and even our democracy, ...",
         "affiliation": "Columbus, Special Interest, Awareness/Activism, Technology,",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=30595cbe-7de3-4055-ae7e-c4c5ac77c29f&v=list&c=Columbus&page=0"
+    },
+    {
+        "name": "Open Source Processor Chip Design Club",
+        "purpose_statement": "The Open Source Processor Chip Design Club at The Ohio State University exists to foster hands-on learning, research, and collaboration in t...",
+        "affiliation": "Columbus",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=374e450f-09ec-4c3d-b79a-1572df8de65e&v=list&c=Columbus&page=0"
     },
     {
         "name": "Operation Smile Club at The Ohio State University",
@@ -7794,6 +7836,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=07063e26-c4b4-4ebb-b21e-c69037100894&v=list&c=Columbus&page=0"
     },
     {
+        "name": "Rapid Risk Managment Club",
+        "purpose_statement": "The Rapid Risk Management Club's goal is to prepare students on how to manage risk in high variance environments, such as day trading, poker...",
+        "affiliation": "Columbus",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=93c3fc6c-cf68-4e42-8b46-1bf01a5c0408&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "Ratio Christi",
         "purpose_statement": "To train Christians in apologetics to defend the Christian worldview.",
         "affiliation": "Columbus, Religious/Spiritual, Academic/College, Special Interest",
@@ -8118,6 +8166,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=d4491570-fc4e-412f-8b47-23270dfa483a&v=list&c=Columbus&page=0"
     },
     {
+        "name": "Scarlet Quantitative Research and Trading",
+        "purpose_statement": "Quant or Quantitative Analysis is a field which now has both critical acclaim and is a desired career of many individuals. The goal of the c...",
+        "affiliation": "Columbus",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=693c0974-b9c9-4f03-abec-26259277a9d3&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "Scarlet Scoops",
         "purpose_statement": "Scarlet Scoops is a club at the Ohio State University dedicated to enjoying and learning about ice cream in a social and relaxed setting. Th...",
         "affiliation": "Columbus, Special Interest",
@@ -8306,7 +8360,7 @@
     {
         "name": "Sigma Epsilon Phi – The Greek and Orthodox Students at The Ohio State University",
         "purpose_statement": "Sigma Epsilon Phi is a co-ed social \"fratority\" that promotes the principles of brotherhood and sisterhood in order to create an outlet for ...",
-        "affiliation": "Columbus, Ethnic/Cultural, Community Service/Service Learning, Religious/Spiritual,",
+        "affiliation": "Columbus, Ethnic/Cultural, Community Service/Service Learning, Religious/Spiritual",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=c2360345-106f-47dd-ba35-74263aaf48da&v=list&c=Columbus&page=0"
     },
     {
@@ -8389,7 +8443,7 @@
     },
     {
         "name": "Ski & Board Team - Sport Club",
-        "purpose_statement": "Alpine Ski and Snowboard Team at the Ohio State University Mission Statement: \n\tThe Alpine Ski and Snowboard Team at the Ohio State Universi...",
+        "purpose_statement": "The Alpine Ski and Snowboard Team at the Ohio State University is a way for snow enthusiasts of all ability levels to enjoy the mountains o...",
         "affiliation": "Columbus, Sports and Recreation, Special Interest,",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=aa510006-4743-491c-8cc5-d4db2a9d678f&v=list&c=Columbus&page=0"
     },
@@ -8964,12 +9018,6 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=c6074e41-4d3f-46a9-b527-065b9f903bae&v=list&c=Columbus&page=0"
     },
     {
-        "name": "Student Life Test Only",
-        "purpose_statement": "SLTS's Test Group Do NOT REMOVE",
-        "affiliation": "Columbus, Social Fraternities/Sororities, Awareness/Activism, Creative and Performing Arts",
-        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=825be603-069a-485d-873b-02d97094c1b5&v=list&c=Columbus&page=0"
-    },
-    {
         "name": "Student Linguistic Association",
         "purpose_statement": "The Student Linguistic Association is an association of graduate students in linguistics.  The association is designed to serve the academic...",
         "affiliation": "Columbus, Academic/College, Governance Organizations",
@@ -9100,12 +9148,6 @@
         "purpose_statement": "To educate the OSU community about the Bhopal Gas Tragedy and work with the survivors to get justice.",
         "affiliation": "Columbus, Awareness/Activism",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=b5ccaeba-0430-4a39-9ce6-3ea1953fe2ac&v=list&c=Columbus&page=0"
-    },
-    {
-        "name": "Students for Integrative Medicine",
-        "purpose_statement": "This group exists to promote medical student awareness of complementary and alternative medicine (CAM) beyond what is normally taught in the...",
-        "affiliation": "Columbus, Academic/College, Special Interest",
-        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=68ed5f89-2b71-4b85-b888-e67fc29ae891&v=list&c=Columbus&page=0"
     },
     {
         "name": "Students for Justice in Palestine",
@@ -10056,6 +10098,12 @@
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=d4019629-5b16-4c67-a313-9bf8193b77d2&v=list&c=Columbus&page=0"
     },
     {
+        "name": "Wellness Society",
+        "purpose_statement": "A wellness community focused on overall holistic health through mindful events, workout classes, & bringing together the community through h...",
+        "affiliation": "Columbus, Special Interest",
+        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=1e866600-7629-44a7-9186-4c56c46353e1&v=list&c=Columbus&page=0"
+    },
+    {
         "name": "Western Sahel Student Association",
         "purpose_statement": "Western Sahel Student Association aims to provide a space where students of Mauritanian, Senegalese, Gambian, Malian, and Guinean descent (W...",
         "affiliation": "Columbus, Ethnic/Cultural, Awareness/Activism",
@@ -10090,12 +10138,6 @@
         "purpose_statement": "The purpose of the WaGMiP is to promote involvement of, career and academic development for, and sense of community among the graduate and u...",
         "affiliation": "Columbus, Academic/College, Awareness/Activism, Special Interest",
         "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=ca59ad70-819d-40b5-b5ad-03ec1ce03e94&v=list&c=Columbus&page=0"
-    },
-    {
-        "name": "Women Founders at The Ohio State University",
-        "purpose_statement": "To create a lifelong network of support and resources for women founders to develop mutually-beneficial relationships, inspire each other, a...",
-        "affiliation": "Columbus, Academic/College, Awareness/Activism, Special Interest",
-        "url": "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?i=84c8b56b-01d3-49ad-82be-52488098c830&v=list&c=Columbus&page=0"
     },
     {
         "name": "Women in Business",
