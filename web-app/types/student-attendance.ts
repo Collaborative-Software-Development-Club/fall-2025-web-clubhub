@@ -6,4 +6,7 @@ export interface StudentProps {
     status: AttendanceStatus;
     timestamp: string | null;
     streak: number;
+    totalMeetings: number;
+    attendanceRate: number; // percentage (0-100)
+    email?: string;
 }

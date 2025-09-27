@@ -8,6 +8,9 @@ export const mockAttendance: StudentProps[] = [
         status: "present",
         timestamp: "10:02",
         streak: 3,
+        totalMeetings: 8,
+        attendanceRate: 87.5,
+        email: "alice.johnson@student.example.edu",
     },
     {
         name: "Bob Smith",
@@ -15,6 +18,9 @@ export const mockAttendance: StudentProps[] = [
         status: "late",
         timestamp: "10:05",
         streak: 1,
+        totalMeetings: 6,
+        attendanceRate: 66.7,
+        email: "bob.smith@student.example.edu",
     },
     {
         name: "Charlie Kim",
@@ -22,6 +28,8 @@ export const mockAttendance: StudentProps[] = [
         status: "absent",
         timestamp: "10:00",
         streak: 0,
+        totalMeetings: 4,
+        attendanceRate: 25.0,
     },
     {
         name: "Diana Lee",
@@ -29,6 +37,9 @@ export const mockAttendance: StudentProps[] = [
         status: "present",
         timestamp: "10:01",
         streak: 5,
+        totalMeetings: 9,
+        attendanceRate: 100.0,
+        email: "diana.lee@student.example.edu",
     },
     {
         name: "Ethan Chen",
@@ -36,6 +47,9 @@ export const mockAttendance: StudentProps[] = [
         status: "no-response",
         timestamp: null,
         streak: 2,
+        totalMeetings: 7,
+        attendanceRate: 71.4,
+        email: "ethan.chen@student.example.edu",
     },
     {
         name: "Fiona Garcia",
@@ -43,6 +57,8 @@ export const mockAttendance: StudentProps[] = [
         status: "late",
         timestamp: "10:02",
         streak: 1,
+        totalMeetings: 5,
+        attendanceRate: 80.0,
     },
     {
         name: "George Patel",
@@ -50,6 +66,9 @@ export const mockAttendance: StudentProps[] = [
         status: "present",
         timestamp: "10:00",
         streak: 4,
+        totalMeetings: 8,
+        attendanceRate: 87.5,
+        email: "george.patel@student.example.edu",
     },
     {
         name: "Hannah Martinez",
@@ -57,5 +76,7 @@ export const mockAttendance: StudentProps[] = [
         status: "no-response",
         timestamp: null,
         streak: 0,
+        totalMeetings: 3,
+        attendanceRate: 33.3,
     },
 ];
