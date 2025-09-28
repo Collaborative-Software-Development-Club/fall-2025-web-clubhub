@@ -25,6 +25,7 @@ import {
     Edit,
 } from "lucide-react";
 import Link from "next/link";
+import { MeetingCard } from "@/components/attendance/MeetingCard";
 
 type Meeting = {
     id: number;
@@ -47,7 +48,7 @@ export default function MeetingsPage() {
         },
     ]);
     const [title, setTitle] = useState(`Meeting #${meetings.length}`);
-    const [date, setDate] = useState<Date | undefined>(undefined);
+    const [date, setDate] = useState<Date | undefined>(new Date(Date.now()));
     const [startTime, setStartTime] = useState<string>("18:00");
     const [endTime, setEndTime] = useState<string>("19:00");
 
@@ -68,12 +69,16 @@ export default function MeetingsPage() {
         setFormOpen(false);
     };
 
+    const editMeeting = (id: number): void => {
+        /* TODO */
+        console.log(`Editing meeting ${id}`);
+    };
     const deleteMeeting = (id: number): void => {
         setMeetings((prev) => prev.filter((m) => m.id !== id));
     };
 
     return (
-        <div className="container mx-auto max-w-xl py-8">
+        <main className="container mx-auto max-w-xl py-8">
             <h1 className="text-3xl font-bold mb-6">Club Meetings</h1>
 
             {/* Create New Meeting Popover */}
@@ -162,57 +167,14 @@ export default function MeetingsPage() {
                     </p>
                 )}
                 {meetings.map((meeting) => (
-                    <Card key={meeting.id}>
-                        <CardHeader className="flex flex-row items-center justify-between">
-                            <div>
-                                <CardTitle className="pb-2">
-                                    {meeting.title}
-                                </CardTitle>
-                                <p className="text-sm text-muted-foreground">
-                                    {format(meeting.date, "PPP")} &middot;{" "}
-                                    {meeting.startTime} - {meeting.endTime}
-                                </p>
-                            </div>
-                            <div className="flex gap-2">
-                                <Button
-                                    className="cursor-pointer"
-                                    variant="link"
-                                >
-                                    <Link href={`/attendance/${meeting.id}`}>
-                                        Take Attendance
-                                    </Link>
-                                </Button>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            className="cursor-pointer"
-                                            variant="ghost"
-                                            size="icon"
-                                        >
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem className="cursor-pointer">
-                                            <Edit className="w-4 h-4 mr-2" />
-                                            Edit
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                                deleteMeeting(meeting.id)
-                                            }
-                                        >
-                                            <Trash2 className="w-4 h-4 mr-2" />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
-                        </CardHeader>
-                    </Card>
+                    <MeetingCard
+                        key={meeting.id}
+                        meeting={meeting}
+                        editMeeting={editMeeting}
+                        deleteMeeting={deleteMeeting}
+                    />
                 ))}
             </div>
-        </div>
+        </main>
     );
 }
