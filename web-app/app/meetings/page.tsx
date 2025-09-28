@@ -63,7 +63,7 @@ export default function MeetingsPage() {
             { id: ID_COUNTER++, title, date, startTime, endTime },
         ]);
         setTitle(`Meeting #${meetings.length + 1}`);
-        setDate(undefined);
+        setDate(new Date(Date.now()));
         setStartTime("18:00");
         setEndTime("19:00");
         setFormOpen(false);
@@ -152,6 +152,7 @@ export default function MeetingsPage() {
                         <Button
                             onClick={addMeeting}
                             className="mt-2 cursor-pointer"
+                            disabled={!title || !date || !startTime || !endTime}
                         >
                             <Plus className="w-4 h-4 mr-2" /> Add Meeting
                         </Button>
