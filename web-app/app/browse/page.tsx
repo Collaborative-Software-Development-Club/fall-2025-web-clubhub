@@ -51,7 +51,6 @@ export default function Browse() {
     const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
     const toggleInterest = (interest: string) => {
-        console.log("toggling interest " + interest);
         setSelectedInterests((prev) =>
             prev.includes(interest)
                 ? prev.filter((i) => i !== interest)
@@ -59,7 +58,6 @@ export default function Browse() {
         );
     };
 
-    console.log(selectedInterests);
     const filteredClubs = clubsData.filter((club) => {
         const matchesSearch = club["Club Name"]
             .toLowerCase()
