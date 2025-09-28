@@ -32,6 +32,8 @@ export default function RootLayout({
                     <h1>Site Header</h1>
                     <nav>
                         <Link href="/">Home</Link> |{" "}
+                        <Link href="/attendance">Attendance</Link> |{" "}
+                        <Link href="/browse">Browse</Link> |{" "}
                         <Link href="/meetings">Meetings</Link> |{" "}
                         <Link href="/clubs/csdc">Sample Club Profile</Link>
                     </nav>
