@@ -11,13 +11,13 @@ export default function AttendanceCodeCard({
     meetingDate,
 }: {
     code: string;
-    meetingDate: string;
+    meetingDate: Date;
 }) {
     return (
         <Card className="flex flex-col md:flex-row items-center gap-8 shadow-md rounded-2xl p-8 mb-14">
             <CardContent className="text-center">
                 <CardTitle className="text-lg mb-2">
-                    {meetingDate} Attendance Code
+                    {meetingDate.toLocaleDateString()}
                 </CardTitle>
                 <p className="text-5xl font-mono font-bold tracking-widest text-blue-600">
                     {code}
