@@ -23,7 +23,12 @@ export default function EditableMultipleText({
     const startEditing = (field: string) => setEditingField(field);
 
     const cancelEditing = () => {
-        setData(initialData); // Reset all data
+        if (editingField !== null) {
+            setData((prev) => ({
+                ...prev,
+                [editingField]: initialData[editingField],
+            }));
+        }
         setEditingField(null);
     };
 
@@ -37,24 +42,15 @@ export default function EditableMultipleText({
         setData((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleKeyDown = (
-        e: React.KeyboardEvent<HTMLTextAreaElement>,
-        field: string,
-    ) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Escape") {
-            setData((prev) => ({ ...prev, [field]: initialData[field] }));
-            setEditingField(null);
+            cancelEditing();
         }
     };
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
         const length = e.target.value.length;
         e.target.setSelectionRange(length, length);
-    };
-
-    const handleBlur = (field: string) => {
-        setData((prev) => ({ ...prev, [field]: initialData[field] }));
-        setEditingField(null);
     };
 
     return (
@@ -73,8 +69,8 @@ export default function EditableMultipleText({
                                 onChange={(e) =>
                                     updateField(field, e.target.value)
                                 }
-                                onKeyDown={(e) => handleKeyDown(e, field)}
-                                onBlur={() => handleBlur(field)}
+                                onKeyDown={(e) => handleKeyDown(e)}
+                                onBlur={() => cancelEditing()}
                                 onFocus={handleFocus}
                                 autoFocus
                                 className="resize-none"
