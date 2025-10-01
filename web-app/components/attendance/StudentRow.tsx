@@ -12,7 +12,7 @@ export function StudentRow({
     streak,
 }: StudentProps) {
     return (
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between bg-white p-1 rounded-lg">
             <div className="flex items-baseline gap-2">
                 <p className="font-medium">{name}</p>
                 <p className="text-sm text-gray-400">{dotNumber}</p>
@@ -25,6 +25,7 @@ export function StudentRow({
                     <Flame size={14} />
                     {streak}
                 </Badge>
+                
             </div>
         </div>
     );

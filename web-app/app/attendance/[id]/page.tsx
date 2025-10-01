@@ -13,7 +13,7 @@ export default function AttendancePage() {
             <AttendanceCodeCard code={code} meetingDate={meetingDate} />
 
             {/* Students who have responded */}
-            <div className="w-full space-y-4">
+            <div className="w-full space-y-4 bg-gray-200 p-4 rounded-lg">
                 {mockAttendance
                     .filter((student) => student.status != "no-response")
                     .sort((a, b) => {
@@ -35,7 +35,7 @@ export default function AttendancePage() {
             </div>
 
             {/* No-response students */}
-            <div className="w-full space-y-4">
+            <div className="w-full space-y-4 bg-gray-200 p-4 rounded-lg">
                 {mockAttendance
                     .filter((student) => student.status == "no-response")
                     .map((student) => (
