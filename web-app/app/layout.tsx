@@ -33,7 +33,6 @@ export default function RootLayout({
                     <nav>
                         <Link href="/">Home</Link> |{" "}
                         <Link href="/attendance">Attendance</Link> |{" "}
-                        <Link href="/popular_clubs">Popular Clubs</Link> |{" "}
                         <Link href="/browse">Browse</Link> |{" "}
                         <Link href="/meetings">Meetings</Link> |{" "}
                         <Link href="/clubs/csdc">Sample Club Profile</Link>

@@ -4,6 +4,32 @@ import ClubCard from "@/components/popular_clubs/ClubCard";
 import ClubCarouselHeader from "@/components/popular_clubs/ClubCarouselHeader";
 
 // Page to show the popular clubs
+
+export function PopularClubsPage(props: PopularClubsPageProps) {
+    const { clubsList = sampleClubsData } = props;
+
+    // Memoize the sorted clubs to avoid recalculating on every render
+    const sortedClubs: Club[] = useMemo(() => {
+        return buildPopularClubs(clubsList).slice(0, 10);
+    }, [clubsList]);
+
+    // These club headers may be customized however needed
+    // (we could generate them as well from the tags maybe)
+    const popularClubPageHeader = "Most Popular Clubs";
+
+    // This could be a grid as well if we want
+    return (
+        <div className="p-6">
+            <ClubCarouselHeader name={popularClubPageHeader} />
+            <ClubCarousel>
+                {sortedClubs.map((club, index) => (
+                    <ClubCard club={club} key={index} />
+                ))}
+            </ClubCarousel>
+        </div>
+    );
+}
+
 /*
 I'm going to assume we will have a club interface/type like this:
 (This is just what I thought of we can have more info too. images ideally)
@@ -27,7 +53,7 @@ type PopularClubsPageProps = {
  * Sorts a list of clubs by their attributes
  * @param clubsList - List of clubs
  * @returns - list of clubs sorted by memberCount -> attendenceRate -> avgAttendence -> alphabetical
- * 
+ *
  * Note: we could do a weighted sort as well
  */
 function buildPopularClubs(clubsList: Club[]) {
@@ -112,28 +138,3 @@ const sampleClubsData: Club[] = [
         isOpen: true,
     },
 ];
-
-export default function PopularClubsPage(props: PopularClubsPageProps) {
-    const { clubsList = sampleClubsData } = props;
-
-    // Memoize the sorted clubs to avoid recalculating on every render
-    const sortedClubs: Club[] = useMemo(() => {
-        return buildPopularClubs(clubsList).slice(0, 10);
-    }, [clubsList]);
-
-    // These club headers may be customized however needed
-    // (we could generate them as well from the tags maybe)
-    const popularClubPageHeader = "Most Popular Clubs";
-
-    // This could be a grid as well if we want
-    return (
-        <>
-            <ClubCarouselHeader name={popularClubPageHeader} />
-            <ClubCarousel>
-                {sortedClubs.map((club, index) => (
-                    <ClubCard club={club} key={index} />
-                ))}
-            </ClubCarousel>
-        </>
-    );
-}
