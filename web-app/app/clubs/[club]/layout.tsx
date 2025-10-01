@@ -2,19 +2,20 @@ import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ClubLeaderLayout({
+export default async function ClubLeaderLayout({
     children,
     params,
 }: {
     children: React.ReactNode;
-    params: { club: string };
+    params: Promise<{ club: string }>;
 }) {
-    const clubId = params.club; // Access the dynamic id(will be actual id when database is set up)
+    const { club } = await params;
+
     const clubData = clubs[0]; //use mock data until we setup the database
 
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
-            <header className="w-full max-w-6xl">
+            <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4">
                     <Image
                         src="/default-club-logo.png"
@@ -44,25 +45,25 @@ export default function ClubLeaderLayout({
                 <div className="w-full max-w-6xl px-4">
                     <nav className="flex gap-6 py-2 border-b border-gray-200">
                         <Link
-                            href={"/clubs/" + clubId}
+                            href={"/clubs/" + club}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Overview
                         </Link>
                         <Link
-                            href={"/clubs/" + clubId + "/members"}
+                            href={"/clubs/" + club + "/members"}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Members
                         </Link>
                         <Link
-                            href={"/clubs/" + clubId + "/attendance"}
+                            href={"/clubs/" + club + "/attendance"}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Attendance
                         </Link>
                         <Link
-                            href={"/clubs/" + clubId + "/contact"}
+                            href={"/clubs/" + club + "/contact"}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Contact Info
@@ -71,7 +72,7 @@ export default function ClubLeaderLayout({
                     </nav>
                 </div>
             </header>
-            <main>{children}</main>
+            <main className="w-full max-w-5xl px-4">{children}</main>
         </div>
     );
 }
