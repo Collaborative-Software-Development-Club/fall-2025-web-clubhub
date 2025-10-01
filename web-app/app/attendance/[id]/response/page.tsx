@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const OTP_LENGTH = 4;
 
@@ -45,7 +46,7 @@ const AttendanceResponsePage = () => {
             { value: "absent", label: "Absent" },
             { value: "excused", label: "Excused" },
         ],
-        []
+        [],
     );
 
     const submitAttendance = useCallback(
@@ -61,13 +62,16 @@ const AttendanceResponsePage = () => {
             setIsLoggingStatus(true);
 
             try {
-                console.log("Submitting attendance", { otp: value, status: "present" });
+                console.log("Submitting attendance", {
+                    otp: value,
+                    status: "present",
+                });
                 setHasCompleted(true);
             } finally {
                 setIsLoggingStatus(false);
             }
         },
-        [hasCompleted, status]
+        [hasCompleted, status],
     );
 
     const handleFormSubmit = useCallback(
@@ -75,7 +79,7 @@ const AttendanceResponsePage = () => {
             event.preventDefault();
             void submitAttendance(otp);
         },
-        [otp, submitAttendance]
+        [otp, submitAttendance],
     );
 
     const handleOtpChange = useCallback((value: string) => {
@@ -87,7 +91,7 @@ const AttendanceResponsePage = () => {
             setOtp(value);
             void submitAttendance(value);
         },
-        [submitAttendance]
+        [submitAttendance],
     );
 
     const handleLogStatus = useCallback(async () => {
@@ -110,18 +114,24 @@ const AttendanceResponsePage = () => {
             {hasCompleted ? (
                 <Card className="w-full max-w-md text-center">
                     <CardHeader className="flex flex-row items-center justify-center gap-3">
-                        <CheckCircle2 className="h-12 w-12 text-emerald-500" aria-hidden />
+                        <CheckCircle2
+                            className="h-12 w-12 text-emerald-500"
+                            aria-hidden
+                        />
                         <CardTitle className="text-xl font-semibold">
                             Attendance recorded
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="text-muted-foreground">
-                        Thanks for checking in. You&apos;re all set for this meeting.
+                        Thanks for checking in. You&apos;re all set for this
+                        meeting.
                     </CardContent>
                 </Card>
             ) : (
                 <>
-                    <h1 className="text-3xl font-bold mb-8">Meeting Placeholder</h1>
+                    <h1 className="text-3xl font-bold mb-8">
+                        Meeting Placeholder
+                    </h1>
 
                     <Card className="w-full max-w-md">
                         <CardHeader className="pb-2">
@@ -152,12 +162,19 @@ const AttendanceResponsePage = () => {
                                         className="mx-auto"
                                     >
                                         <InputOTPGroup className="mt-2 mx-auto">
-                                            {Array.from({ length: OTP_LENGTH }).map((_, index) => (
-                                                <InputOTPSlot key={index} index={index} />
+                                            {Array.from({
+                                                length: OTP_LENGTH,
+                                            }).map((_, index) => (
+                                                <InputOTPSlot
+                                                    key={index}
+                                                    index={index}
+                                                />
                                             ))}
                                         </InputOTPGroup>
                                     </InputOTP>
                                 </div>
+
+                                <Separator />
 
                                 <div className="space-y-2">
                                     <label
@@ -170,10 +187,15 @@ const AttendanceResponsePage = () => {
                                         id="attendance-status"
                                         className="w-full mt-2 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                         value={status}
-                                        onChange={(event) => setStatus(event.target.value)}
+                                        onChange={(event) =>
+                                            setStatus(event.target.value)
+                                        }
                                     >
                                         {statusOptions.map((option) => (
-                                            <option key={option.value} value={option.value}>
+                                            <option
+                                                key={option.value}
+                                                value={option.value}
+                                            >
                                                 {option.label}
                                             </option>
                                         ))}
@@ -185,6 +207,7 @@ const AttendanceResponsePage = () => {
                             <Button
                                 type="button"
                                 className="w-full"
+                                variant={"secondary"}
                                 disabled={isLoggingStatus || hasCompleted}
                                 onClick={() => void handleLogStatus()}
                             >
