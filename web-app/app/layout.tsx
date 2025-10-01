@@ -36,7 +36,7 @@ export default function RootLayout({
                         <Link href="/browse">Browse</Link> |{" "}
                         <Link href="/meetings">Meetings</Link> |{" "}
                         <Link href="/clubs/csdc">Sample Club Profile</Link> |{" "}
-                        <Link href="/userprofile">User Profile</Link>
+                        <Link href="/login">User Profile</Link>
                     </nav>
                 </header>
                 <main>{children}</main>{" "}
