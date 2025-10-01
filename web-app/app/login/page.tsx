@@ -1,15 +1,23 @@
 import Link from "next/link";
 import ClubCard from "@/components/browse/ClubCard";
-// If you have a Browse page component, import it here instead.
+import clubsData from "@/mock/clubs.json";
+
+// Utility to shuffle and pick N random clubs
+function getRandomClubs(clubs, count = 3) {
+    const shuffled = [...clubs].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+}
 
 export default function LoginPage() {
+    const randomClubs = getRandomClubs(clubsData, 3);
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
             {/* Floating panel */}
             <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center mb-12"
                 style={{ minWidth: 320 }}>
                 <h2 className="text-2xl font-bold mb-6">Welcome</h2>
-                <h3 className="text-l font-semibold mb-4"> To access User Profile you must log in.</h3>
+                <h3 className="text-l font-semibold mb-4">To access User Profile you must log in.</h3>
                 <div className="grid grid-cols-3 gap-4 mb-4">
                     {/* Login Button */}
                     <button
@@ -38,12 +46,20 @@ export default function LoginPage() {
             </div>
             {/* Browse page below */}
             <div className="w-full max-w-3xl px-4">
-                {/* Replace below with your actual Browse page component if available */}
                 <h3 className="text-lg font-semibold mb-4">Browse Clubs</h3>
-                {/* Example: Render some ClubCards */}
-                <ClubCard name="Artificial Intelligence Club" interests={["AI", "Machine Learning"]} />
-                <ClubCard name="Buckeye FinTech" interests={["Finance", "Technology"]} />
-                {/* ...add more or map over your clubs data */}
+                <div className="flex flex-col gap-6">
+                    {randomClubs.map((club) => (
+                        <ClubCard
+                            key={club["Club Name"]}
+                            name={club["Club Name"]}
+                            interests={
+                                Array.isArray(club.Categories["Secondary Types"])
+                                    ? club.Categories["Secondary Types"]
+                                    : [club.Categories["Secondary Types"]]
+                            }
+                        />
+                    ))}
+                </div>
             </div>
         </div>
     );
