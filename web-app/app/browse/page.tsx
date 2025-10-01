@@ -19,10 +19,25 @@ const clubsData = mockClubs.map((club, index) => {
           ? [secondaryRaw]
           : [];
 
+    const primaryLeader = club.Leaders?.["Primary Leader"];
+
+    let contact: string | undefined;
+    if (club["Contact Information"]) {
+        const emails = club["Contact Information"]["Organization Email"];
+        if (Array.isArray(emails)) {
+            contact = emails[0];
+        } else if (typeof emails === "string") {
+            contact = emails;
+        }
+    }
+
     return {
         id: index + 1,
-        ...club,
+        name: club["Club Name"],
+        description: club["Purpose Statement"] || "No description available.",
         interests: Array.from(new Set([primary, ...secondary])),
+        leader: primaryLeader,
+        contact,
     };
 });
 
@@ -59,7 +74,7 @@ export default function Browse() {
     };
 
     const filteredClubs = clubsData.filter((club) => {
-        const matchesSearch = club["Club Name"]
+        const matchesSearch = club.name
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
         const matchesInterests =
@@ -109,8 +124,11 @@ export default function Browse() {
                     filteredClubs.map((club) => (
                         <ClubCard
                             key={club.id}
-                            name={club["Club Name"]}
+                            name={club.name}
                             interests={club.interests}
+                            description={club.description}
+                            leader={club.leader} //optional
+                            contact={club.contact}
                         />
                     ))
                 )}
