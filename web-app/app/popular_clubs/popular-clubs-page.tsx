@@ -39,8 +39,8 @@ export type Club = {
     name?: string; // - club name
     tags?: string[]; // - tags for club
     memberCount?: number; // (integer) - num members in club
-    avgAttendence?: number; // (integer) - average attendence
-    attendenceRate?: number; // (decimal: avgAttendence/memberCount) (can be derived ig)
+    avgAttendance?: number; // (integer) - average attendance
+    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
     meetingFrequency?: number; // (idk if we need something like this just example)
     isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
 };
@@ -52,7 +52,7 @@ type PopularClubsPageProps = {
 /**
  * Sorts a list of clubs by their attributes
  * @param clubsList - List of clubs
- * @returns - list of clubs sorted by memberCount -> attendenceRate -> avgAttendence -> alphabetical
+ * @returns - list of clubs sorted by memberCount -> attendanceRate -> avgAttendance -> alphabetical
  *
  * Note: we could do a weighted sort as well
  */
@@ -68,12 +68,12 @@ function buildPopularClubs(clubsList: Club[]) {
 
         // Secondary: Sort by attendance rate (descending - higher rate = more engaged)
         const attendanceRateDiff =
-            (b.attendenceRate || 0) - (a.attendenceRate || 0);
+            (b.attendanceRate || 0) - (a.attendanceRate || 0);
         if (attendanceRateDiff !== 0) return attendanceRateDiff;
 
         // Tertiary: Sort by average attendance (descending)
         const avgAttendanceDiff =
-            (b.avgAttendence || 0) - (a.avgAttendence || 0);
+            (b.avgAttendance || 0) - (a.avgAttendance || 0);
         if (avgAttendanceDiff !== 0) return avgAttendanceDiff;
 
         // Final: Alphabetical by name as tiebreaker
@@ -87,8 +87,8 @@ const sampleClubsData: Club[] = [
         name: "Collaborative Software Development",
         tags: ["Programming", "Projects", "Collaboration", "Open Source"],
         memberCount: 150,
-        avgAttendence: 120,
-        attendenceRate: 0.8,
+        avgAttendance: 120,
+        attendanceRate: 0.8,
         meetingFrequency: 1,
         isOpen: true,
     },
@@ -96,8 +96,8 @@ const sampleClubsData: Club[] = [
         name: "AI Club",
         tags: ["AI", "Machine Learning", "Research", "Innovation"],
         memberCount: 89,
-        avgAttendence: 75,
-        attendenceRate: 0.84,
+        avgAttendance: 75,
+        attendanceRate: 0.84,
         meetingFrequency: 1,
         isOpen: true,
     },
@@ -105,8 +105,8 @@ const sampleClubsData: Club[] = [
         name: "OH/IO Hackathon",
         tags: ["Hackathon", "Competition", "Innovation", "Programming"],
         memberCount: 200,
-        avgAttendence: 45,
-        attendenceRate: 0.225,
+        avgAttendance: 45,
+        attendanceRate: 0.225,
         meetingFrequency: 4,
         isOpen: true,
     },
@@ -114,8 +114,8 @@ const sampleClubsData: Club[] = [
         name: "Big Data Analytics Association",
         tags: ["Data Science", "Analytics", "Statistics", "Research"],
         memberCount: 67,
-        avgAttendence: 52,
-        attendenceRate: 0.78,
+        avgAttendance: 52,
+        attendanceRate: 0.78,
         meetingFrequency: 2,
         isOpen: true,
     },
@@ -123,8 +123,8 @@ const sampleClubsData: Club[] = [
         name: "Cybersecurity Club",
         tags: ["Security", "Ethical Hacking", "Privacy", "Network Security"],
         memberCount: 95,
-        avgAttendence: 68,
-        attendenceRate: 0.72,
+        avgAttendance: 68,
+        attendanceRate: 0.72,
         meetingFrequency: 2,
         isOpen: false,
     },
@@ -132,8 +132,8 @@ const sampleClubsData: Club[] = [
         name: "Buckeye CTF",
         tags: ["CTF", "Cybersecurity", "Competition", "Problem Solving"],
         memberCount: 45,
-        avgAttendence: 38,
-        attendenceRate: 0.84,
+        avgAttendance: 38,
+        attendanceRate: 0.84,
         meetingFrequency: 1,
         isOpen: true,
     },

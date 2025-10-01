@@ -16,7 +16,7 @@ add it into this ClubCard.
 export default function ClubCard(props: ClubCardProps) {
     const { club } = props;
 
-    // Formats attendence rate to percentage
+    // Formats attendance rate to percentage
     const formatAttendanceRate = (rate?: number) => {
         return rate ? `${(rate * 100).toFixed(1)}%` : "N/A";
     };
@@ -51,10 +51,10 @@ export default function ClubCard(props: ClubCardProps) {
     const statList = [
         { fieldTitle: "Members:", value: club.memberCount },
         {
-            fieldTitle: "Attendence:",
-            value: formatAttendanceRate(club.attendenceRate),
+            fieldTitle: "Attendance:",
+            value: formatAttendanceRate(club.attendanceRate),
         },
-        { fieldTitle: "Avg. Turnout:", value: club.avgAttendence },
+        { fieldTitle: "Avg. Turnout:", value: club.avgAttendance },
         {
             fieldTitle: "Meetings:",
             value: formatMeetingFrequency(club.meetingFrequency),
