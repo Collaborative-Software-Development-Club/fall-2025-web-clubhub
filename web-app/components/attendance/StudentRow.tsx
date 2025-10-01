@@ -3,6 +3,7 @@
 import { AttendanceStatus, StudentProps } from "@/types/student-attendance";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
+import ChangeAttendanceButton from "./ChangeAttendanceButton";
 
 export function StudentRow({
     name,
@@ -25,7 +26,7 @@ export function StudentRow({
                     <Flame size={14} />
                     {streak}
                 </Badge>
-                
+                <ChangeAttendanceButton />
             </div>
         </div>
     );
