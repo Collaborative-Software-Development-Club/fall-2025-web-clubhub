@@ -9,6 +9,7 @@ interface EditableMultipleTextProps {
     title: string;
     path: string;
     initialData: Record<string, string>;
+    isLink: boolean;
 }
 
 export default function EditableMultipleText({
@@ -16,6 +17,7 @@ export default function EditableMultipleText({
     title,
     path,
     initialData,
+    isLink = false,
 }: EditableMultipleTextProps) {
     const [data, setData] = useState(initialData);
     const [editingField, setEditingField] = useState<string | null>(null);
@@ -54,9 +56,9 @@ export default function EditableMultipleText({
     };
 
     return (
-        <div className="flex flex-col w-full px-5">
-            <h2 className="text-xl font-bold px-2 mb-1">{title}:</h2>
-
+        <div className="flex flex-col w-full px-5 mt-2">
+            <h2 className="text-xl font-bold px-2">{title}:</h2>
+            <hr className="mt-2 border-gray-400" />
             {Object.entries(data).map(([field, value]) => (
                 <div key={field}>
                     {editingField === field ? (
@@ -101,9 +103,25 @@ export default function EditableMultipleText({
                             <label className="text-lg font-semibold capitalize cursor-pointer">
                                 {field.replace(/([A-Z])/g, " $1").trim()}:
                             </label>
-                            <p className="whitespace-pre-wrap min-h-6 mt-1">
-                                {value || "Click to edit..."}
-                            </p>
+                            {isLink && value ? (
+                                <p className="whitespace-pre-wrap min-h-6 mt-1 text-blue-600 underline">
+                                    <a
+                                        href={
+                                            value.startsWith("http")
+                                                ? value
+                                                : "http://" + value
+                                        }
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {value}
+                                    </a>
+                                </p>
+                            ) : (
+                                <p className="whitespace-pre-wrap min-h-6 mt-1">
+                                    {value || "Click to edit..."}
+                                </p>
+                            )}
                         </div>
                     )}
                 </div>
