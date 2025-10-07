@@ -1,6 +1,7 @@
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
+import { changeStatus } from "@/components/clubProfile/changeStatus"
 
 export default async function ClubLeaderLayout({
     children,
@@ -9,9 +10,8 @@ export default async function ClubLeaderLayout({
     children: React.ReactNode;
     params: Promise<{ club: string }>;
 }) {
-    const { club } = await params;
-
     const clubData = clubs[0]; //use mock data until we setup the database
+    const { club } =  await params;
 
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
@@ -29,8 +29,7 @@ export default async function ClubLeaderLayout({
                                 {clubData["Club Name"] + "(Leader)"}
                             </h1>
                             <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
-                                {/* Status Badge (Todo: Implement pop up for changing status) */}
-                                {clubData["Status"]}
+                                {changeStatus("Hello")}
                             </div>
                         </div>
                         <h2 className="text-xl font-semibold">
@@ -76,3 +75,5 @@ export default async function ClubLeaderLayout({
         </div>
     );
 }
+
+
