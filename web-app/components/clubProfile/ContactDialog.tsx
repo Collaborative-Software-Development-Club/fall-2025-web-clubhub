@@ -157,7 +157,7 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
                         {isEmail && (
                             <Button
                                 type="button"
-                                className="bg-blue-500 text-white"
+                                className="text-blue-500 bg-blue-100 hover:bg-blue-400 hover:text-white"
                                 onClick={() => setTempList([...tempList, ""])}
                             >
                                 <Plus />

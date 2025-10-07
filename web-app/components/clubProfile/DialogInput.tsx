@@ -30,7 +30,7 @@ export default function DialogInput({
         const updatedList = [...tempList];
         updatedList[index] = newValue;
         setTempList(updatedList);
-        
+
         if (hasError) {
             clearFieldError();
         }
