@@ -1,0 +1,41 @@
+"use client"; 
+
+import { useState } from "react";
+import Image from "next/image";
+
+export default function EditableProfilePicture({intialSrc, alt, width, height}) {
+    const [imageSrc, setImageSrc] = useState(intialSrc);
+
+    const handImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImageSrc(e.target.result);
+                // Here you would also handle uploading the image to your server
+            };
+            reader.readAsDataURL(file);
+        }
+    }; 
+
+    return (
+        <div className="relative inline-block cursor-pointer">
+            <Image
+                src={imageSrc}
+                alt={alt}
+                width={width}
+                height={height}
+                className="transition duration-300 hover:grayscale"; 
+                onClick={() => document.getElementById("profileUpload").click()}
+            />
+            <input
+                type="file"
+                id="profileUpload"
+                accept="image/*"
+                className="hidden"
+                onChange={handImageChange}
+            />
+        </div>
+    );
+}
+
