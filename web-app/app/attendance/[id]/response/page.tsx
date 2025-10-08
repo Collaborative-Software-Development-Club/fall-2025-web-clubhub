@@ -111,7 +111,9 @@ const AttendanceResponsePage = () => {
                             onOtpChange={setOtp}
                             onOtpComplete={(value) => {
                                 setOtp(value);
-                                void submitAttendance(value);
+                                void submitAttendance(value).catch((err) => {
+                                    console.error("Error submitting attendance:", err);
+                                });
                             }}
                             onSubmit={(value) => submitAttendance(value)}
                             otpLength={OTP_LENGTH}
