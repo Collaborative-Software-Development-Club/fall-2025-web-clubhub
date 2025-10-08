@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import ProfileCard from "@/components/userprofile/ProfileCard";
 import { mockUsers } from "@/data/mock-users";
 import clubs from "@/mock/clubs.json";
-import { useState } from "react";
 import { FaPlus, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 // Mock data for announcements and meetings
 const announcements = [
@@ -26,31 +27,105 @@ const meetings = [
     { date: "9/23/25", time: "5:00 PM", club: "Chess", conflict: false }
 ];
 
+// Inline styles for layout and spacing
+const styles = {
+    main: {
+        display: "flex",
+        flexDirection: "column" as const,
+        alignItems: "center",
+        padding: "2rem",
+        width: "100%",
+        maxWidth: "80rem",
+        margin: "0 auto",
+    },
+    section: {
+        width: "100%",
+        marginTop: "3rem",
+    },
+    sectionTitle: {
+        fontSize: "1.5rem",
+        fontWeight: 700,
+        marginBottom: "1.5rem",
+    },
+    clubsRow: {
+        display: "flex",
+        flexDirection: "row" as const,
+        overflowX: "auto" as const,
+        paddingBottom: "0.5rem",
+    },
+    fellowList: {
+        listStyle: "none",
+        padding: 0,
+        margin: 0,
+    },
+    fellowListItem: {
+        marginBottom: "1rem",
+    },
+    calendarRow: {
+        display: "flex",
+        flexDirection: "row" as const,
+        gap: "2rem",
+    },
+    flex1: {
+        flex: 1,
+    },
+};
+
 function ClubCard({ club }: { club: any }) {
     return (
-        <div className="flex flex-col items-center bg-white rounded-xl shadow-md p-4 mx-2 w-48 min-w-48">
-            <div className="w-full h-20 bg-gray-200 rounded-md mb-2 flex items-center justify-center">
-                {/* Placeholder for club logo/image */}
-                <span className="text-gray-400">Logo</span>
-            </div>
-            <div className="font-bold text-lg mb-1 text-center">{club["Club Name"]}</div>
-            <div className="text-sm text-gray-600 text-center">
-                Next: {club["Next Meeting Date"]} {club["Next Meeting Time"]} <br />
-                {club["Next Meeting Location"]}
-            </div>
-        </div>
+        <Card style={{ borderRadius: "1rem", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", minWidth: 192, width: 192, margin: "0 0.5rem" }}>
+            <CardContent style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem" }}>
+                <div style={{
+                    width: "100%",
+                    height: 80,
+                    background: "#e5e7eb",
+                    borderRadius: "0.5rem",
+                    marginBottom: "0.5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                }}>
+                    <span style={{ color: "#9ca3af" }}>Logo</span>
+                </div>
+                <div style={{ fontWeight: "bold", fontSize: "1.125rem", marginBottom: "0.25rem", textAlign: "center" }}>{club["Club Name"]}</div>
+                <div style={{ fontSize: "0.95rem", color: "#6b7280", textAlign: "center" }}>
+                    Next: {club["Next Meeting Date"]} {club["Next Meeting Time"]} <br />
+                    {club["Next Meeting Location"]}
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 
 function AddClubCard({ onClick }: { onClick: () => void }) {
     return (
-        <button
-            className="flex flex-col items-center justify-center bg-white rounded-xl shadow-md p-4 mx-2 w-48 min-w-48 border-2 border-dashed border-gray-300 hover:bg-gray-100 transition"
+        <Card style={{
+            borderRadius: "1rem",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
+            minWidth: 192,
+            width: 192,
+            margin: "0 0.5rem",
+            border: "2px dashed #d1d5db",
+            cursor: "pointer",
+            transition: "background 0.2s"
+        }}
             onClick={onClick}
+            tabIndex={0}
+            role="button"
             aria-label="Add Club"
         >
-            <FaPlus className="text-3xl text-gray-400" />
-        </button>
+            <CardContent style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "1rem",
+                height: "100%",
+                minHeight: 120,
+            }}>
+                <FaPlus style={{ fontSize: "2rem", color: "#9ca3af" }} />
+            </CardContent>
+        </Card>
     );
 }
 
@@ -60,27 +135,37 @@ function AnnouncementCarousel({ announcements }: { announcements: any[] }) {
     const current = announcements[index];
 
     return (
-        <div className="flex items-center w-full my-6">
-            <button
-                className="p-2"
+        <div style={{ display: "flex", alignItems: "center", width: "100%", margin: "1.5rem 0" }}>
+            <Button
+                variant="ghost"
+                style={{ padding: "0.5rem" }}
                 onClick={() => setIndex((i) => (i === 0 ? total - 1 : i - 1))}
                 aria-label="Previous Announcement"
             >
-                <FaChevronLeft className="text-2xl text-gray-500" />
-            </button>
-            <div className="flex-1 mx-4 bg-white rounded-full shadow-md px-8 py-6 flex flex-col justify-between min-h-[80px]">
-                <div className="text-lg font-medium mb-2">{current.text}</div>
-                <div className="text-sm text-gray-500 mt-auto text-right">
-                    {current.club} {current.date}
-                </div>
-            </div>
-            <button
-                className="p-2"
+                <FaChevronLeft style={{ fontSize: "1.5rem", color: "#6b7280" }} />
+            </Button>
+            <Card style={{ borderRadius: "9999px", boxShadow: "0 4px 24px rgba(0,0,0,0.08)", flex: 1, margin: "0 1rem" }}>
+                <CardContent style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    minHeight: 80,
+                    padding: "1.5rem 2rem"
+                }}>
+                    <div style={{ fontSize: "1.125rem", fontWeight: 500, marginBottom: "0.5rem" }}>{current.text}</div>
+                    <div style={{ fontSize: "0.95rem", color: "#6b7280", marginTop: "auto", textAlign: "right" }}>
+                        {current.club} {current.date}
+                    </div>
+                </CardContent>
+            </Card>
+            <Button
+                variant="ghost"
+                style={{ padding: "0.5rem" }}
                 onClick={() => setIndex((i) => (i === total - 1 ? 0 : i + 1))}
                 aria-label="Next Announcement"
             >
-                <FaChevronRight className="text-2xl text-gray-500" />
-            </button>
+                <FaChevronRight style={{ fontSize: "1.5rem", color: "#6b7280" }} />
+            </Button>
         </div>
     );
 }
@@ -89,21 +174,35 @@ function CalendarGrid({ meetings }: { meetings: any[] }) {
     // Simple 5x7 grid for demonstration
     const days = Array.from({ length: 35 }, (_, i) => i + 1);
     return (
-        <div className="grid grid-cols-7 gap-2">
+        <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(7, 1fr)",
+            gap: "0.5rem"
+        }}>
             {days.map((day) => (
-                <div
-                    key={day}
-                    className="bg-white rounded-md border border-gray-200 h-16 w-16 flex flex-col items-center justify-center text-xs"
-                >
-                    <div className="font-bold">{day}</div>
-                    {meetings
-                        .filter((m) => parseInt(m.date.split("/")[1]) === day)
-                        .map((m, idx) => (
-                            <div key={idx} className="text-[10px] text-gray-600">
-                                {m.club}
-                            </div>
-                        ))}
-                </div>
+                <Card key={day} style={{
+                    background: "#fff",
+                    borderRadius: "0.5rem",
+                    border: "1px solid #e5e7eb",
+                    height: 64,
+                    width: 64,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.85rem"
+                }}>
+                    <CardContent style={{ padding: "0.5rem", width: "100%", textAlign: "center" }}>
+                        <div style={{ fontWeight: "bold" }}>{day}</div>
+                        {meetings
+                            .filter((m) => parseInt(m.date.split("/")[1]) === day)
+                            .map((m, idx) => (
+                                <div key={idx} style={{ fontSize: "0.7rem", color: "#6b7280" }}>
+                                    {m.club}
+                                </div>
+                            ))}
+                    </CardContent>
+                </Card>
             ))}
         </div>
     );
@@ -111,19 +210,23 @@ function CalendarGrid({ meetings }: { meetings: any[] }) {
 
 function MeetingList({ meetings }: { meetings: any[] }) {
     return (
-        <div className="flex flex-col gap-2">
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {meetings.map((m, idx) => (
-                <div
-                    key={idx}
-                    className="bg-white rounded-md shadow px-4 py-2 flex items-center justify-between"
-                >
-                    <div>
-                        <span className="font-semibold">{m.date} {m.time}</span> — {m.club}
-                    </div>
-                    {m.conflict && (
-                        <span className="text-red-600 font-bold ml-2">CONFLICT</span>
-                    )}
-                </div>
+                <Card key={idx} style={{ borderRadius: "0.5rem", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                    <CardContent style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "0.75rem 1rem"
+                    }}>
+                        <div>
+                            <span style={{ fontWeight: 600 }}>{m.date} {m.time}</span> — {m.club}
+                        </div>
+                        {m.conflict && (
+                            <span style={{ color: "#dc2626", fontWeight: "bold", marginLeft: "0.5rem" }}>CONFLICT</span>
+                        )}
+                    </CardContent>
+                </Card>
             ))}
         </div>
     );
@@ -137,14 +240,14 @@ export default function UserProfile() {
     );
 
     return (
-        <main className="flex flex-col items-center p-8 w-full max-w-5xl mx-auto">
-            <h1 className="text-3xl font-bold mb-8">User Profile</h1>
+        <main style={styles.main}>
+            <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "2rem" }}>User Profile</h1>
             <ProfileCard user={currentUser} />
 
             {/* User's Clubs Section */}
-            <section className="w-full mt-10">
-                <h2 className="text-2xl font-bold mb-6">{currentUser.name}’s Clubs</h2>
-                <div className="flex flex-row overflow-x-auto pb-2">
+            <section style={styles.section}>
+                <h2 style={styles.sectionTitle}>{currentUser.name}’s Clubs</h2>
+                <div style={styles.clubsRow}>
                     {userClubs.map(club => (
                         <ClubCard key={club["Club Name"]} club={club} />
                     ))}
@@ -153,30 +256,30 @@ export default function UserProfile() {
             </section>
 
             {/* Announcements Section */}
-            <section className="w-full mt-12">
-                <h2 className="text-xl font-semibold mb-4">Announcements</h2>
+            <section style={styles.section}>
+                <h2 style={{ ...styles.sectionTitle, fontSize: "1.25rem", fontWeight: 600, marginBottom: "1rem" }}>Announcements</h2>
                 <AnnouncementCarousel announcements={announcements} />
             </section>
 
             {/* Calendar Section */}
-            <section className="w-full mt-12">
-                <h2 className="text-xl font-semibold mb-4">Calendar</h2>
-                <div className="flex flex-row gap-8">
-                    <div className="flex-1">
+            <section style={styles.section}>
+                <h2 style={{ ...styles.sectionTitle, fontSize: "1.25rem", fontWeight: 600, marginBottom: "1rem" }}>Calendar</h2>
+                <div style={styles.calendarRow}>
+                    <div style={styles.flex1}>
                         <CalendarGrid meetings={meetings} />
                     </div>
-                    <div className="flex-1">
+                    <div style={styles.flex1}>
                         <MeetingList meetings={meetings} />
                     </div>
                 </div>
             </section>
 
-            {/* Fellow Members Section (unchanged) */}
-            <section className="w-full mt-12">
-                <h2 className="text-xl font-semibold mb-4">Fellow Club Members</h2>
-                <ul>
+            {/* Fellow Members Section */}
+            <section style={styles.section}>
+                <h2 style={{ ...styles.sectionTitle, fontSize: "1.25rem", fontWeight: 600, marginBottom: "1rem" }}>Fellow Club Members</h2>
+                <ul style={styles.fellowList}>
                     {fellowMembers.map(user => (
-                        <li key={user.name}>
+                        <li key={user.name} style={styles.fellowListItem}>
                             <ProfileCard user={user} />
                         </li>
                     ))}
