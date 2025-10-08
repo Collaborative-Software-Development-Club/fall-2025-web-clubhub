@@ -79,7 +79,7 @@ export default function MeetingsPage() {
 
     return (
         <main className="container mx-auto max-w-xl py-8">
-            <h1 className="text-3xl font-bold mb-6">Club Meetings</h1>
+            <h1 className="text-2xl font-bold mb-6">Club Meetings</h1>
 
             {/* Create New Meeting Popover */}
             <Popover open={formOpen} onOpenChange={setFormOpen}>
