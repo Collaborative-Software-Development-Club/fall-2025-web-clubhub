@@ -47,7 +47,7 @@ export default function EditableText({
             {isEditing ? (
                 <div className="flex flex-col gap-2">
                     <label className="text-xl font-bold px-2">{title}:</label>
-
+                    <hr className="border-gray-400" />
                     <Textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -81,6 +81,7 @@ export default function EditableText({
                     className="rounded-md cursor-pointer hover:bg-gray-100 transition-colors min-h-14 whitespace-pre-wrap hover:shadow-sm py-2"
                 >
                     <label className="text-xl font-bold px-2">{title}:</label>
+                    <hr className="mt-2 border-gray-400" />
                     <p className="p-2 min-h-10 whitespace-pre-wrap">
                         {text || "Click to edit..."}
                     </p>
