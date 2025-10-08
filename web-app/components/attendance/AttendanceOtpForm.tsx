@@ -34,7 +34,7 @@ const AttendanceOtpForm = ({
     };
 
     return (
-        <form className="space-y-2" onSubmit={handleFormSubmit} aria-busy={disabled}>
+        <form className="space-y-2" onSubmit={handleFormSubmit} aria-busy={disabled ? "true" : "false"}>
             <label htmlFor="attendance-code" className="text-base font-medium">
                 Attendance Code
             </label>
