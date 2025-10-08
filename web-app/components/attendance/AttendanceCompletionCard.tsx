@@ -17,7 +17,7 @@ const AttendanceCompletionCard = ({
     return (
         <Card className="w-full max-w-md text-center">
             <CardHeader className="flex flex-row items-center justify-center gap-3">
-                <CheckCircle2 className="h-12 w-12 text-emerald-500" aria-hidden />
+                <CheckCircle2 className="h-12 w-12 text-emerald-500" aria-hidden="true" />
                 <CardTitle className="text-xl font-semibold">
                     Attendance recorded
                 </CardTitle>
