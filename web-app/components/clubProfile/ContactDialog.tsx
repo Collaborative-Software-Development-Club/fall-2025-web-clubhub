@@ -35,6 +35,7 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
     const [tempList, setTempList] = useState(data);
     const [errors, setErrors] = useState<boolean[]>([]);
     const [generalError, setGeneralError] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
 
     const validateItem = (item: string): boolean => {
         if (isEmail) {
@@ -67,14 +68,12 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
             return;
         }
 
-        // Filter out empty items before saving
-        const filteredList = tempList.filter((item) => item.trim() !== "");
-
         setGeneralError("");
         setErrors([]);
-        setList(filteredList);
+        setList(tempList);
+        setIsOpen(false);
 
-        console.log(`Saved ${isEmail ? "emails" : "links"}:`, filteredList);
+        console.log(`Saved ${isEmail ? "emails" : "links"}:`, tempList);
     };
 
     const resetToOriginalState = () => {
@@ -85,28 +84,31 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
 
     const handleCancel = () => {
         resetToOriginalState();
+        setIsOpen(false);
     };
 
     const handleOpenChange = (open: boolean) => {
+        setIsOpen(open);
         if (open) {
             resetToOriginalState();
         }
     };
 
     const renderDisplayItem = (item: string, index: number) => {
-        if (!item) return null;
+        if (!item || item.trim() === "") return null;
 
         return (
-            <div key={index}>
+            <li
+                key={index}
+                className={isEmail ? "list-disc list-inside" : "list-none"}
+            >
                 {!isEmail && (
-                    <p className="font-semibold py-1">
+                    <span className="font-semibold py-1">
                         {SOCIAL_MEDIA_PLATFORMS[index]}:
-                    </p>
-                )}
-                <li className={isEmail ? "list-disc list-inside" : "list-none"}>
-                    {item}
-                </li>
-            </div>
+                    </span>
+                )}{" "}
+                {item}
+            </li>
         );
     };
 
@@ -117,7 +119,7 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
     const sectionTitle = isEmail ? "Emails" : "Links";
 
     return (
-        <Dialog onOpenChange={handleOpenChange}>
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <div className="rounded-md cursor-pointer hover:bg-gray-100 min-h-14 whitespace-pre-wrap hover:shadow-sm py-2">
                     <label className="text-xl font-bold px-2">{title}</label>

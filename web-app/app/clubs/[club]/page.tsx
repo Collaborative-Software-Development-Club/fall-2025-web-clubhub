@@ -11,10 +11,10 @@ export default async function ClubPage({
     const { club } = await params;
     const clubData = clubs[0];
     const socialMedia = [
-        clubData["Contact Information"]["Instagram"] || null,
-        clubData["Contact Information"]["Facebook Group Page"] || null,
-        clubData["Contact Information"]["Website"] || null,
-        clubData["Contact Information"]["Other"] || null,
+        clubData["Contact Information"]["Instagram"] || "",
+        clubData["Contact Information"]["Facebook Group Page"] || "",
+        clubData["Contact Information"]["Website"] || "",
+        clubData["Contact Information"]["Other"] || "",
     ];
 
     return (
@@ -30,7 +30,6 @@ export default async function ClubPage({
                 title="Membership Details"
                 path="Membership Details"
                 initialData={clubData["Membership Details"]}
-                isLink={false}
             />
             <EditableText
                 id={club}

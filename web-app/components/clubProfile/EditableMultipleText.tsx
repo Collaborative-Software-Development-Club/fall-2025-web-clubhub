@@ -9,7 +9,6 @@ interface EditableMultipleTextProps {
     title: string;
     path: string;
     initialData: Record<string, string>;
-    isLink: boolean;
 }
 
 export default function EditableMultipleText({
@@ -17,7 +16,6 @@ export default function EditableMultipleText({
     title,
     path,
     initialData,
-    isLink = false,
 }: EditableMultipleTextProps) {
     const [data, setData] = useState(initialData);
     const [editingField, setEditingField] = useState<string | null>(null);
@@ -103,25 +101,9 @@ export default function EditableMultipleText({
                             <label className="text-lg font-semibold capitalize cursor-pointer">
                                 {field.replace(/([A-Z])/g, " $1").trim()}:
                             </label>
-                            {isLink && value ? (
-                                <p className="whitespace-pre-wrap min-h-6 mt-1 text-blue-600 underline">
-                                    <a
-                                        href={
-                                            value.startsWith("http")
-                                                ? value
-                                                : "http://" + value
-                                        }
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {value}
-                                    </a>
-                                </p>
-                            ) : (
-                                <p className="whitespace-pre-wrap min-h-6 mt-1">
-                                    {value || "Click to edit..."}
-                                </p>
-                            )}
+                            <p className="whitespace-pre-wrap min-h-6 mt-1">
+                                {value || "Click to edit..."}
+                            </p>
                         </div>
                     )}
                 </div>
