@@ -33,7 +33,7 @@ const AttendanceStatusForm = ({
     };
 
     return (
-        <form className="space-y-3" onSubmit={handleSubmit} aria-busy={isSubmitting}>
+        <form className="space-y-3" onSubmit={handleSubmit} aria-busy={isSubmitting ? "true" : "false"}>
             <div className="space-y-2">
                 <label
                     htmlFor="attendance-status"
