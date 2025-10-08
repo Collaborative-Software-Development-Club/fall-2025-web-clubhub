@@ -15,13 +15,18 @@ export function StudentRow({
         <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-2">
                 <p className="font-medium">{name}</p>
-                <p className="text-sm text-gray-400">{dotNumber}</p>
+                <p className="text-sm text-gray-400">
+                    {dotNumber.toLowerCase()}
+                </p>
             </div>
 
             <div className="flex items-center gap-6">
                 <StatusBadge status={status} />
                 <p className="text-sm text-gray-600">{timestamp ?? "--:--"}</p>
-                <Badge variant="default" className="bg-orange-100 text-orange-700 border-orange-200">
+                <Badge
+                    variant="default"
+                    className="bg-orange-100 text-orange-700 border-orange-200"
+                >
                     <Flame size={14} />
                     {streak}
                 </Badge>
@@ -62,7 +67,10 @@ const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
     };
 
     return (
-        <Badge variant={statusConfig.variant} className={statusConfig.className}>
+        <Badge
+            variant={statusConfig.variant}
+            className={statusConfig.className}
+        >
             {statusConfig.icon}
             {statusConfig.text}
         </Badge>
