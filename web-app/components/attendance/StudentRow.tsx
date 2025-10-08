@@ -52,12 +52,13 @@ const StatusBadge = ({ status }: { status: AttendanceStatus }) => {
         absent: {
             variant: "destructive" as const,
             text: "Absent",
+            className: "bg-red-500 text-white",
             icon: <XCircle size={14} />,
         },
         "no-response": {
             variant: "outline" as const,
             text: "No Response",
-            className: "text-gray-500",
+            className: "bg-grey-500 text-white",
             icon: <HelpCircle size={14} />,
         },
     }[status] || {
