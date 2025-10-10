@@ -1,7 +1,8 @@
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
-import { changeStatus } from "@/components/clubProfile/changeStatus"
+import { ChangeStatus } from "@/components/clubProfile/ChangeStatus";
+import React from 'react';
 
 export default async function ClubLeaderLayout({
     children,
@@ -13,11 +14,12 @@ export default async function ClubLeaderLayout({
     const clubData = clubs[0]; //use mock data until we setup the database
     const { club } =  await params;
 
+
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
             <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4">
-                    <Image
+                    <Image 
                         src="/default-club-logo.png"
                         alt="Club Logo"
                         width={200}
@@ -28,8 +30,9 @@ export default async function ClubLeaderLayout({
                             <h1 className="text-3xl font-bold">
                                 {clubData["Club Name"] + "(Leader)"}
                             </h1>
-                            <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
-                                {changeStatus("Hello")}
+                            <div>
+                                <ChangeStatus 
+                                initialText={clubData["Status"]}/>
                             </div>
                         </div>
                         <h2 className="text-xl font-semibold">
