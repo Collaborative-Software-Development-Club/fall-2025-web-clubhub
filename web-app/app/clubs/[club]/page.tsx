@@ -1,6 +1,7 @@
 import clubs from "@/mock/clubs.json";
 import EditableText from "@/components/clubProfile/EditableText";
 import EditableMultipleText from "@/components/clubProfile/EditableMultipleText";
+import ContactDialog from "@/components/clubProfile/ContactDialog";
 
 export default async function ClubPage({
     params,
@@ -9,6 +10,12 @@ export default async function ClubPage({
 }) {
     const { club } = await params;
     const clubData = clubs[0];
+    const socialMedia = [
+        clubData["Contact Information"]["Instagram"] || "",
+        clubData["Contact Information"]["Facebook Group Page"] || "",
+        clubData["Contact Information"]["Website"] || "",
+        clubData["Contact Information"]["Other"] || "",
+    ];
 
     return (
         <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
@@ -32,6 +39,16 @@ export default async function ClubPage({
                     clubData["Meeting Information"]["Meeting Time and Place"]
                 }
             />
+            <div
+                id="contact"
+                className="w-full grid grid-cols-2 items-start px-5 gap-4"
+            >
+                <ContactDialog
+                    data={clubData["Contact Information"]["Organization Email"]}
+                    isEmail={true}
+                />
+                <ContactDialog data={socialMedia} isEmail={false} />
+            </div>
         </div>
     );
 }

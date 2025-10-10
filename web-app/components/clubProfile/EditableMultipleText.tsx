@@ -54,9 +54,9 @@ export default function EditableMultipleText({
     };
 
     return (
-        <div className="flex flex-col w-full px-5">
-            <h2 className="text-xl font-bold px-2 mb-1">{title}:</h2>
-
+        <div className="flex flex-col w-full px-5 mt-2">
+            <h2 className="text-xl font-bold px-2">{title}:</h2>
+            <hr className="mt-2 border-gray-400" />
             {Object.entries(data).map(([field, value]) => (
                 <div key={field}>
                     {editingField === field ? (

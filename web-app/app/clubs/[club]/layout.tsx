@@ -59,13 +59,13 @@ export default async function ClubLeaderLayout({
                             Members
                         </Link>
                         <Link
-                            href={"/clubs/" + club + "/attendance"}
+                            href={"/clubs/" + club + "/meetings"}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
-                            Attendance
+                            Meetings
                         </Link>
                         <Link
-                            href={"/clubs/" + club + "/contact"}
+                            href="#contact"
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Contact Info
