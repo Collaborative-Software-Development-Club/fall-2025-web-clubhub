@@ -3,29 +3,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
     Popover,
     PopoverTrigger,
     PopoverContent,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
-import {
-    Plus,
-    Trash2,
-    MoreHorizontal,
-    Calendar as CalendarIcon,
-    Edit,
-} from "lucide-react";
-import Link from "next/link";
-import { MeetingCard } from "@/components/attendance/MeetingCard";
+import { Plus, Calendar as CalendarIcon } from "lucide-react";
+import { MeetingCard } from "@/app/(attendance)/MeetingCard";
 
 type Meeting = {
     id: number;

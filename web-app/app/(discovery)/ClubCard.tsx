@@ -1,7 +1,21 @@
 "use client";
 import React from "react";
-import { Card, CardContent } from "../ui/card";
-import { Club } from "../../app/popular_clubs/page";
+import { Card, CardContent } from "@/components/ui/card";
+
+/*
+I'm going to assume we will have a club interface/type like this:
+(This is just what I thought of we can have more info too. images ideally)
+*/
+// Basic club type definition
+export type Club = {
+    name?: string; // - club name
+    tags?: string[]; // - tags for club
+    memberCount?: number; // (integer) - num members in club
+    avgAttendance?: number; // (integer) - average attendance
+    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
+    meetingFrequency?: number; // (idk if we need something like this just example)
+    isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
+};
 
 type ClubCardProps = {
     club: Club;

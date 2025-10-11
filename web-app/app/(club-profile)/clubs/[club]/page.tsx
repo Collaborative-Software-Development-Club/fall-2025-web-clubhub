@@ -1,7 +1,7 @@
 import clubs from "@/mock/clubs.json";
-import EditableText from "@/components/clubProfile/EditableText";
-import EditableMultipleText from "@/components/clubProfile/EditableMultipleText";
-import ContactDialog from "@/components/clubProfile/ContactDialog";
+import EditableText from "@/components/EditableText";
+import EditableMultipleText from "@/components/EditableMultipleText";
+import ContactDialog from "./ContactDialog";
 
 export default async function ClubPage({
     params,

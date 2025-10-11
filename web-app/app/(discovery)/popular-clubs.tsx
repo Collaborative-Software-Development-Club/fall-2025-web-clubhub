@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import ClubCarousel from "@/components/popular_clubs/ClubCarousel";
-import ClubCard from "@/components/popular_clubs/ClubCard";
-import ClubCarouselHeader from "@/components/popular_clubs/ClubCarouselHeader";
+import ClubCard, { Club } from "./ClubCard";
+import { ClubCarousel } from "./ClubCarousel";
+import { ClubCarouselHeader } from "./ClubCarouselHeader";
 
 // Page to show the popular clubs
 
-export function PopularClubsPage(props: PopularClubsPageProps) {
+export function PopularClubs(props: PopularClubsPageProps) {
     const { clubsList = sampleClubsData } = props;
 
     // Memoize the sorted clubs to avoid recalculating on every render
@@ -29,21 +29,6 @@ export function PopularClubsPage(props: PopularClubsPageProps) {
         </div>
     );
 }
-
-/*
-I'm going to assume we will have a club interface/type like this:
-(This is just what I thought of we can have more info too. images ideally)
-*/
-// Basic club type definition
-export type Club = {
-    name?: string; // - club name
-    tags?: string[]; // - tags for club
-    memberCount?: number; // (integer) - num members in club
-    avgAttendance?: number; // (integer) - average attendance
-    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
-    meetingFrequency?: number; // (idk if we need something like this just example)
-    isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
-};
 
 type PopularClubsPageProps = {
     clubsList?: Club[]; // Replace this with the proper type for club in the future

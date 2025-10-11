@@ -1,10 +1,4 @@
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardContent,
-    CardAction,
-} from "@/components/ui/card";
+import { Card, CardTitle, CardContent, CardAction } from "@/components/ui/card";
 
 export default function AttendanceCodeCard({
     code,

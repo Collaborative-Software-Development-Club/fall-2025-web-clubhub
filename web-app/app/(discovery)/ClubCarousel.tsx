@@ -8,17 +8,18 @@ import {
     CarouselItem,
     CarouselPrevious,
     CarouselNext,
-} from "../ui/carousel";
+} from "@/components/ui/carousel";
 
 type PropType = {
     children: React.ReactNode;
 };
 
 // Generic carousel component
-const ClubCarousel: React.FC<PropType> = (props) => {
+export const ClubCarousel: React.FC<PropType> = (props) => {
     const { children } = props;
 
-    const carouselButtonCSS = "bg-white/90 hover:bg-white border shadow-lg disabled:invisible transition-opacity duration-200"
+    const carouselButtonCSS =
+        "bg-white/90 hover:bg-white border shadow-lg disabled:invisible transition-opacity duration-200";
 
     return (
         <Carousel className="relative w-full">
@@ -32,10 +33,8 @@ const ClubCarousel: React.FC<PropType> = (props) => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className={`left-2 ${carouselButtonCSS}`}/>
-            <CarouselNext className={`right-2 ${carouselButtonCSS}`}/>
+            <CarouselPrevious className={`left-2 ${carouselButtonCSS}`} />
+            <CarouselNext className={`right-2 ${carouselButtonCSS}`} />
         </Carousel>
     );
 };
-
-export default ClubCarousel;

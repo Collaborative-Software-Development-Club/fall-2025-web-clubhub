@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
+import { Button } from "./ui/button";
+import { Textarea } from "./ui/textarea";
 
 interface EditableTextProps {
     id: string;

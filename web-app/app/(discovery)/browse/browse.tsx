@@ -1,67 +1,23 @@
 "use client";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ClubCard from "@/components/browse/ClubCard";
-import mockClubs from "@/mock/clubs.json";
-import { Badge } from "@/components/ui/badge";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import ClubCard from "@/app/(discovery)/browse/ClubCard";
 import { Toggle } from "@/components/ui/toggle";
 
-// Read and process mock club data from clubs.json
-const clubsData = mockClubs.map((club, index) => {
-    const primary = club.Categories?.["Primary Type"];
-    const secondaryRaw = club.Categories?.["Secondary Types"];
-
-    const secondary = Array.isArray(secondaryRaw)
-        ? secondaryRaw
-        : typeof secondaryRaw === "string"
-          ? [secondaryRaw]
-          : [];
-
-    const primaryLeader = club.Leaders?.["Primary Leader"];
-
-    let contact: string | undefined;
-    if (club["Contact Information"]) {
-        const emails = club["Contact Information"]["Organization Email"];
-        if (Array.isArray(emails)) {
-            contact = emails[0];
-        } else if (typeof emails === "string") {
-            contact = emails;
-        }
-    }
-
-    return {
-        id: index + 1,
-        name: club["Club Name"],
-        description: club["Purpose Statement"] || "No description available.",
-        interests: Array.from(new Set([primary, ...secondary])),
-        leader: primaryLeader,
-        contact,
-    };
-});
-
-// OSU student organization interest categories
-const interestOptions = [
-    "Academic/College",
-    "Awareness/Activism",
-    "Community Service/Service Learning",
-    "Creative and Performing Arts",
-    "Ethnic/Cultural",
-    "Governance Organizations",
-    "Honoraries/Honor Societies",
-    "Media, Journalism, and Creative Writing",
-    "Religious/Spiritual",
-    "Social Fraternities/Sororities",
-    "Special Interest",
-    "Sports and Recreation",
-    "Technology",
-    "Graduate",
-    "Professional",
-    "Undergraduate",
-];
-
-export default function Browse() {
+export function Browse({
+    clubsData,
+    interestOptions,
+}: {
+    clubsData: {
+        id: number;
+        name: string;
+        description: string;
+        interests: string[];
+        leader: string;
+        contact: string | undefined;
+    }[];
+    interestOptions: string[];
+}) {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
