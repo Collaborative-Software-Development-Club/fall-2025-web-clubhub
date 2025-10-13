@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import DisplayText from "./DisplayText";
 
 interface EditableTextProps {
     id: string;
@@ -77,14 +78,10 @@ export default function EditableText({
                 </div>
             ) : (
                 <div
-                    onClick={startEditing}
                     className="rounded-md cursor-pointer hover:bg-gray-100 transition-colors min-h-14 whitespace-pre-wrap hover:shadow-sm py-2"
+                    onClick={startEditing}
                 >
-                    <label className="text-xl font-bold px-2">{title}:</label>
-                    <hr className="mt-2 border-gray-400" />
-                    <p className="p-2 min-h-10 whitespace-pre-wrap">
-                        {text || "Click to edit..."}
-                    </p>
+                    <DisplayText title={title} text={text} />
                 </div>
             )}
         </div>

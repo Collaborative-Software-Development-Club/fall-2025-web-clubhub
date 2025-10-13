@@ -1,5 +1,7 @@
 import clubs from "@/mock/clubs.json";
+import DisplayText from "@/components/clubProfile/DisplayText";
 import EditableText from "@/components/clubProfile/EditableText";
+import DisplayMultipleText from "@/components/clubProfile/DisplayMultipleText";
 import EditableMultipleText from "@/components/clubProfile/EditableMultipleText";
 import ContactDialog from "@/components/clubProfile/ContactDialog";
 
@@ -16,6 +18,7 @@ export default async function ClubPage({
         clubData["Contact Information"]["Website"] || "",
         clubData["Contact Information"]["Other"] || "",
     ];
+    const isStudent = true;
 
     return (
         <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
@@ -25,10 +28,14 @@ export default async function ClubPage({
                 path="Purpose Statement"
                 initialText={clubData["Purpose Statement"]}
             />
-            <EditableMultipleText
+            {/* <EditableMultipleText
                 id={club}
                 title="Membership Details"
                 path="Membership Details"
+                initialData={clubData["Membership Details"]}
+            /> */}
+            <DisplayMultipleText
+                title="Membership Details"
                 initialData={clubData["Membership Details"]}
             />
             <EditableText
