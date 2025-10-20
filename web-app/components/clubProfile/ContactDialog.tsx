@@ -14,16 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import DialogInput from "./DialogInput";
 import { Plus } from "lucide-react";
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const LINK_REGEX = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-./?%&=]*)?$/i;
-
-const SOCIAL_MEDIA_PLATFORMS = [
-    "Instagram",
-    "Facebook Group Page",
-    "Website",
-    "Other",
-] as const;
+import DisplayContact from "./DisplayContact";
+import { EMAIL_REGEX, LINK_REGEX, SOCIAL_MEDIA_PLATFORMS } from "./constants";
 
 interface ContactDialogProps {
     data: string[];
@@ -94,25 +86,6 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
         }
     };
 
-    const renderDisplayItem = (item: string, index: number) => {
-        if (!item || item.trim() === "") return null;
-
-        return (
-            <li
-                key={index}
-                className={isEmail ? "list-disc list-inside" : "list-none"}
-            >
-                {!isEmail && (
-                    <span className="font-semibold py-1">
-                        {SOCIAL_MEDIA_PLATFORMS[index]}:
-                    </span>
-                )}{" "}
-                {item}
-            </li>
-        );
-    };
-
-    const title = isEmail ? "Organization Email:" : "Social Media Links:";
     const dialogTitle = isEmail
         ? "Edit Organization Emails"
         : "Edit Social Media Links";
@@ -122,22 +95,7 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <div className="rounded-md cursor-pointer hover:bg-gray-100 min-h-14 whitespace-pre-wrap hover:shadow-sm py-2">
-                    <label className="text-xl font-bold px-2">{title}</label>
-                    <hr className="border-gray-400 mt-2" />
-
-                    {list.length > 0 ? (
-                        <ul
-                            className={`p-2 ${
-                                isEmail ? "list-disc list-inside" : ""
-                            }`}
-                        >
-                            {list.map(renderDisplayItem)}
-                        </ul>
-                    ) : (
-                        <p className="p-2 min-h-10 whitespace-pre-wrap">
-                            Click to edit...
-                        </p>
-                    )}
+                    <DisplayContact list={list} isEmail={isEmail} />
                 </div>
             </DialogTrigger>
 

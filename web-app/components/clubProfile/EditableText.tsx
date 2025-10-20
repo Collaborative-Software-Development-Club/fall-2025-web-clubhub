@@ -44,9 +44,9 @@ export default function EditableText({
     };
 
     return (
-        <div className="flex flex-col w-full px-5">
+        <div className="flex flex-col w-full">
             {isEditing ? (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 mx-5">
                     <label className="text-xl font-bold px-2">{title}:</label>
                     <hr className="border-gray-400" />
                     <Textarea
@@ -78,7 +78,7 @@ export default function EditableText({
                 </div>
             ) : (
                 <div
-                    className="rounded-md cursor-pointer hover:bg-gray-100 transition-colors min-h-14 whitespace-pre-wrap hover:shadow-sm py-2"
+                    className="rounded-md cursor-pointer hover:bg-gray-100 transition-colors min-h-14 whitespace-pre-wrap hover:shadow-sm my-2"
                     onClick={startEditing}
                 >
                     <DisplayText title={title} text={text} />

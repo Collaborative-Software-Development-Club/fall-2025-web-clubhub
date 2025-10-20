@@ -4,6 +4,7 @@ import EditableText from "@/components/clubProfile/EditableText";
 import DisplayMultipleText from "@/components/clubProfile/DisplayMultipleText";
 import EditableMultipleText from "@/components/clubProfile/EditableMultipleText";
 import ContactDialog from "@/components/clubProfile/ContactDialog";
+import DisplayContact from "@/components/clubProfile/DisplayContact";
 
 export default async function ClubPage({
     params,
@@ -18,44 +19,84 @@ export default async function ClubPage({
         clubData["Contact Information"]["Website"] || "",
         clubData["Contact Information"]["Other"] || "",
     ];
-    const isStudent = true;
+
+    const isLeader = true; // TODO: Replace with actual authentication logic
 
     return (
-        <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
-            <EditableText
-                id={club}
-                title="Purpose Statement"
-                path="Purpose Statement"
-                initialText={clubData["Purpose Statement"]}
-            />
-            {/* <EditableMultipleText
-                id={club}
-                title="Membership Details"
-                path="Membership Details"
-                initialData={clubData["Membership Details"]}
-            /> */}
-            <DisplayMultipleText
-                title="Membership Details"
-                initialData={clubData["Membership Details"]}
-            />
-            <EditableText
-                id={club}
-                title="Meeting Time and Location"
-                path="Meeting Time and Location"
-                initialText={
-                    clubData["Meeting Information"]["Meeting Time and Place"]
-                }
-            />
-            <div
-                id="contact"
-                className="w-full grid grid-cols-2 items-start px-5 gap-4"
-            >
-                <ContactDialog
-                    data={clubData["Contact Information"]["Organization Email"]}
-                    isEmail={true}
-                />
-                <ContactDialog data={socialMedia} isEmail={false} />
-            </div>
+        <div className="w-full">
+            {isLeader ? (
+                <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
+                    <EditableText
+                        id={club}
+                        title="Purpose Statement"
+                        path="Purpose Statement"
+                        initialText={clubData["Purpose Statement"]}
+                    />
+                    <EditableMultipleText
+                        id={club}
+                        title="Membership Details"
+                        path="Membership Details"
+                        initialData={clubData["Membership Details"]}
+                    />
+                    <EditableText
+                        id={club}
+                        title="Meeting Time and Location"
+                        path="Meeting Time and Location"
+                        initialText={
+                            clubData["Meeting Information"][
+                                "Meeting Time and Place"
+                            ]
+                        }
+                    />
+                    <div
+                        id="contact"
+                        className="w-full grid grid-cols-2 items-start px-5 gap-4"
+                    >
+                        <ContactDialog
+                            data={
+                                clubData["Contact Information"][
+                                    "Organization Email"
+                                ]
+                            }
+                            isEmail={true}
+                        />
+                        <ContactDialog data={socialMedia} isEmail={false} />
+                    </div>
+                </div>
+            ) : (
+                <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
+                    <DisplayText
+                        title="Purpose Statement"
+                        text={clubData["Purpose Statement"]}
+                    />
+                    <DisplayMultipleText
+                        title="Membership Details"
+                        initialData={clubData["Membership Details"]}
+                    />
+                    <DisplayText
+                        title="Meeting Time and Location"
+                        text={
+                            clubData["Meeting Information"][
+                                "Meeting Time and Place"
+                            ]
+                        }
+                    />
+                    <div
+                        id="contact"
+                        className="w-full grid grid-cols-2 items-start px-5 gap-4"
+                    >
+                        <DisplayContact
+                            list={
+                                clubData["Contact Information"][
+                                    "Organization Email"
+                                ]
+                            }
+                            isEmail={true}
+                        />
+                        <DisplayContact list={socialMedia} isEmail={false} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
