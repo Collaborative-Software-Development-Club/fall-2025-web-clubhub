@@ -5,8 +5,6 @@ import { JSX, useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
@@ -17,9 +15,9 @@ interface ChangeStatusProps {
 
 function ChangeStatus({ initialText }: ChangeStatusProps): JSX.Element {
     const [status, changeStatus] = useState(initialText);
-    let buttonStyleActive = "rounded-full bg-green-200 px-3 py-1 w-fit text-sm font-medium text-gray-700";
-    let buttonStyleInactive = "rounded-full bg-red-200 px-3 py-1 w-fit text-sm font-medium text-gray-700";
-    let buttonStylePending = "rounded-full bg-yellow-200 px-3 py-1 w-fit text-sm font-medium text-gray-700";
+    let buttonStyleActive = "cursor-pointer bg-green-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-green-100";
+    let buttonStyleInactive = "cursor-pointer bg-red-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-red-100";
+    let buttonStylePending = "cursor-pointer bg-yellow-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-yellow-100";
     let startState;
     if (initialText === "Pending") {
         startState = buttonStylePending;
@@ -46,24 +44,24 @@ function ChangeStatus({ initialText }: ChangeStatusProps): JSX.Element {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
-                <div className={buttonColor}>
+            <DropdownMenuTrigger asChild>
+                <Button className={buttonColor}>
                     {status}
-                </div>
+                </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-fit"  align="start">
+            <DropdownMenuContent align="center" className="w-[--radix-popover-trigger-width] min-w-0 bg-transparent shadow-none border-none">
                 <DropdownMenuItem>
-                    <Button onClick={updateActive} variant="link" className={buttonStyleActive}>
+                    <Button onClick={updateActive} className={buttonStyleActive}>
                         Active
                     </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <Button onClick={updateInactive} variant="link" className={buttonStyleInactive}>
+                    <Button onClick={updateInactive} className={buttonStyleInactive}>
                         Inactive
                     </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <Button onClick={updatePending} variant="link" className={buttonStylePending}>
+                    <Button onClick={updatePending} className={buttonStylePending}>
                         Pending
                     </Button>
                 </DropdownMenuItem>
