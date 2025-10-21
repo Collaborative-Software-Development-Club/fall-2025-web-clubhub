@@ -68,6 +68,12 @@ export default async function ClubLeaderLayout({
                         >
                             Contact Info
                         </Link>
+                        <Link
+                            href={"/clubs/" + club + "/announcements"}
+                            className="font-medium text-gray-700 hover:text-blue-600"
+                            >
+                                Announcements
+                            </Link>
                         {/* Add more links or Remove links as needed */}
                     </nav>
                 </div>
