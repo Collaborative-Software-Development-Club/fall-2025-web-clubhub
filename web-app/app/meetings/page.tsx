@@ -33,6 +33,8 @@ type Meeting = {
     date: Date;
     startTime: string;
     endTime: string;
+    description?: string;
+    location?: string;
 };
 
 let ID_COUNTER = 0;
@@ -45,12 +47,16 @@ export default function MeetingsPage() {
             date: new Date(),
             startTime: "18:00",
             endTime: "19:00",
+            description: "enter description here",
+            location: "enter location here",
         },
     ]);
     const [title, setTitle] = useState(`Meeting #${meetings.length}`);
     const [date, setDate] = useState<Date | undefined>(new Date(Date.now()));
     const [startTime, setStartTime] = useState<string>("18:00");
     const [endTime, setEndTime] = useState<string>("19:00");
+    const [description, setDescription] = useState<string>("enter description here");
+    const [location, setLocation] = useState<string>("enter location here");
 
     // Control popovers
     const [formOpen, setFormOpen] = useState(false);
@@ -64,18 +70,21 @@ export default function MeetingsPage() {
     const [editDate, setEditDate] = useState<Date | undefined>();
     const [editStartTime, setEditStartTime] = useState("");
     const [editEndTime, setEditEndTime] = useState("");
-
+    const [editDescription, setEditDescription] = useState("");
+    const [editLocation, setEditLocation] = useState("");
 
     const addMeeting = (): void => {
         if (!title || !date || !startTime || !endTime) return;
         setMeetings((prev) => [
             ...prev,
-            { id: ID_COUNTER++, title, date, startTime, endTime },
+            { id: ID_COUNTER++, title, date, startTime, endTime, description, location },
         ]);
         setTitle(`Meeting #${meetings.length + 1}`);
         setDate(new Date(Date.now()));
         setStartTime("18:00");
         setEndTime("19:00");
+        setDescription("enter description here");
+        setLocation("enter location here");
         setFormOpen(false);
     };
 
@@ -89,6 +98,8 @@ export default function MeetingsPage() {
             setEditDate(meeting.date);
             setEditStartTime(meeting.startTime);
             setEditEndTime(meeting.endTime);
+            setEditDescription(meeting.description || "");
+            setEditLocation(meeting.location || "");
             setEditFormOpen(true);
             console.log("Edit form should now be open"); // Debug log
         }
@@ -104,7 +115,9 @@ export default function MeetingsPage() {
                     title: editTitle, 
                     date: editDate, 
                     startTime: editStartTime, 
-                    endTime: editEndTime 
+                    endTime: editEndTime, 
+                    description: editDescription,
+                    location: editLocation,
                   }
                 : meeting
         ));
@@ -118,6 +131,8 @@ export default function MeetingsPage() {
         setEditDate(undefined);
         setEditStartTime("");
         setEditEndTime("");
+        setEditDescription("");
+        setEditLocation("");
         setEditFormOpen(false);
         setEditCalendarOpen(false);
     };
@@ -194,6 +209,20 @@ export default function MeetingsPage() {
                                 value={endTime}
                                 onChange={(e) => setEndTime(e.target.value)}
                                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                            />
+                        </div>
+                        <div className = "flex items-center">
+                            <Input
+                                placeholder="Description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
+                        <div className = "flex items-center">
+                            <Input
+                                placeholder="Location"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
                             />
                         </div>
 
@@ -276,6 +305,20 @@ export default function MeetingsPage() {
                                         value={editEndTime}
                                         onChange={(e) => setEditEndTime(e.target.value)}
                                         className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                    />
+                                </div>
+                                <div className = "flex items-center">
+                                    <Input
+                                        placeholder="Description"
+                                        value={editDescription}
+                                        onChange={(e) => setEditDescription(e.target.value)}
+                                    />
+                                </div>
+                                <div className = "flex items-center">
+                                    <Input
+                                        placeholder="Location"
+                                        value={editLocation}
+                                        onChange={(e) => setEditLocation(e.target.value)}
                                     />
                                 </div>
 
