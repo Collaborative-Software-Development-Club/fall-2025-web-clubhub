@@ -81,7 +81,11 @@ export default function EditableText({
                     className="rounded-md cursor-pointer hover:bg-gray-100 transition-colors min-h-14 whitespace-pre-wrap hover:shadow-sm my-2"
                     onClick={startEditing}
                 >
-                    <DisplayText title={title} text={text} />
+                    <DisplayText
+                        title={title}
+                        text={text}
+                        placeholder="Click to edit..."
+                    />
                 </div>
             )}
         </div>

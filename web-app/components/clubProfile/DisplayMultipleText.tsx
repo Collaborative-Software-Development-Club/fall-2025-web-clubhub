@@ -12,7 +12,7 @@ export default function DisplayMultipleText({
             <div className="p-2 min-h-10 whitespace-pre-wrap">
                 {Object.entries(initialData).map(([key, value]) => (
                     <div key={key}>
-                        <strong>{key}:</strong> {value || "Click to edit..."}
+                        <strong>{key}:</strong> {value || "No information provided"}
                     </div>
                 ))}
             </div>

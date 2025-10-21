@@ -68,6 +68,7 @@ export default async function ClubPage({
                     <DisplayText
                         title="Purpose Statement"
                         text={clubData["Purpose Statement"]}
+                        placeholder="No information provided"
                     />
                     <DisplayMultipleText
                         title="Membership Details"
@@ -80,6 +81,7 @@ export default async function ClubPage({
                                 "Meeting Time and Place"
                             ]
                         }
+                        placeholder="No information provided"
                     />
                     <div
                         id="contact"
@@ -92,8 +94,13 @@ export default async function ClubPage({
                                 ]
                             }
                             isEmail={true}
+                            placeholder="No information provided"
                         />
-                        <DisplayContact list={socialMedia} isEmail={false} />
+                        <DisplayContact
+                            list={socialMedia}
+                            isEmail={false}
+                            placeholder="No information provided"
+                        />
                     </div>
                 </div>
             )}

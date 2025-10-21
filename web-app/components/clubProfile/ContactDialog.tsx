@@ -95,7 +95,11 @@ export default function ContactDialog({ data, isEmail }: ContactDialogProps) {
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <div className="rounded-md cursor-pointer hover:bg-gray-100 min-h-14 whitespace-pre-wrap hover:shadow-sm py-2">
-                    <DisplayContact list={list} isEmail={isEmail} />
+                    <DisplayContact
+                        list={list}
+                        isEmail={isEmail}
+                        placeholder="Click to edit..."
+                    />
                 </div>
             </DialogTrigger>
 

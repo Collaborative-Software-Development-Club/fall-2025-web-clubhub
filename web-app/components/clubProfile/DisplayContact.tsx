@@ -3,9 +3,11 @@ import { SOCIAL_MEDIA_PLATFORMS } from "./constants";
 export default function DisplayContact({
     list,
     isEmail,
+    placeholder = "",
 }: {
     list: string[];
     isEmail: boolean;
+    placeholder?: string;
 }) {
     const renderDisplayItem = (item: string, index: number) => {
         if (!item || item.trim() === "") return null;
@@ -38,7 +40,7 @@ export default function DisplayContact({
                 </ul>
             ) : (
                 <p className="p-2 min-h-10 whitespace-pre-wrap">
-                    Click to edit...
+                    {placeholder}
                 </p>
             )}
         </div>
