@@ -15,9 +15,9 @@ interface ChangeStatusProps {
 
 function ChangeStatus({ initialText }: ChangeStatusProps): JSX.Element {
     const [status, changeStatus] = useState(initialText);
-    let buttonStyleActive = "cursor-pointer bg-green-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-green-100";
-    let buttonStyleInactive = "cursor-pointer bg-red-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-red-100";
-    let buttonStylePending = "cursor-pointer bg-yellow-200 px-3 py-1 w-full text-sm font-medium text-gray-700 hover:bg-yellow-100";
+    let buttonStyleActive = "cursor-pointer bg-green-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-green-100";
+    let buttonStyleInactive = "cursor-pointer bg-red-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-red-100";
+    let buttonStylePending = "cursor-pointer bg-yellow-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-yellow-100";
     let startState;
     if (initialText === "Pending") {
         startState = buttonStylePending;
