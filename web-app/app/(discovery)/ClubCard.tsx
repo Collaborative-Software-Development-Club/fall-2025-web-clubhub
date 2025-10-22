@@ -1,25 +1,31 @@
 "use client";
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "../ui/card";
+import { Club } from "@/app/popular_clubs/popular-clubs-page";
+import { Badge } from "@/components/ui/badge";
 
-/*
-I'm going to assume we will have a club interface/type like this:
-(This is just what I thought of we can have more info too. images ideally)
-*/
-// Basic club type definition
-export type Club = {
-    name?: string; // - club name
-    tags?: string[]; // - tags for club
-    memberCount?: number; // (integer) - num members in club
-    avgAttendance?: number; // (integer) - average attendance
-    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
-    meetingFrequency?: number; // (idk if we need something like this just example)
-    isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
+// Support two usages:
+// - Popular page: <ClubCard club={club} />
+// - Browse page:  <ClubCard name=.. description=.. interests=.. />
+type BrowseProps = {
+    name: string;
+    description: string;
+    interests: string[];
+    leader?: string;
+    contact?: string;
 };
 
-type ClubCardProps = {
+type PopularProps = {
     club: Club;
 };
+
+type ClubCardProps = PopularProps | BrowseProps;
 /*
 We should have an image, title, and some other information that would be useful
 to display on the main page. I was thinking we could make some kind of clickable or hover
@@ -28,16 +34,30 @@ add it into this ClubCard.
 */
 
 export default function ClubCard(props: ClubCardProps) {
-    const { club } = props;
+    // Normalize props into a `club` object used by this component
+    let club: Club;
+
+    if ("club" in props) {
+        club = props.club;
+    } else {
+        // props is BrowseProps
+        club = {
+            name: props.name,
+            description: props.description,
+            tags: props.interests,
+            leader: props.leader,
+            contactEmail: props.contact,
+        };
+    }
 
     // Formats attendance rate to percentage
     const formatAttendanceRate = (rate?: number) => {
-        return rate ? `${(rate * 100).toFixed(1)}%` : "N/A";
+        return rate ? `${(rate * 100).toFixed(1)}%` : null;
     };
 
     // Formats meeting frequency to readable
     const formatMeetingFrequency = (frequency?: number) => {
-        if (!frequency) return "N/A";
+        if (!frequency) return null;
         if (frequency === 1) return "Weekly";
         if (frequency === 2) return "Bi-weekly";
         if (frequency === 4) return "Monthly";
@@ -61,83 +81,102 @@ export default function ClubCard(props: ClubCardProps) {
         );
     };
 
-    // List of statistics/info to display about the club
-    const statList = [
-        { fieldTitle: "Members:", value: club.memberCount },
-        {
-            fieldTitle: "Attendance:",
-            value: formatAttendanceRate(club.attendanceRate),
-        },
-        { fieldTitle: "Avg. Turnout:", value: club.avgAttendance },
-        {
-            fieldTitle: "Meetings:",
-            value: formatMeetingFrequency(club.meetingFrequency),
-        },
-    ];
+    // inside ClubCard component, after helpers
+    type StatItem = { fieldTitle: string; value: string | number };
 
+    function buildStatList(club: Club): StatItem[] {
+        const out: StatItem[] = [];
+
+        if (club.memberCount != null)
+            out.push({ fieldTitle: "Members:", value: club.memberCount });
+        const attendance = formatAttendanceRate(club.attendanceRate);
+        if (attendance != null)
+            out.push({ fieldTitle: "Attendance:", value: attendance });
+        if (club.avgAttendance != null)
+            out.push({
+                fieldTitle: "Avg. Turnout:",
+                value: club.avgAttendance,
+            });
+        const meeting = formatMeetingFrequency(club.meetingFrequency);
+        if (meeting != null)
+            out.push({ fieldTitle: "Meetings:", value: meeting });
+
+        return out;
+    }
+
+    const statList = buildStatList(club);
     return (
-        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-            <CardContent className="p-4 h-full flex flex-col">
-                {/* Club Name */}
-                <div className="mb-3">
-                    <h3 className="text-lg font-bold text-gray-900 leading-tight">
-                        {club.name || "Unknown Club"}
-                    </h3>
-                </div>
+        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer gap-3">
+            <CardHeader>
+                <CardTitle className="text-lg font-bold text-gray-900 leading-tight pb-1 border-b border-gray-300">
+                    {club.name || "Unknown Club Name"}
+                </CardTitle>
+                {club.description && (
+                    <CardDescription className="line-clamp-3">
+                        {club.description}
+                    </CardDescription>
+                )}
+            </CardHeader>
 
+            <CardContent>
                 {/* Tags */}
                 {club.tags && club.tags.length > 0 && (
                     <div className="mb-3">
                         {/* Display 3 tags in blue bubbles */}
-                        <div className="flex flex-wrap gap-1">
-                            {club.tags.slice(0, 3).map((tag, index) => (
-                                <span
-                                    key={index}
-                                    className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full"
-                                >
-                                    {tag}
-                                </span>
+                        <div className="flex flex-row flex-wrap gap-1">
+                            {club.tags.map((tag: string, index: number) => (
+                                <Badge key={index}>{tag}</Badge>
                             ))}
-                            {/* If we have more tags then this shows that */}
-                            {club.tags.length > 3 && (
-                                <span className="text-xs text-gray-500 px-2 py-1">
-                                    +{club.tags.length - 3} more
-                                </span>
-                            )}
                         </div>
                     </div>
                 )}
 
-                {/* Stats Grid */}
-                <div className="flex-1 space-y-2 text-sm">
-                    {statList.map((item, index) => {
-                        // Skip null/undefined values but allow 0
-                        if (item.value == null) return null;
-
-                        return statField(
-                            `stat-${index}`,
-                            item.fieldTitle,
-                            item.value as string | number,
-                        );
-                    })}
-                </div>
+                {/* Stats Grid (render only when there's at least one stat) */}
+                {statList.length > 0 && (
+                    <div className="flex-1 space-y-2 text-sm">
+                        {statList.map((item, index) =>
+                            statField(
+                                `stat-${index}`,
+                                item.fieldTitle,
+                                item.value,
+                            ),
+                        )}
+                    </div>
+                )}
 
                 {/* Registration Status Badge */}
-                <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="flex justify-center">
-                        <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                club.isOpen
-                                    ? "bg-green-100 text-green-800"
-                                    : "bg-red-100 text-red-800"
-                            }`}
-                        >
-                            {club.isOpen
-                                ? "✓ Open for Registration"
-                                : "✗ Registration Closed"}
-                        </span>
+                {club.isOpen !== undefined && (
+                    <div className="mt-3 pt-3 border-t border-gray-300">
+                        <div className="flex justify-center">
+                            <Badge
+                                className={`h-8 text-xs font-medium ${
+                                    club.isOpen
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-red-100 text-red-800"
+                                }`}
+                            >
+                                {club.isOpen
+                                    ? "✓ Open for Registration"
+                                    : "✗ Registration Closed"}
+                            </Badge>
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {club.leader && (
+                    <p className="text-sm font-medium">Leader: {club.leader}</p>
+                )}
+                {club.contactEmail && (
+                    <p className="text-sm text-muted-foreground">
+                        Contact:{" "}
+                        <a
+                            href={`mailto:${club.contactEmail}`}
+                            className="underline"
+                        >
+                            {club.contactEmail}
+                        </a>
+                    </p>
+                )}
             </CardContent>
         </Card>
     );

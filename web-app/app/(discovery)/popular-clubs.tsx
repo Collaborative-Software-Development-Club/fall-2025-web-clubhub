@@ -30,6 +30,25 @@ export function PopularClubs(props: PopularClubsPageProps) {
     );
 }
 
+/*
+I'm going to assume we will have a club interface/type like this:
+(This is just what I thought of we can have more info too. images ideally)
+*/
+// Basic club type definition
+export type Club = {
+    name?: string; // - club name
+    tags?: string[]; // - tags for club
+    memberCount?: number; // (integer) - num members in club
+    avgAttendance?: number; // (integer) - average attendance
+    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
+    meetingFrequency?: number; // (idk if we need something like this just example)
+    isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
+    description?: string;
+    leader?: string;
+    contactEmail?: string;
+    image?: string;
+};
+
 type PopularClubsPageProps = {
     clubsList?: Club[]; // Replace this with the proper type for club in the future
 };
