@@ -1,152 +1,80 @@
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import clubsData from "@/mock/clubs.json";
 
+interface ClubCategories {
+    "Secondary Types": string | string[];
+}
+
+interface Club {
+    "Club Name": string;
+    Categories: ClubCategories;
+}
+
 // Utility to shuffle and pick N random clubs
-function getRandomClubs(clubs, count = 3) {
+function getRandomClubs(clubs: Club[], count: number = 3): Club[] {
     const shuffled = [...clubs].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
 }
 
-const styles = {
-    page: {
-        minHeight: "100vh",
-        background: "#f9fafb",
-        display: "flex",
-        flexDirection: "column" as const,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    card: {
-        borderRadius: "1rem",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
-        padding: "2rem",
-        display: "flex",
-        flexDirection: "column" as const,
-        alignItems: "center",
-        marginBottom: "3rem",
-        minWidth: 320,
-    },
-    cardHeader: {
-        alignItems: "center",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column" as const,
-        justifyContent: "center",
-        padding: 0,
-    },
-    cardTitle: {
-        fontSize: "2rem",
-        fontWeight: "bold",
-        marginBottom: "0.5rem",
-        textAlign: "center" as const,
-        width: "100%",
-    },
-    cardContent: {
-        display: "flex",
-        flexDirection: "column" as const,
-        alignItems: "center",
-        width: "100%",
-    },
-    heading: {
-        fontSize: "1.125rem",
-        fontWeight: 600,
-        marginBottom: "1rem",
-    },
-    buttonRow: {
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "1rem",
-        marginBottom: "1rem",
-        width: "100%",
-    },
-    button: {
-        width: "100%",
-    },
-    debugText: {
-        fontSize: "0.75rem",
-        color: "#6b7280",
-    },
-    browseContainer: {
-        width: "100%",
-        maxWidth: "48rem",
-        paddingLeft: "1rem",
-        paddingRight: "1rem",
-    },
-    browseTitle: {
-        fontSize: "1.125rem",
-        fontWeight: 600,
-        marginBottom: "1rem",
-    },
-    clubList: {
-        display: "flex",
-        flexDirection: "column" as const,
-        gap: "1.5rem",
-    },
-    tagRow: {
-        display: "flex",
-        flexWrap: "wrap" as const,
-        gap: "0.5rem",
-    },
-    tag: {
-        background: "#e5e7eb",
-        color: "#374151",
-        padding: "0.25rem 0.5rem",
-        borderRadius: "0.375rem",
-        fontSize: "0.875rem",
-    },
-};
-
-export default function LoginPage() {
-    const randomClubs = getRandomClubs(clubsData, 3);
+export default function LoginPage(): React.JSX.Element {
+    const randomClubs: Club[] = getRandomClubs(clubsData, 3);
 
     return (
-        <div style={styles.page}>
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
             {/* Floating panel */}
-            <Card style={styles.card}>
-                <CardHeader style={styles.cardHeader}>
-                    <CardTitle style={styles.cardTitle}>Welcome</CardTitle>
+            <Card className="rounded-xl shadow-md p-8 flex flex-col items-center mb-12 min-w-[320px]">
+                <CardHeader className="flex flex-col items-center w-full p-0">
+                    <CardTitle className="text-2xl font-bold mb-2 w-full text-center">
+                        Welcome
+                    </CardTitle>
                 </CardHeader>
-                <CardContent style={styles.cardContent}>
-                    <h3 style={styles.heading}>To access User Profile you must log in.</h3>
-                    <div style={styles.buttonRow}>
+                <CardContent className="flex flex-col items-center w-full">
+                    <h3 className="text-lg font-semibold mb-4">
+                        To access User Profile you must log in.
+                    </h3>
+                    <div className="grid grid-cols-3 gap-4 mb-4 w-full">
                         {/* Login Button */}
-                        <Button style={styles.button} variant="default">
+                        <Button className="w-full" variant="default">
                             Login
                         </Button>
                         {/* Register Button */}
-                        <Button style={styles.button} variant="success">
+                        <Button className="w-full" variant="default">
                             Register
                         </Button>
                         {/* Debug Mode Button */}
-                        <Link href="/userprofile" style={{ width: "100%" }}>
-                            <Button style={styles.button} variant="secondary">
+                        <Link href="/userdashboard" className="w-full">
+                            <Button className="w-full" variant="secondary">
                                 Debug Mode
                             </Button>
                         </Link>
                     </div>
-                    <p style={styles.debugText}>
+                    <p className="text-xs text-gray-500">
                         Debug Mode lets you view the profile page without logging in.
                     </p>
                 </CardContent>
             </Card>
             {/* Browse page below */}
-            <div style={styles.browseContainer}>
-                <h3 style={styles.browseTitle}>Browse Clubs</h3>
-                <div style={styles.clubList}>
+            <div className="w-full max-w-3xl px-4">
+                <h3 className="text-lg font-semibold mb-4">Browse Clubs</h3>
+                <div className="flex flex-col gap-6">
                     {randomClubs.map((club) => (
                         <Card key={club["Club Name"]}>
                             <CardHeader>
                                 <CardTitle>{club["Club Name"]}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div style={styles.tagRow}>
+                                <div className="flex flex-wrap gap-2">
                                     {(Array.isArray(club.Categories["Secondary Types"])
                                         ? club.Categories["Secondary Types"]
                                         : [club.Categories["Secondary Types"]]
                                     ).map((interest: string) => (
-                                        <span key={interest} style={styles.tag}>
+                                        <span
+                                            key={interest}
+                                            className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm"
+                                        >
                                             {interest}
                                         </span>
                                     ))}
