@@ -210,14 +210,14 @@ export default function MeetingsPage() {
                                 className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                             />
                         </div>
-                        <div className = "flex items-center">
+                        <div className="flex items-center">
                             <Input
                                 placeholder="Description"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                        <div className = "flex items-center">
+                        <div className="flex items-center">
                             <Input
                                 placeholder="Location"
                                 value={location}
