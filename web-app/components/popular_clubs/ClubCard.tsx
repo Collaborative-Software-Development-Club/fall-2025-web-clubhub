@@ -145,7 +145,7 @@ export default function ClubCard(props: ClubCardProps) {
                 )}
 
                 {/* Registration Status Badge */}
-                {club.isOpen != undefined && (
+                {club.isOpen !== undefined && (
                     <div className="mt-3 pt-3 border-t border-gray-300">
                         <div className="flex justify-center">
                             <Badge
