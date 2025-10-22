@@ -1,0 +1,50 @@
+[
+  {
+    "clubName": "Collaborative Software Development Club",
+    "id": 1,
+    "message": "Come meet fellow members and get an overview of our upcoming collaborative software projects! No experience required.",
+    "datePosted": "2025-09-20T15:00:00Z",
+    "expiryDate": "2025-10-01T00:00:00Z",
+    "contactEmail": "csdcosu@gmail.com"
+  },
+  {
+    "clubName": "Buckeye FinTech",
+    "id": 2,
+    "message": "Join us for a hands-on workshop exploring blockchain applications in finance. No prior experience needed.",
+    "datePosted": "2025-09-22T10:00:00Z",
+    "expiryDate": "2025-10-05T00:00:00Z",
+    "contactEmail": "buckeyefintech@gmail.com"
+  },
+  {
+    "clubName": "Artificial Intelligence Club",
+    "id": 3,
+    "message": "Dr. Chao will be discussing the future of deep learning and opportunities for student research.",
+    "datePosted": "2025-09-25T18:30:00Z",
+    "expiryDate": "2025-10-03T00:00:00Z",
+    "contactEmail": "osuaiclub@gmail.com"
+  },
+  {
+    "clubName": "The AutoDrive Challenge Team at The Ohio State University",
+    "id": 4,
+    "message": "Interested in autonomous vehicles? Come learn how to join our team and build the future of driving.",
+    "datePosted": "2025-09-21T14:00:00Z",
+    "expiryDate": "2025-10-10T00:00:00Z", 
+    "contactEmail": "mannem.3@osu.edu"
+  },
+  {
+    "clubName": "Big Data and Analytics Association",
+    "id": 5,
+    "message": "This week's meeting will cover matplotlib and seaborn. Bring your laptops!",
+    "datePosted": "2025-09-24T12:00:00Z",
+    "expiryDate": "2025-09-30T00:00:00Z",
+    "contactEmail": "ohiostatebdaa@gmail.com"
+  },
+  {
+    "clubName": "Baseball - Sport Club",
+    "id": 6,
+    "message": "Tryouts for new members will be held on Sunday at 10:00 AM at the baseball field near Woody Hayes Dr.",
+    "datePosted": "2025-09-23T08:00:00Z",
+    "expiryDate": "2025-09-29T00:00:00Z",
+    "contactEmail": "baseballclub@osu.edu"
+  }
+]
