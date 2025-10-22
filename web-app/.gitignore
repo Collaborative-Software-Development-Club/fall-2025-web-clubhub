@@ -2,6 +2,7 @@
 
 package-lock.json
 pnpm-lock.yaml
+bun.lock
 
 # dependencies
 /node_modules

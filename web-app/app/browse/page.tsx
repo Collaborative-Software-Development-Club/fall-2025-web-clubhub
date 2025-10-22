@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ClubCard from "@/components/browse/ClubCard";
+import ClubCard from "@/components/popular_clubs/ClubCard";
 import mockClubs from "@/mock/clubs.json";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
