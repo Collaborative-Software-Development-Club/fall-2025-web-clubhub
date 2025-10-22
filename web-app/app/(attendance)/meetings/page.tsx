@@ -11,7 +11,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Plus, Calendar as CalendarIcon } from "lucide-react";
-import { MeetingCard } from "@/app/(attendance)/MeetingCard";
+import { MeetingCard } from "@/app/(attendance)/meetings/MeetingCard";
 
 type Meeting = {
     id: number;

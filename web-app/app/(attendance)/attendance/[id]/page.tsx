@@ -1,6 +1,6 @@
 import { mockAttendance } from "@/data/sample-attendance";
-import AttendanceCodeCard from "../../AttendanceCodeCard";
-import { StudentRow } from "../../StudentRow";
+import AttendanceCodeCard from "./response/AttendanceCodeCard";
+import { StudentRow } from "./StudentRow";
 
 export default function AttendancePage() {
     const code = "0000";
@@ -31,11 +31,11 @@ export default function AttendancePage() {
             </div>
 
             <div className="flex items-center my-6 w-full">
-                <div className="flex-grow border-t border-gray-300"></div>
+                <div className="grow border-t border-gray-300"></div>
                 <span className="mx-4 text-gray-500 font-medium">
                     No Response
                 </span>
-                <div className="flex-grow border-t border-gray-300"></div>
+                <div className="grow border-t border-gray-300"></div>
             </div>
 
             {/* No-response students */}

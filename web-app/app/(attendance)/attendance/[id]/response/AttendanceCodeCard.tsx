@@ -18,7 +18,7 @@ export default function AttendanceCodeCard({
                 </p>
             </CardContent>
 
-            <CardAction className="flex-shrink-0">
+            <CardAction className="shrink-0">
                 <img
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/500px-QR_code_for_mobile_English_Wikipedia.svg.png"
                     alt="QR Code"
