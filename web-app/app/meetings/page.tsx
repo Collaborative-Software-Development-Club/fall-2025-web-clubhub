@@ -92,7 +92,6 @@ export default function MeetingsPage() {
         console.log("Edit meeting clicked for ID:", id); // Debug log
         const meeting = meetings.find(m => m.id === id);
         if (meeting) {
-            console.log("Found meeting:", meeting); // Debug log
             setEditingMeetingId(id);
             setEditTitle(meeting.title);
             setEditDate(meeting.date);
