@@ -18,7 +18,7 @@ export default function RootLayout({
                             <Link href="/">Browse</Link>
                         </TabsTrigger>
                         <TabsTrigger value="for-you" asChild>
-                            <Link href="for-you">For You</Link>
+                            <Link href="interest-selection">For You</Link>
                         </TabsTrigger>
                     </TabsList>
                 </Tabs>
