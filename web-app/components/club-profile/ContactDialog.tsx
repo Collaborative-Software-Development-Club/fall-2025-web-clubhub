@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import DialogInput from "./DialogInput";
 import { Plus } from "lucide-react";
-import DisplayContact from "./DisplayContact";
 import { EMAIL_REGEX, LINK_REGEX, SOCIAL_MEDIA_PLATFORMS } from "./constants";
+import DisplayContact from "@/components/club-profile/DisplayContact";
 
 interface ContactDialogProps {
     data: string[];

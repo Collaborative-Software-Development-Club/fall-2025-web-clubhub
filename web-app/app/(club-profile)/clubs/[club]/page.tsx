@@ -1,10 +1,10 @@
+import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
+import EditableText from "@/components/club-profile/EditableText";
 import clubs from "@/mock/clubs.json";
-import DisplayText from "@/components/clubProfile/DisplayText";
-import EditableText from "@/components/clubProfile/EditableText";
-import DisplayMultipleText from "@/components/clubProfile/DisplayMultipleText";
-import EditableMultipleText from "@/components/clubProfile/EditableMultipleText";
-import ContactDialog from "@/components/clubProfile/ContactDialog";
-import DisplayContact from "@/components/clubProfile/DisplayContact";
+import ContactDialog from "../../../../components/club-profile/ContactDialog";
+import DisplayContact from "@/components/club-profile/DisplayContact";
+import DisplayMultipleText from "@/components/club-profile/DisplayMultipleText";
+import { DisplayText } from "@/components/club-profile/DisplayText";
 
 export default async function ClubPage({
     params,

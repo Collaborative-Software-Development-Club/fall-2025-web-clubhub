@@ -3,17 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 
-import AttendanceCompletionCard from "@/components/attendance/AttendanceCompletionCard";
-import AttendanceOtpForm from "@/components/attendance/AttendanceOtpForm";
+import AttendanceCompletionCard from "./AttendanceCompletionCard";
+import AttendanceOtpForm from "./AttendanceOtpForm";
 import AttendanceStatusForm, {
     AttendanceStatusOption,
-} from "@/components/attendance/AttendanceStatusForm";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+} from "./AttendanceStatusForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 const OTP_LENGTH = 4;
@@ -29,7 +24,7 @@ const AttendanceResponsePage = () => {
     const rawMeetingId = params?.id;
     const meetingId = Array.isArray(rawMeetingId)
         ? rawMeetingId[0]
-        : rawMeetingId ?? "";
+        : (rawMeetingId ?? "");
     const meetingTitle = "Sample Meeting Title";
 
     const [otp, setOtp] = useState("");
@@ -112,7 +107,10 @@ const AttendanceResponsePage = () => {
                             onOtpComplete={(value) => {
                                 setOtp(value);
                                 void submitAttendance(value).catch((err) => {
-                                    console.error("Error submitting attendance:", err);
+                                    console.error(
+                                        "Error submitting attendance:",
+                                        err,
+                                    );
                                 });
                             }}
                             onSubmit={(value) => submitAttendance(value)}

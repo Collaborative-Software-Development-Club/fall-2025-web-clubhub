@@ -22,7 +22,7 @@ export const ClubCarousel: React.FC<PropType> = (props) => {
         "bg-white/90 hover:bg-white border shadow-lg disabled:invisible transition-opacity duration-200";
 
     return (
-        <Carousel className="relative w-full">
+        <Carousel className="relative w-full" opts={{ align: "start" }}>
             <CarouselContent className="-ml-2 md:-ml-4">
                 {React.Children.map(children, (child, index) => (
                     <CarouselItem
@@ -33,8 +33,8 @@ export const ClubCarousel: React.FC<PropType> = (props) => {
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious className={`left-2 ${carouselButtonCSS}`} />
-            <CarouselNext className={`right-2 ${carouselButtonCSS}`} />
+            <CarouselPrevious className={`-left-4 ${carouselButtonCSS}`} />
+            <CarouselNext className={`-right-4 ${carouselButtonCSS}`} />
         </Carousel>
     );
 };

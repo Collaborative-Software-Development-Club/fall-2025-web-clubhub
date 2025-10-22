@@ -13,8 +13,9 @@ export function Navbar() {
         { href: "/browse", label: "Browse" },
         { href: "/meetings", label: "Meetings" },
         { href: "/clubs/csdc", label: "Sample Club Profile" },
-        { href: "/attenndance/0/response", label: "Attendance Response" },
-        { href: "/account", label: "Attendance Response" },
+        { href: "/attendance/0/response", label: "Attendance Response" },
+        { href: "/account", label: "Account" },
+        { href: "/dashboard", label: "Dashboard" },
     ];
 
     console.log(pathname);

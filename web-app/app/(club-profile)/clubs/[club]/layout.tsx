@@ -1,7 +1,7 @@
+import { TagDialog } from "@/components/club-profile/TagDialog";
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
-import TagDialog from "@/components/clubProfile/TagDialog";
 
 export default async function ClubLeaderLayout({
     children,
@@ -39,9 +39,7 @@ export default async function ClubLeaderLayout({
                         </h2>
                         <div className="flex flex-wrap pt-4 gap-2 mb-6">
                             {/* Club Tags(eg. rounded badges and modify button when hovered) */}
-                                <TagDialog
-                                    data={softwareTags}
-                                />
+                            <TagDialog data={softwareTags} />
                         </div>
                     </div>
                 </div>
@@ -74,9 +72,9 @@ export default async function ClubLeaderLayout({
                         <Link
                             href={"/clubs/" + club + "/announcements"}
                             className="font-medium text-gray-700 hover:text-blue-600"
-                            >
-                                Announcements
-                            </Link>
+                        >
+                            Announcements
+                        </Link>
                         {/* Add more links or Remove links as needed */}
                     </nav>
                 </div>
@@ -86,7 +84,4 @@ export default async function ClubLeaderLayout({
     );
 }
 
-const softwareTags = [
-    "Technology",
-    "Special Interest",
-]
+const softwareTags = ["Technology", "Special Interest"];

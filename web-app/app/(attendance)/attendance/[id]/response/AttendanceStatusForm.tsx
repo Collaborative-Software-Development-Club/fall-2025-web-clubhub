@@ -33,7 +33,11 @@ const AttendanceStatusForm = ({
     };
 
     return (
-        <form className="space-y-3" onSubmit={handleSubmit} aria-busy={isSubmitting ? "true" : "false"}>
+        <form
+            className="space-y-3"
+            onSubmit={handleSubmit}
+            aria-busy={isSubmitting ? "true" : "false"}
+        >
             <div className="space-y-2">
                 <label
                     htmlFor="attendance-status"
@@ -59,7 +63,7 @@ const AttendanceStatusForm = ({
             <Button
                 type="submit"
                 className="w-full"
-                variant="secondary"
+                variant="default"
                 disabled={disabled || isSubmitting}
             >
                 {isSubmitting ? "Submitting..." : "Submit"}

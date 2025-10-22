@@ -1,4 +1,4 @@
-export default function DisplayText({
+export function DisplayText({
     title,
     text,
     placeholder = "",
