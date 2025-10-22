@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
-import ClubCard, { Club } from "./ClubCard";
+import { ClubCard } from "./club-card";
 import { ClubCarousel } from "./ClubCarousel";
 import { ClubCarouselHeader } from "./ClubCarouselHeader";
+import { PopularClubData } from "./PopularClubData";
 
 // Page to show the popular clubs
 
@@ -9,7 +10,7 @@ export function PopularClubs(props: PopularClubsPageProps) {
     const { clubsList = sampleClubsData } = props;
 
     // Memoize the sorted clubs to avoid recalculating on every render
-    const sortedClubs: Club[] = useMemo(() => {
+    const sortedClubs: PopularClubData[] = useMemo(() => {
         return buildPopularClubs(clubsList).slice(0, 10);
     }, [clubsList]);
 
@@ -34,23 +35,9 @@ export function PopularClubs(props: PopularClubsPageProps) {
 I'm going to assume we will have a club interface/type like this:
 (This is just what I thought of we can have more info too. images ideally)
 */
-// Basic club type definition
-export type Club = {
-    name?: string; // - club name
-    tags?: string[]; // - tags for club
-    memberCount?: number; // (integer) - num members in club
-    avgAttendance?: number; // (integer) - average attendance
-    attendanceRate?: number; // (decimal: avgAttendance/memberCount) (can be derived ig)
-    meetingFrequency?: number; // (idk if we need something like this just example)
-    isOpen?: boolean; // - is the club open to joining/can you still apply or open registration
-    description?: string;
-    leader?: string;
-    contactEmail?: string;
-    image?: string;
-};
 
 type PopularClubsPageProps = {
-    clubsList?: Club[]; // Replace this with the proper type for club in the future
+    clubsList?: PopularClubData[]; // Replace this with the proper type for club in the future
 };
 
 /**
@@ -60,7 +47,7 @@ type PopularClubsPageProps = {
  *
  * Note: we could do a weighted sort as well
  */
-function buildPopularClubs(clubsList: Club[]) {
+function buildPopularClubs(clubsList: PopularClubData[]) {
     // Create a copy to avoid mutating the original array
     const sortedClubs = [...clubsList];
 
@@ -86,7 +73,7 @@ function buildPopularClubs(clubsList: Club[]) {
 }
 
 // Sample data for testing
-const sampleClubsData: Club[] = [
+const sampleClubsData: PopularClubData[] = [
     {
         name: "Collaborative Software Development",
         tags: ["Programming", "Projects", "Collaboration", "Open Source"],

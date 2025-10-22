@@ -1,6 +1,9 @@
 "use client";
 
-import { AttendanceStatus, StudentProps } from "@/types/student-attendance";
+import {
+    AttendanceStatus,
+    StudentProps,
+} from "@/app/(attendance)/attendance/[id]/types";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
 

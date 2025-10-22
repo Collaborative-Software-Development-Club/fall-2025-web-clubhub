@@ -1,5 +1,4 @@
-// /data/sample-attendance.ts
-import { StudentProps } from "@/types/student-attendance";
+import type { StudentProps } from "@/app/(attendance)/attendance/[id]/types";
 
 export const mockAttendance: StudentProps[] = [
     {

@@ -6,9 +6,9 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "../ui/card";
-import { Club } from "@/app/popular_clubs/popular-clubs-page";
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PopularClubData } from "./PopularClubData";
 
 // Support two usages:
 // - Popular page: <ClubCard club={club} />
@@ -22,7 +22,7 @@ type BrowseProps = {
 };
 
 type PopularProps = {
-    club: Club;
+    club: PopularClubData;
 };
 
 type ClubCardProps = PopularProps | BrowseProps;
@@ -33,9 +33,9 @@ popout to show additional information but we need to define those types before I
 add it into this ClubCard.
 */
 
-export default function ClubCard(props: ClubCardProps) {
+export function ClubCard(props: ClubCardProps) {
     // Normalize props into a `club` object used by this component
-    let club: Club;
+    let club: PopularClubData;
 
     if ("club" in props) {
         club = props.club;
@@ -84,7 +84,7 @@ export default function ClubCard(props: ClubCardProps) {
     // inside ClubCard component, after helpers
     type StatItem = { fieldTitle: string; value: string | number };
 
-    function buildStatList(club: Club): StatItem[] {
+    function buildStatList(club: PopularClubData): StatItem[] {
         const out: StatItem[] = [];
 
         if (club.memberCount != null)
