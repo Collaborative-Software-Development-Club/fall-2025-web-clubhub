@@ -5,6 +5,7 @@ import { mockUsers } from "@/data/mock-users";
 import clubs from "@/mock/clubs.json";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import ClubCalendar from "@/components/calendar/ClubCalendar";
 
 // Mock data for announcements and meetings
 const announcements = [
@@ -94,28 +95,9 @@ function AnnouncementCarousel({ announcements }: { announcements: any[] }) {
     );
 }
 
-function CalendarGrid({ meetings }: { meetings: any[] }) {
-    // Simple 5x7 grid for demonstration
-    const days = Array.from({ length: 35 }, (_, i) => i + 1);
-    return (
-        <div className="grid grid-cols-7 gap-2">
-            {days.map((day) => (
-                <Card key={day} className="bg-white rounded-lg border border-gray-200 h-16 w-16 flex flex-col items-center justify-center text-sm">
-                    <CardContent className="p-2 w-full text-center">
-                        <div className="font-bold">{day}</div>
-                        {meetings
-                            .filter((m) => parseInt(m.date.split("/")[1]) === day)
-                            .map((m, idx) => (
-                                <div key={idx} className="text-xs text-gray-500">
-                                    {m.club}
-                                </div>
-                            ))}
-                    </CardContent>
-                </Card>
-            ))}
-        </div>
-    );
-}
+// function CalendarGrid({ meetings }: { meetings: any[] }) {
+//    This function is replaced by ClubCalendar component
+// }
 
 function MeetingList({ meetings }: { meetings: any[] }) {
     return (
@@ -168,13 +150,9 @@ export default function UserProfile() {
             {/* Calendar Section */}
             <section className="w-full mt-12">
                 <h2 className="text-lg font-semibold mb-4">Calendar</h2>
-                <div className="flex flex-row gap-8">
-                    <div className="flex-1">
-                        <CalendarGrid meetings={meetings} />
-                    </div>
-                    <div className="flex-1">
-                        <MeetingList meetings={meetings} />
-                    </div>
+                <div className="grid gap-8 md:grid-cols-2">
+                    <ClubCalendar meetings={meetings} />
+                    <MeetingList meetings={meetings} />
                 </div>
             </section>
 
