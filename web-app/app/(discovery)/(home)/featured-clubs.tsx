@@ -4,6 +4,7 @@ import clubsData from "@/mock/clubs.json";
 import { CarouselItem } from "@/components/ui/carousel";
 import { ClubCard } from "../club-card";
 import { PopularClubData } from "../PopularClubData";
+import Link from "next/link";
 
 export function FeaturedClubs() {
     const featuredCategories = [
@@ -64,7 +65,9 @@ export function FeaturedClubs() {
                                     key={`featured-${index}`}
                                     className="pl-2 md:pl-4 basis-1/1 md:basis-1/2 lg:basis-1/3 h-full"
                                 >
-                                    <ClubCard club={club} />
+                                    <Link href="clubs/csdc">
+                                        <ClubCard club={club} />
+                                    </Link>
                                 </CarouselItem>
                             ))}
                         </ClubCarousel>

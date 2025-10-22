@@ -5,6 +5,7 @@
 
 /app/(club-profile)/ @JunhoHwoang
 /services/club-profile/ @JunhoHwoang
+/components/club-profile/ @JunhoHwoang
 
 /app/(attendance)/ @donutdiet
 /services/attendance/ @donutdiet

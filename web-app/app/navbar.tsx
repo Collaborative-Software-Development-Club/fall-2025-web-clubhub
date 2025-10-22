@@ -10,7 +10,6 @@ export function Navbar() {
     const navLinks = [
         { href: "/", label: "Home" },
         { href: "/browse", label: "Browse" },
-        { href: "/clubs/csdc", label: "Sample Club Profile" },
         { href: "/dashboard", label: "My Clubs" },
     ];
 
