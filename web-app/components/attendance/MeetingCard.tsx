@@ -33,7 +33,7 @@ export function MeetingCard({
     deleteMeeting,
     editMeeting,
 }: MeetingCardProps) {
-    console.log(meeting);
+    
     return (
         <Card key={meeting.id}>
             <CardHeader className="flex flex-row items-center justify-between">
