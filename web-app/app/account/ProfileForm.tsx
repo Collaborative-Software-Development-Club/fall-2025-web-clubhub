@@ -1,105 +1,99 @@
 "use client";
 
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent } from "@/components/ui/card";
 
-const ProfileForm = () => {
-  const [formData, setFormData] = useState({
-    username: "",
-    major: "",
-    year: "",
-    bio: "",
-    isPublic: true,
-  });
+export default function ProfileForm() {
+    const [formData, setFormData] = useState({
+        username: "",
+        major: "",
+        year: "",
+        bio: "",
+        isPublic: true,
+    });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const target = e.target;
-  
-    if (target instanceof HTMLInputElement && target.type === "checkbox") {
-      setFormData(prev => ({
-        ...prev,
-        [target.name]: target.checked,
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [target.name]: target.value,
-      }));
-    }
-  };
+    const handleChange = (name: string, value: string | boolean) => {
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData); // ✅ prints form data
-  };
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("✅ Form submitted:", formData);
+    };
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-4">
-      {/* form fields here (same as before) */}
-      <div>
-        <label className="block font-medium">Username</label>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Username */}
+            <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                    id="username"
+                    value={formData.username}
+                    onChange={(e) => handleChange("username", e.target.value)}
+                    placeholder="Enter your username"
+                    required
+                />
+            </div>
 
-      <div>
-        <label className="block font-medium">Major</label>
-        <input
-          type="text"
-          name="major"
-          value={formData.major}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
+            {/* Major */}
+            <div className="space-y-2">
+                <Label htmlFor="major">Major</Label>
+                <Input
+                    id="major"
+                    value={formData.major}
+                    onChange={(e) => handleChange("major", e.target.value)}
+                    placeholder="Enter your major"
+                />
+            </div>
 
-      <div>
-        <label className="block font-medium">Year</label>
-        <select
-          name="year"
-          value={formData.year}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        >
-          <option value="">Select year</option>
-          <option value="Freshman">Freshman</option>
-          <option value="Sophomore">Sophomore</option>
-          <option value="Junior">Junior</option>
-          <option value="Senior">Senior</option>
-          <option value="Graduate">Graduate</option>
-        </select>
-      </div>
+            {/* Year */}
+            <div className="space-y-2">
+                <Label htmlFor="year">Year</Label>
+                <Select
+                    value={formData.year}
+                    onValueChange={(val) => handleChange("year", val)}
+                >
+                    <SelectTrigger id="year">
+                        <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Freshman">Freshman</SelectItem>
+                        <SelectItem value="Sophomore">Sophomore</SelectItem>
+                        <SelectItem value="Junior">Junior</SelectItem>
+                        <SelectItem value="Senior">Senior</SelectItem>
+                        <SelectItem value="Graduate">Graduate</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
 
-      <div>
-        <label className="block font-medium">Bio</label>
-        <textarea
-          name="bio"
-          value={formData.bio}
-          onChange={handleChange}
-          className="border p-2 w-full"
-          rows={4}
-        />
-      </div>
+            {/* Public Profile */}
+            <div className="flex items-center space-x-2">
+                <Switch
+                    id="isPublic"
+                    checked={formData.isPublic}
+                    onCheckedChange={(checked) =>
+                        handleChange("isPublic", Boolean(checked))
+                    }
+                />
+                <Label htmlFor="isPublic">Make profile public</Label>
+            </div>
 
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          name="isPublic"
-          checked={formData.isPublic}
-          onChange={handleChange}
-        />
-        <label>Make profile public</label>
-      </div>
-
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Save Changes
-      </button>
-    </form>
-  );
-};
-
-export default ProfileForm;
+            {/* Submit */}
+            <Button type="submit" className="w-full">
+                Save Changes
+            </Button>
+        </form>
+    );
+}
