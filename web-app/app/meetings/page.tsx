@@ -3,27 +3,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
     Popover,
     PopoverTrigger,
     PopoverContent,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
-import {
-    Plus,
-    Trash2,
-    MoreHorizontal,
-    Calendar as CalendarIcon,
-    Edit,
-} from "lucide-react";
+import { Plus, Calendar as CalendarIcon, Edit } from "lucide-react";
 import Link from "next/link";
 import { MeetingCard } from "@/components/attendance/MeetingCard";
 
@@ -55,7 +42,9 @@ export default function MeetingsPage() {
     const [date, setDate] = useState<Date | undefined>(new Date(Date.now()));
     const [startTime, setStartTime] = useState<string>("18:00");
     const [endTime, setEndTime] = useState<string>("19:00");
-    const [description, setDescription] = useState<string>("enter description here");
+    const [description, setDescription] = useState<string>(
+        "enter description here",
+    );
     const [location, setLocation] = useState<string>("enter location here");
 
     // Control popovers
@@ -65,7 +54,9 @@ export default function MeetingsPage() {
     // Edit meeting state
     const [editFormOpen, setEditFormOpen] = useState(false);
     const [editCalendarOpen, setEditCalendarOpen] = useState(false);
-    const [editingMeetingId, setEditingMeetingId] = useState<number | null>(null);
+    const [editingMeetingId, setEditingMeetingId] = useState<number | null>(
+        null,
+    );
     const [editTitle, setEditTitle] = useState("");
     const [editDate, setEditDate] = useState<Date | undefined>();
     const [editStartTime, setEditStartTime] = useState("");
@@ -77,7 +68,15 @@ export default function MeetingsPage() {
         if (!title || !date || !startTime || !endTime) return;
         setMeetings((prev) => [
             ...prev,
-            { id: ID_COUNTER++, title, date, startTime, endTime, description, location },
+            {
+                id: ID_COUNTER++,
+                title,
+                date,
+                startTime,
+                endTime,
+                description,
+                location,
+            },
         ]);
         setTitle(`Meeting #${meetings.length + 1}`);
         setDate(new Date(Date.now()));
@@ -89,8 +88,7 @@ export default function MeetingsPage() {
     };
 
     const editMeeting = (id: number): void => {
-        console.log("Edit meeting clicked for ID:", id); // Debug log
-        const meeting = meetings.find(m => m.id === id);
+        const meeting = meetings.find((m) => m.id === id);
         if (meeting) {
             setEditingMeetingId(id);
             setEditTitle(meeting.title);
@@ -100,27 +98,35 @@ export default function MeetingsPage() {
             setEditDescription(meeting.description || "");
             setEditLocation(meeting.location || "");
             setEditFormOpen(true);
-            
         }
     };
 
     const saveEditMeeting = (): void => {
-        if (!editTitle || !editDate || !editStartTime || !editEndTime || !editingMeetingId) return;
-        
-        setMeetings(prev => prev.map(meeting => 
-            meeting.id === editingMeetingId 
-                ? { 
-                    ...meeting, 
-                    title: editTitle, 
-                    date: editDate, 
-                    startTime: editStartTime, 
-                    endTime: editEndTime, 
-                    description: editDescription,
-                    location: editLocation,
-                  }
-                : meeting
-        ));
-        
+        if (
+            !editTitle ||
+            !editDate ||
+            !editStartTime ||
+            !editEndTime ||
+            !editingMeetingId
+        )
+            return;
+
+        setMeetings((prev) =>
+            prev.map((meeting) =>
+                meeting.id === editingMeetingId
+                    ? {
+                          ...meeting,
+                          title: editTitle,
+                          date: editDate,
+                          startTime: editStartTime,
+                          endTime: editEndTime,
+                          description: editDescription,
+                          location: editLocation,
+                      }
+                    : meeting,
+            ),
+        );
+
         cancelEdit();
     };
 
@@ -240,11 +246,11 @@ export default function MeetingsPage() {
             {editFormOpen && (
                 <div className="fixed inset-0 z-50">
                     {/* Backdrop */}
-                    <div 
-                        className="fixed inset-0 bg-black/20" 
+                    <div
+                        className="fixed inset-0 bg-black/20"
                         onClick={cancelEdit}
                     ></div>
-                    
+
                     {/* Popover-style content */}
                     <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <div className="bg-white rounded-md border shadow-md p-4 w-[300px]">
@@ -255,7 +261,9 @@ export default function MeetingsPage() {
                                 <Input
                                     placeholder="Meeting Title"
                                     value={editTitle}
-                                    onChange={(e) => setEditTitle(e.target.value)}
+                                    onChange={(e) =>
+                                        setEditTitle(e.target.value)
+                                    }
                                 />
 
                                 {/* Date Picker for Edit */}
@@ -294,7 +302,9 @@ export default function MeetingsPage() {
                                         type="time"
                                         step={60}
                                         value={editStartTime}
-                                        onChange={(e) => setEditStartTime(e.target.value)}
+                                        onChange={(e) =>
+                                            setEditStartTime(e.target.value)
+                                        }
                                         className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                     />
                                     <span className="px-2">to</span>
@@ -302,7 +312,9 @@ export default function MeetingsPage() {
                                         type="time"
                                         step={60}
                                         value={editEndTime}
-                                        onChange={(e) => setEditEndTime(e.target.value)}
+                                        onChange={(e) =>
+                                            setEditEndTime(e.target.value)
+                                        }
                                         className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                     />
                                 </div>
@@ -310,14 +322,18 @@ export default function MeetingsPage() {
                                     <Input
                                         placeholder="Description"
                                         value={editDescription}
-                                        onChange={(e) => setEditDescription(e.target.value)}
+                                        onChange={(e) =>
+                                            setEditDescription(e.target.value)
+                                        }
                                     />
                                 </div>
                                 <div className="flex items-center">
                                     <Input
                                         placeholder="Location"
                                         value={editLocation}
-                                        onChange={(e) => setEditLocation(e.target.value)}
+                                        onChange={(e) =>
+                                            setEditLocation(e.target.value)
+                                        }
                                     />
                                 </div>
 
@@ -325,9 +341,15 @@ export default function MeetingsPage() {
                                     <Button
                                         onClick={saveEditMeeting}
                                         className="flex-1 cursor-pointer"
-                                        disabled={!editTitle || !editDate || !editStartTime || !editEndTime}
+                                        disabled={
+                                            !editTitle ||
+                                            !editDate ||
+                                            !editStartTime ||
+                                            !editEndTime
+                                        }
                                     >
-                                        <Edit className="w-4 h-4 mr-2" /> Save Changes
+                                        <Edit className="w-4 h-4 mr-2" /> Save
+                                        Changes
                                     </Button>
                                     <Button
                                         onClick={cancelEdit}
