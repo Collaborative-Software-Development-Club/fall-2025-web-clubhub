@@ -100,7 +100,7 @@ export default function MeetingsPage() {
             setEditDescription(meeting.description || "");
             setEditLocation(meeting.location || "");
             setEditFormOpen(true);
-            console.log("Edit form should now be open"); // Debug log
+            
         }
     };
 
