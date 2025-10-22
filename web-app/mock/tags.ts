@@ -1,0 +1,18 @@
+export const mockTags = [
+    "Academic/College",
+    "Awareness/Activism",
+    "Community Service/Service Learning",
+    "Creative and Performing Arts",
+    "Ethnic/Cultural",
+    "Governance Organizations",
+    "Honoraries/Honor Societies",
+    "Media, Journalism, and Creative Writing",
+    "Religious/Spiritual",
+    "Social Fraternities/Sororities",
+    "Special Interest",
+    "Sports and Recreation",
+    "Technology",
+    "Graduate",
+    "Professional",
+    "Undergraduate",
+];

@@ -1,1 +1,14 @@
 * @ldfMion
+
+/app/(discovery)/ @ldfMion
+/services/discovery/ @ldfMion
+
+/app/(club-profile)/ @JunhoHwoang
+/services/club-profile/ @JunhoHwoang
+/components/club-profile/ @JunhoHwoang
+
+/app/(attendance)/ @donutdiet
+/services/attendance/ @donutdiet
+
+/app/(account)/ @kbeaverson
+/services/account/ @kbeaverson
