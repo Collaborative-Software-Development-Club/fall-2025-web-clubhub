@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ClubCarousel } from "./club-carousel";
@@ -50,54 +49,43 @@ export default async function Home() {
         .map(mapClubData);
     const tags = (await tagsService.getAllTags()).map((t) => t.name);
 
+    const sections = [
+        {
+            name: "Featured Clubs",
+            clubs: featuredClubs,
+        },
+        ...carouselsData,
+    ];
+
     return (
         <div className="flex flex-col">
-            {/* Section with Background, Search, and Interests */}
-            <section className="relative flex h-[350px] items-center justify-center  text-center  md:h-[450px]">
-                {/* Increased height */}
-                {/* Content Container */}
+            <section className="relative flex items-center justify-center  text-center mt-8">
                 <div className="relative z-10 flex w-full flex-col items-center space-y-4 px-4">
                     <SearchBar />
                     <InterestBar allTags={tags} />
                 </div>
             </section>
 
-            {/* Featured Clubs Carousel */}
-            {featuredClubs.length > 0 && (
-                <section className="container mx-auto max-w-5xl px-4 py-8">
-                    <ClubCarouselHeader name="Featured Clubs" />
-                    <ClubCarousel>
-                        {featuredClubs.map((club, index) => (
-                            <CarouselItem
-                                key={`featured-${index}`}
-                                className="pl-2 md:pl-4 basis-1/1 md:basis-1/2 lg:basis-1/3 h-full"
-                            >
-                                <ClubCard club={club} />
-                            </CarouselItem>
-                        ))}
-                    </ClubCarousel>
-                </section>
+            {sections.map((section) =>
+                section.clubs.length > 0 ? (
+                    <section
+                        className="container mx-auto py-8 flex flex-col gap-4"
+                        key={section.name}
+                    >
+                        <ClubCarouselHeader name={section.name} />
+                        <ClubCarousel>
+                            {section.clubs.map((club, index) => (
+                                <CarouselItem
+                                    key={`featured-${index}`}
+                                    className="pl-2 md:pl-4 basis-1/1 md:basis-1/2 lg:basis-1/3 h-full"
+                                >
+                                    <ClubCard club={club} />
+                                </CarouselItem>
+                            ))}
+                        </ClubCarousel>
+                    </section>
+                ) : null,
             )}
-
-            {/* 3. Carousels for Each Category */}
-            {carouselsData.map((carousel) => (
-                <section
-                    key={carousel.name}
-                    className="container mx-auto max-w-5xl px-4 py-8"
-                >
-                    <ClubCarouselHeader name={carousel.name} />
-                    <ClubCarousel>
-                        {carousel.clubs.map((club, index) => (
-                            <CarouselItem
-                                key={`${carousel.name}-${index}-${club.name || index}`}
-                                className="pl-2 md:pl-4 basis-1/1 md:basis-1/2 lg:basis-1/3 h-full"
-                            >
-                                <ClubCard club={club} />
-                            </CarouselItem>
-                        ))}
-                    </ClubCarousel>
-                </section>
-            ))}
 
             {/* Call to Action */}
             <section className="bg-gray-100 py-12 text-center">
@@ -158,13 +146,13 @@ type ClubJsonData = {
 
 // --- Simple Search Bar Component ---
 const SearchBar = () => (
-    <div className="flex w-full max-w-lg items-center space-x-2 rounded-full border border-gray-300 bg-white p-2 shadow-md transition-shadow hover:shadow-lg">
+    <div className="w-full max-w-lg items-center space-x-2 relative z-0">
         <Input
             type="text"
             placeholder="Search clubs or keywords"
-            className="flex-1 border-none bg-transparent px-4 py-2 text-gray-900 placeholder-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0" // Added text/placeholder colors
-        />
-        <Button type="submit" className="rounded-full">
+            className="shadow-primary/50 shadow-2xl flex-1 px-8 py-6 w-full rounded-full"
+        ></Input>
+        <Button type="submit" className="rounded-full absolute right-2 top-2">
             Search
         </Button>
     </div>

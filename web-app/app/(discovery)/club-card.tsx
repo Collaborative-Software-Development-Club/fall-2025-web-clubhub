@@ -125,7 +125,9 @@ export function ClubCard(props: ClubCardProps) {
                         {/* Display 3 tags in blue bubbles */}
                         <div className="flex flex-row flex-wrap gap-1">
                             {club.tags.map((tag: string, index: number) => (
-                                <Badge key={index}>{tag}</Badge>
+                                <Badge variant="secondary" key={index}>
+                                    {tag}
+                                </Badge>
                             ))}
                         </div>
                     </div>

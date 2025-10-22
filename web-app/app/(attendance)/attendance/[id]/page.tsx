@@ -1,4 +1,4 @@
-import { mockAttendance } from "@/data/sample-attendance";
+import { mockAttendance } from "@/mock/sample-attendance";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
 

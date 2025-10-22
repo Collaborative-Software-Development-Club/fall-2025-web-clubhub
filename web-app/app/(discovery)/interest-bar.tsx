@@ -9,12 +9,12 @@ export const InterestBar = ({ allTags }: { allTags: string[] }) => {
     const hiddenInterestCount = allTags.length - visibleInterests.length;
 
     return (
-        <div className="flex w-full max-w-5xl items-center space-x-2 py-2 flex-wrap gap-1">
+        <div className="flex w-full max-w-5xl items-center space-x-2 py-2 flex-wrap gap-1 z-2">
             {visibleInterests.map((interest) => (
                 <Toggle
                     key={interest}
                     variant="outline"
-                    className="rounded-full"
+                    className="rounded-full bg-background"
                 >
                     {interest}
                 </Toggle>
@@ -28,16 +28,6 @@ export const InterestBar = ({ allTags }: { allTags: string[] }) => {
                     + {hiddenInterestCount} more
                 </Button>
             )}
-            {/* Add styling for scrollbar hiding if needed */}
-            <style jsx>{`
-                .scrollbar-hide::-webkit-scrollbar {
-                    display: none;
-                }
-                .scrollbar-hide {
-                    -ms-overflow-style: none; /* IE and Edge */
-                    scrollbar-width: none; /* Firefox */
-                }
-            `}</style>
         </div>
     );
 };

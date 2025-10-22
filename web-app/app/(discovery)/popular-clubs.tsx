@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ClubCard } from "./club-card";
-import { ClubCarousel } from "./ClubCarousel";
-import { ClubCarouselHeader } from "./ClubCarouselHeader";
+import { ClubCarousel } from "./club-carousel";
+import { ClubCarouselHeader } from "./club-carousel-header";
 import { PopularClubData } from "./PopularClubData";
 
 // Page to show the popular clubs
