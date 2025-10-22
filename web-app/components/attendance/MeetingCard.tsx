@@ -18,6 +18,8 @@ export type Meeting = {
     date: Date;
     startTime: string;
     endTime: string;
+    description?: string;
+    location?: string;
 };
 
 type MeetingCardProps = {
@@ -31,6 +33,7 @@ export function MeetingCard({
     deleteMeeting,
     editMeeting,
 }: MeetingCardProps) {
+    
     return (
         <Card key={meeting.id}>
             <CardHeader className="flex flex-row items-center justify-between">
@@ -39,6 +42,12 @@ export function MeetingCard({
                     <p className="text-sm text-muted-foreground">
                         {format(meeting.date, "PPP")} &middot;{" "}
                         {meeting.startTime} - {meeting.endTime}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        {meeting.description ? ` · ${meeting.description}` : ""}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                        {meeting.location ? ` · ${meeting.location}` : ""}
                     </p>
                 </div>
                 <div className="flex gap-2">
