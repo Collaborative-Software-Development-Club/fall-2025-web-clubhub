@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ClubCarousel } from "./club-carousel";
-import { ClubCarouselHeader } from "./club-carousel-header";
+import { ClubCarousel } from "../club-carousel";
+import { ClubCarouselHeader } from "../club-carousel-header";
 import clubsData from "@/mock/clubs.json";
 import { CarouselItem } from "@/components/ui/carousel";
-import { ClubCard } from "./club-card";
-import { PopularClubData } from "./PopularClubData";
+import { ClubCard } from "../club-card";
+import { PopularClubData } from "../PopularClubData";
 import { tagsService } from "@/services/discovery/tags-service";
-import { InterestBar } from "./interest-bar";
+import { InterestBar } from "../interest-bar";
 
 export default async function Home() {
     // Define the categories for carousels
@@ -59,7 +59,7 @@ export default async function Home() {
 
     return (
         <div className="flex flex-col">
-            <section className="relative flex items-center justify-center  text-center mt-8">
+            <section className="relative flex items-center justify-center  text-center mt-4">
                 <div className="relative z-10 flex w-full flex-col items-center space-y-4 px-4">
                     <SearchBar />
                     <InterestBar allTags={tags} />
