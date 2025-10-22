@@ -9,13 +9,9 @@ export function Navbar() {
     const pathname = usePathname();
     const navLinks = [
         { href: "/", label: "Home" },
-        { href: "/attendance/0", label: "Attendance" },
         { href: "/browse", label: "Browse" },
-        { href: "/meetings", label: "Meetings" },
         { href: "/clubs/csdc", label: "Sample Club Profile" },
-        { href: "/attendance/0/response", label: "Attendance Response" },
-        { href: "/account", label: "Account" },
-        { href: "/dashboard", label: "Dashboard" },
+        { href: "/dashboard", label: "My Clubs" },
     ];
 
     console.log(pathname);

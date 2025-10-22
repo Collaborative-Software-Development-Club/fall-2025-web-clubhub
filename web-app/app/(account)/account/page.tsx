@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import ProfileForm from "./ProfileForm";
+import ProfileForm from "./profile-form";
 
 export default function AccountPage() {
     return (

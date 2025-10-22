@@ -58,7 +58,7 @@ export default async function ClubLeaderLayout({
                             Members
                         </Link>
                         <Link
-                            href={"/clubs/" + club + "/meetings"}
+                            href={"/meetings/" + club}
                             className="font-medium text-gray-700 hover:text-blue-600"
                         >
                             Meetings

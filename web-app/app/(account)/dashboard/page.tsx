@@ -4,6 +4,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import announcements from "@/mock/announcements.json";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
     const user = "User"; // eventually grab from convex/auth
@@ -20,6 +22,18 @@ export default function Dashboard() {
 
     return (
         <>
+            <div className="w-full flex flex-row justify-end px-8">
+                <Button
+                    asChild
+                    variant="outline"
+                    size="icon"
+                    aria-label="Account Settings"
+                >
+                    <Link href="account">
+                        <Settings />
+                    </Link>
+                </Button>
+            </div>
             {/* User Clubs */}
             <section className="m-8 space-y-4">
                 <h2 className="text-xl font-semibold">{`${user}'s Clubs`}</h2>

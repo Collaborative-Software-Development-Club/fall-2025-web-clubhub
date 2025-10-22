@@ -1,4 +1,5 @@
 import { Card, CardTitle, CardContent, CardAction } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function AttendanceCodeCard({
     code,
@@ -18,14 +19,16 @@ export default function AttendanceCodeCard({
                 </p>
             </CardContent>
 
-            <CardAction className="shrink-0">
-                <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/500px-QR_code_for_mobile_English_Wikipedia.svg.png"
-                    alt="QR Code"
-                    width={200}
-                    height={200}
-                />
-            </CardAction>
+            <Link href="/attendance/0/response">
+                <CardAction className="shrink-0">
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/500px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                        alt="QR Code"
+                        width={200}
+                        height={200}
+                    />
+                </CardAction>
+            </Link>
         </Card>
     );
 }
