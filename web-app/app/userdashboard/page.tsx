@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ProfileCard from "@/components/userprofile/ProfileCard";
 import { mockUsers } from "@/data/mock-users";
 import clubs from "@/mock/clubs.json";
@@ -19,12 +19,6 @@ const announcements = [
         club: "Robotics",
         date: "9/23/25"
     }
-];
-
-const meetings = [
-    { date: "9/22/25", time: "4:00 PM", club: "CSD", conflict: false },
-    { date: "9/22/25", time: "4:00 PM", club: "Robotics", conflict: true },
-    { date: "9/23/25", time: "5:00 PM", club: "Chess", conflict: false }
 ];
 
 function ClubCard({ club }: { club: any }) {
@@ -125,6 +119,39 @@ export default function UserProfile() {
         user => user.clubs.some(club => currentUser.clubs.includes(club)) && user.name !== currentUser.name
     );
 
+    const [meetings, setMeetings] = useState<any[]>([]);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const loadMeetings = async () => {
+        const res = await fetch("/api/meetings", { cache: "no-store" });
+        const data = await res.json();
+        setMeetings(data);
+    };
+
+    useEffect(() => {
+        loadMeetings();
+    }, []);
+
+    const onClickImport = () => fileInputRef.current?.click();
+
+    const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const fd = new FormData();
+        fd.append("file", file);
+        await fetch("/api/meetings/import", {
+            method: "POST",
+            body: fd
+        });
+        await loadMeetings();
+        if (fileInputRef.current) fileInputRef.current.value = "";
+    };
+
+    const onClickExport = () => {
+        // Simple download
+        window.location.href = "/api/meetings/export";
+    };
+
     return (
         <main className="flex flex-col items-center p-8 w-full max-w-[80rem] mx-auto">
             <h1 className="text-2xl font-bold mb-8">User Dashboard</h1>
@@ -149,10 +176,28 @@ export default function UserProfile() {
 
             {/* Calendar Section */}
             <section className="w-full mt-12">
-                <h2 className="text-lg font-semibold mb-4">Calendar</h2>
-                <div className="grid gap-8 md:grid-cols-2">
-                    <ClubCalendar meetings={meetings} />
-                    <MeetingList meetings={meetings} />
+                <div className="flex items-center justify-between gap-4 mb-4">
+                    <h2 className="text-lg font-semibold">Calendar</h2>
+                    <div className="flex items-center gap-2">
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept=".ics,text/calendar"
+                            className="hidden"
+                            onChange={onFileChange}
+                        />
+                        <Button variant="outline" onClick={onClickImport}>Import .ics</Button>
+                        <Button onClick={onClickExport}>Export .ics</Button>
+                    </div>
+                </div>
+
+                <div className="grid items-start gap-6 md:gap-8 grid-cols-1 md:grid-cols-[1.35fr_1fr]">
+                    <div className="rounded-xl border border-gray-200 bg-white p-2 md:p-3 shadow-sm">
+                        <ClubCalendar meetings={meetings} />
+                    </div>
+                    <div className="rounded-xl border border-gray-200 bg-white p-2 md:p-3 shadow-sm max-h-[520px] md:max-h-[640px] overflow-y-auto">
+                        <MeetingList meetings={meetings} />
+                    </div>
                 </div>
             </section>
 

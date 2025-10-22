@@ -1,0 +1,103 @@
+/* Optional CSS for Calendar */
+
+.wrapper {
+  width: 100%;
+}
+
+/* Apply to the Calendar root via className */
+.calendar {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 12px;
+  padding: 8px 12px 12px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+}
+
+/* Navigation */
+.calendar :global(.react-calendar__navigation) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9; /* slate-100 */
+}
+
+.calendar :global(.react-calendar__navigation__label) {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a; /* slate-900 */
+}
+
+.calendar :global(.react-calendar__navigation button) {
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 600;
+  color: #0f172a;
+  background: transparent;
+}
+
+.calendar :global(.react-calendar__navigation button:hover) {
+  background: #f1f5f9; /* slate-100 */
+}
+
+/* Weekdays */
+.calendar :global(.react-calendar__month-view__weekdays) {
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #64748b; /* slate-500 */
+  margin-bottom: 4px;
+}
+
+.calendar :global(.react-calendar__month-view__weekdays__weekday) abbr {
+  text-decoration: none;
+}
+
+/* Tiles */
+.calendar :global(.react-calendar__tile) {
+  position: relative;
+  border-radius: 10px;
+  padding: 10px 6px;
+}
+
+.calendar :global(.react-calendar__tile:hover) {
+  background: #f8fafc; /* slate-50 */
+}
+
+.calendar :global(.react-calendar__tile--now) {
+  outline: 2px solid #e5e7eb; /* gray-200 */
+}
+
+.calendar :global(.react-calendar__tile--active) {
+  background: #0ea5e9; /* sky-500 */
+  color: #ffffff;
+}
+
+.calendar :global(.react-calendar__tile--active:hover) {
+  background: #0284c7; /* sky-600 */
+}
+
+/* Neighboring month days */
+.calendar :global(.react-calendar__month-view__days__day--neighboringMonth) {
+  color: #cbd5e1; /* slate-300 */
+}
+
+/* Dot for days with meetings */
+.meetingDot {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+@media (min-width: 768px) {
+  .calendar :global(.react-calendar__tile) {
+    padding: 12px 8px;
+  }
+}

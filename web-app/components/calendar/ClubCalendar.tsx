@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import Calendar, { TileArgs } from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import styles from "./ClubCalendar.module.css";
 
 type Meeting = {
     date: string;
     time: string;
     club: string;
-    conflict: boolean;
+    conflict: boolean | number;
 };
 
 interface Props {
@@ -41,37 +42,32 @@ export default function ClubCalendar({ meetings }: Props) {
         const meetingsForDay = meetingsByDate.get(normalizeDateKey(date));
         if (!meetingsForDay?.length) return null;
 
-        const hasConflict = meetingsForDay.some((meeting) => meeting.conflict);
+        const hasConflict = meetingsForDay.some((meeting) => Boolean(meeting.conflict));
         return (
             <span
-                className={`mt-1 block h-1.5 w-1.5 rounded-full mx-auto ${
-                    hasConflict ? "bg-red-500" : "bg-blue-500"
-                }`}
+                className={`${styles.meetingDot} ${hasConflict ? "bg-red-500" : "bg-blue-500"}`}
             />
         );
     };
 
     return (
-        <Calendar
-            className="w-full rounded-xl border border-gray-200 p-4 shadow-sm"
-            locale="en-US"
-            showNeighboringMonth={false}
-            prevLabel={<span className="text-lg font-medium">&lt;</span>}
-            nextLabel={<span className="text-lg font-medium">&gt;</span>}
-            prev2Label={null}
-            next2Label={null}
-            navigationLabel={({ date }) =>
-                date.toLocaleDateString(undefined, {
-                    month: "long",
-                    year: "numeric"
-                })
-            }
-            formatShortWeekday={(locale, date) =>
-                date
-                    .toLocaleDateString(locale ?? "en-US", { weekday: "short" })
-                    .slice(0, 2)
-            }
-            tileContent={tileContent}
-        />
+        <div className={styles.wrapper}>
+            <Calendar
+                className={styles.calendar}
+                locale="en-US"
+                showNeighboringMonth={false}
+                prevLabel={<span className="text-lg font-medium">&lt;</span>}
+                nextLabel={<span className="text-lg font-medium">&gt;</span>}
+                prev2Label={null}
+                next2Label={null}
+                navigationLabel={({ date }) =>
+                    date.toLocaleDateString(undefined, { month: "long", year: "numeric" })
+                }
+                formatShortWeekday={(locale, date) =>
+                    date.toLocaleDateString(locale ?? "en-US", { weekday: "short" }).slice(0, 2)
+                }
+                tileContent={tileContent}
+            />
+        </div>
     );
 }
