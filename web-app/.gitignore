@@ -2,6 +2,7 @@
 
 package-lock.json
 pnpm-lock.yaml
+bun.lock
 
 # dependencies
 /node_modules
@@ -42,3 +43,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.DS_Store
+.next/
