@@ -9,6 +9,7 @@
         "lint": "eslint"
     },
     "dependencies": {
+        "@clerk/nextjs": "^6.34.0",
         "@hookform/resolvers": "^5.2.2",
         "@neondatabase/serverless": "^1.0.2",
         "@radix-ui/react-dialog": "^1.1.15",
@@ -45,7 +46,7 @@
         "@types/node": "^20.19.21",
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19",
-        "drizzle-kit": "^0.31.6",
+        "drizzle-kit": "^0.31.5",
         "eslint": "^9",
         "eslint-config-next": "15.5.2",
         "tailwindcss": "^4",
