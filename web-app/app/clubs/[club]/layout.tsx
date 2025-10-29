@@ -1,6 +1,7 @@
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
+import EditableProfilePicture from "@/components/EditableProfilePicture";
 
 export default async function ClubLeaderLayout({
     children,
@@ -18,8 +19,8 @@ export default async function ClubLeaderLayout({
             <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4">
                     <div className="hover:grayscale transition duration-300">   
-                        <Image
-                            src="/default-club-logo.png"
+                        <EditableProfilePicture
+                            initialSrc="/default-club-logo.png"
                             alt="Club Logo"
                             width={200}
                             height={100}

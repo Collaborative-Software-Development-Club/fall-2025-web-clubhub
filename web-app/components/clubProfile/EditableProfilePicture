@@ -3,10 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function EditableProfilePicture({intialSrc, alt, width, height}) {
+export default function EditableProfilePicture({initialSrc, alt, width, height}) {
     const [imageSrc, setImageSrc] = useState(intialSrc);
 
-    const handImageChange = (event) => {
+    const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -25,7 +25,7 @@ export default function EditableProfilePicture({intialSrc, alt, width, height}) 
                 alt={alt}
                 width={width}
                 height={height}
-                className="transition duration-300 hover:grayscale"; 
+                className="transition duration-300 hover:grayscale"
                 onClick={() => document.getElementById("profileUpload").click()}
             />
             <input
@@ -33,7 +33,7 @@ export default function EditableProfilePicture({intialSrc, alt, width, height}) 
                 id="profileUpload"
                 accept="image/*"
                 className="hidden"
-                onChange={handImageChange}
+                onChange={handleImageChange}
             />
         </div>
     );
