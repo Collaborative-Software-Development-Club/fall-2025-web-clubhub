@@ -4,6 +4,7 @@ import Image from "next/image";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Edit, Info, MoreHorizontal, Trash2 } from "lucide-react";
+import { AddUserDialog, AddUserType } from "@/components/club-profile/AddUserDialog";
 
 
 export default async function MembersPage({
@@ -17,7 +18,11 @@ export default async function MembersPage({
     return (
         <>
             <h1 className="text-3xl font-bold mb-4">Members of CLUBNAME</h1>
-            <h2 className="text-xl font-semibold">Leaders</h2>
+            <div className="flex justify-between items-center mb-2">
+                <h2 className="text-xl font-semibold">Leaders</h2>
+                <Button className="m-1" variant="default">+ Add Leader</Button>
+                <AddUserDialog addUserType={AddUserType.Leader} />
+            </div>
             <div className="mb-6 rounded-lg border overflow-hidden">
             <Table>
                 <TableHeader>
