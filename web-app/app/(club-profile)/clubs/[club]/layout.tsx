@@ -2,7 +2,7 @@ import { TagDialog } from "@/components/club-profile/TagDialog";
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
-import EditableProfilePicture from "@/components/EditableProfilePicture";
+import EditableProfilePicture from "@/components/club-profile/EditableProfilePicture";
 
 export default async function ClubLeaderLayout({
     children,
