@@ -74,7 +74,6 @@ export default function AttendancePage() {
                 </div>
             </div>
             <h1 className="text-3xl font-bold mb-8">Attendance</h1>
-            
             <AttendanceCodeCard code={code} meetingDate={meetingDate} />
 
             {/* Students who have responded */}
