@@ -8,6 +8,7 @@ export function Navbar() {
     // Detects active link based on current pathname
     const pathname = usePathname();
     const navLinks = [
+        {href: "/admin", label: "Admin"},
         { href: "/", label: "Home" },
         { href: "/browse", label: "Browse" },
         { href: "/dashboard", label: "My Clubs" },
