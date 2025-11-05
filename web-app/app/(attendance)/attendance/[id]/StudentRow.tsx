@@ -6,7 +6,12 @@ import {
 } from "@/app/(attendance)/attendance/[id]/types";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from "@/components/ui/select";
 
 interface StudentRowProps extends StudentProps {
     onStatusChange?: (newStatus: AttendanceStatus) => void;
@@ -18,23 +23,25 @@ export function StudentRow({
     status,
     timestamp,
     streak,
-    onStatusChange
+    onStatusChange,
 }: StudentRowProps) {
     return (
         <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2 basis-1/2 shrink-0 grow-0">
                 <p className="font-medium">{name}</p>
                 <p className="text-sm text-gray-400">
                     {dotNumber.toLowerCase()}
                 </p>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 basis-1/2 shrink-0 grow-0 justify-end">
                 <StatusBadge status={status} onStatusChange={onStatusChange} />
-                <p className="text-sm text-gray-600">{timestamp ?? "--:--"}</p>
+                <p className="text-sm text-gray-600 basis-3/20 shrink-0 grow-0">
+                    {timestamp ?? "--:--"}
+                </p>
                 <Badge
                     variant="default"
-                    className="bg-orange-100 text-orange-700 border-orange-200"
+                    className="bg-orange-100 text-orange-700 border-orange-200 basis-3/20 shrink-0 grow-0"
                 >
                     <Flame size={14} />
                     {streak}
@@ -71,11 +78,11 @@ const statusConfigs = {
     },
 };
 
-const StatusBadge = ({ 
-    status, 
-    onStatusChange 
-}: { 
-    status: AttendanceStatus; 
+const StatusBadge = ({
+    status,
+    onStatusChange,
+}: {
+    status: AttendanceStatus;
     onStatusChange?: (newStatus: AttendanceStatus) => void;
 }) => {
     const statusConfig = statusConfigs[status] || {
@@ -88,7 +95,7 @@ const StatusBadge = ({
         return (
             <Badge
                 variant={statusConfig.variant}
-                className={statusConfig.className}
+                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[100px]`}
             >
                 {statusConfig.icon}
                 {statusConfig.text}
@@ -98,14 +105,21 @@ const StatusBadge = ({
 
     return (
         <Select value={status} onValueChange={onStatusChange}>
-            <SelectTrigger className={`${statusConfig.className} hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100`}>
+            <SelectTrigger
+                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[100px] hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100`}
+            >
                 {statusConfig.icon}
                 {statusConfig.text}
             </SelectTrigger>
             <SelectContent>
-                {(Object.entries(statusConfigs) as [AttendanceStatus, typeof statusConfigs['present']][]).map(([key, config]) => (
-                    <SelectItem 
-                        key={key} 
+                {(
+                    Object.entries(statusConfigs) as [
+                        AttendanceStatus,
+                        (typeof statusConfigs)["present"],
+                    ][]
+                ).map(([key, config]) => (
+                    <SelectItem
+                        key={key}
                         value={key}
                         className={`${config.className} my-1 cursor-pointer`}
                     >
