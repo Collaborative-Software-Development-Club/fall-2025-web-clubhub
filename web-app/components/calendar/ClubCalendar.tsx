@@ -1,7 +1,6 @@
+"use client";
 import React, { useMemo } from "react";
-import Calendar, { TileArgs } from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import styles from "./ClubCalendar.module.css";
+import { Calendar } from "@/components/ui/calendar";
 
 type Meeting = {
     date: string;
@@ -12,6 +11,7 @@ type Meeting = {
 
 interface Props {
     meetings: Meeting[];
+    className?: string;
 }
 
 function parseDate(dateStr: string) {
@@ -23,7 +23,7 @@ function normalizeDateKey(date: Date) {
     return date.toISOString().split("T")[0];
 }
 
-export default function ClubCalendar({ meetings }: Props) {
+export default function ClubCalendar({ meetings, className }: Props) {
     const meetingsByDate = useMemo(() => {
         const map = new Map<string, Meeting[]>();
         meetings.forEach((meeting) => {
@@ -36,37 +36,28 @@ export default function ClubCalendar({ meetings }: Props) {
         return map;
     }, [meetings]);
 
-    const tileContent = ({ date, view }: TileArgs) => {
-        if (view !== "month") return null;
+    const modifiers = {
+        hasMeeting: (date: Date) => meetingsByDate.has(normalizeDateKey(date)),
+        hasConflict: (date: Date) => {
+            const list = meetingsByDate.get(normalizeDateKey(date));
+            return list?.some((m) => Boolean(m.conflict)) || false;
+        },
+    };
 
-        const meetingsForDay = meetingsByDate.get(normalizeDateKey(date));
-        if (!meetingsForDay?.length) return null;
-
-        const hasConflict = meetingsForDay.some((meeting) => Boolean(meeting.conflict));
-        return (
-            <span
-                className={`${styles.meetingDot} ${hasConflict ? "bg-red-500" : "bg-blue-500"}`}
-            />
-        );
+    const modifiersClassNames = {
+        hasMeeting: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-blue-500",
+        hasConflict: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:rounded-full after:bg-red-500",
     };
 
     return (
-        <div className={styles.wrapper}>
+        <div className={`min-w-0 ${className || ""}`}>
             <Calendar
-                className={styles.calendar}
-                locale="en-US"
-                showNeighboringMonth={false}
-                prevLabel={<span className="text-lg font-medium">&lt;</span>}
-                nextLabel={<span className="text-lg font-medium">&gt;</span>}
-                prev2Label={null}
-                next2Label={null}
-                navigationLabel={({ date }) =>
-                    date.toLocaleDateString(undefined, { month: "long", year: "numeric" })
-                }
-                formatShortWeekday={(locale, date) =>
-                    date.toLocaleDateString(locale ?? "en-US", { weekday: "short" }).slice(0, 2)
-                }
-                tileContent={tileContent}
+                mode="single"
+                className={[
+                    "rounded-md border w-auto  mx-auto",
+                ].join(" ")}
+                modifiers={modifiers}
+                modifiersClassNames={modifiersClassNames}
             />
         </div>
     );

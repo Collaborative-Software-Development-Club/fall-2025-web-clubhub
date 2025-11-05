@@ -9,22 +9,17 @@ export function Navbar() {
     const pathname = usePathname();
     const navLinks = [
         { href: "/", label: "Home" },
-        { href: "/attendance/0", label: "Attendance" },
         { href: "/browse", label: "Browse" },
-        { href: "/meetings", label: "Meetings" },
-        { href: "/clubs/csdc", label: "Sample Club Profile" },
-        { href: "/attenndance/0/response", label: "Attendance Response" },
-        { href: "/account", label: "Attendance Response" },
-        { href: "/login", label: "Dashboard" },
+        { href: "/login", label: "My Clubs" },
     ];
 
     console.log(pathname);
     return (
         // loops through links and highlights active one
         <header className="sticky top-0 z-50 p-4 ">
-            <Card className="w-full px-8 py-4 items-center justify-between flex flex-row rounded-full">
+            <Card className="w-full px-8 py-4 items-center justify-between flex flex-row rounded-full shadow-primary/10 shadow-lg">
                 <Link href="/" className="flex items-center gap-5">
-                    <h1 className="text-2xl font-bold">ClubHub</h1>
+                    <h1 className="text-2xl font-bold text-primary">ClubHub</h1>
                 </Link>
 
                 <nav className="flex flex-wrap items-center gap-4">
