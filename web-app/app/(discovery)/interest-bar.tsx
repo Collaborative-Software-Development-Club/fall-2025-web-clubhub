@@ -3,7 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
 import { useState } from "react";
 
-export const InterestBar = ({ allTags }: { allTags: string[] }) => {
+export const InterestBar = ({
+    allTags,
+    selectedInterests,
+    onToggleInterest,
+}: {
+    allTags: string[];
+    selectedInterests: string[];
+    onToggleInterest: (interest: string) => void;
+}) => {
     const [showAll, setShowAll] = useState(false);
     const visibleInterests = showAll ? allTags : allTags.slice(0, 4);
     const hiddenInterestCount = allTags.length - visibleInterests.length;
@@ -14,7 +22,9 @@ export const InterestBar = ({ allTags }: { allTags: string[] }) => {
                 <Toggle
                     key={interest}
                     variant="outline"
-                    className="rounded-full bg-background"
+                    className="rounded-full"
+                    pressed={selectedInterests.includes(interest)}
+                    onPressedChange={() => onToggleInterest(interest)}
                 >
                     {interest}
                 </Toggle>
