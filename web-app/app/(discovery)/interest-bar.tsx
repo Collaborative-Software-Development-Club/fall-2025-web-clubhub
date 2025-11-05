@@ -22,7 +22,7 @@ export const InterestBar = ({
                 <Toggle
                     key={interest}
                     variant="outline"
-                    className="rounded-full data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                    className="rounded-full"
                     pressed={selectedInterests.includes(interest)}
                     onPressedChange={() => onToggleInterest(interest)}
                 >
