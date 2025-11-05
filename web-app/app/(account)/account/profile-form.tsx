@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,8 +12,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { SaveAccountSetting } from "@/app/actions";
+import { useRouter } from "next/navigation";
 
 export default function ProfileForm() {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string>("");
     const [formData, setFormData] = useState({
         username: "",
         major: "",
@@ -26,13 +31,33 @@ export default function ProfileForm() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("✅ Form submitted:", formData);
+        setError("");
+        
+        try {
+            startTransition(async () => {
+                const result = await SaveAccountSetting(formData);
+                if (result.ok) {
+                    router.refresh(); // Refresh the page to show updated data
+                    console.log("✅ Settings saved successfully");
+                } else {
+                    setError("Failed to save settings");
+                }
+            });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to save settings");
+            console.error("Error saving settings:", err);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+                <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
+                    {error}
+                </div>
+            )}
             {/* Username */}
             <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
@@ -89,8 +114,12 @@ export default function ProfileForm() {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full">
-                Save Changes
+            <Button 
+                type="submit" 
+                className="w-full"
+                disabled={isPending}
+            >
+                {isPending ? "Saving..." : "Save Changes"}
             </Button>
         </form>
     );
