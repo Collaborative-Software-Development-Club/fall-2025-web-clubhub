@@ -10,7 +10,7 @@ export function Navbar() {
     const navLinks = [
         { href: "/", label: "Home" },
         { href: "/browse", label: "Browse" },
-        { href: "/dashboard", label: "My Clubs" },
+        { href: "/login", label: "My Clubs" },
     ];
 
     console.log(pathname);
