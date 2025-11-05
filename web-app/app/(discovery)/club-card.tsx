@@ -9,7 +9,7 @@ type ClubCardProps = {
     club: Club;
 };
 
-// Placeholder image from public/ directory
+// Placeholder image from public
 const PLACEHOLDER_IMAGE = "/default-club-logo.png";
 
 export default function ClubCard({ club }: ClubCardProps) {
@@ -71,7 +71,7 @@ export default function ClubCard({ club }: ClubCardProps) {
     const imageUrl = club.image || PLACEHOLDER_IMAGE;
 
     return (
-        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer gap-3 overflow-hidden flex flex-col">
+        <Card className="h-full hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer gap-3 overflow-hidden flex flex-col border-2 border-transparent hover:border-gray-200">
             {/* Club Image */}
             <div className="relative w-full h-40 bg-white overflow-hidden flex items-center justify-center">
                 <Image
