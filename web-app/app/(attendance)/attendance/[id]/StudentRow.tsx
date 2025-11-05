@@ -72,7 +72,7 @@ const statusConfigs = {
     },
     "no-response": {
         variant: "outline" as const,
-        text: "No Response",
+        text: "No Answer",
         className: "bg-gray-500 hover:bg-gray-600 text-white",
         icon: <HelpCircle size={14} className="text-white" />,
     },
