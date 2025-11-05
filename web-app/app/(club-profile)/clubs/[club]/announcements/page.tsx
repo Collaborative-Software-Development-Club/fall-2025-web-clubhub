@@ -34,9 +34,11 @@ type Announcement = {
 
 let ANN_ID = 0;
 
+const isLeader = true; //replace with actual authentication logic
+
 export default function AnnouncementsPage() {
 	const [announcements, setAnnouncements] = useState<Announcement[]>([
-		{ id: ANN_ID++, title: "Welcome to the club!", body: "We're glad you're here.", date: new Date(), author: "FirstName LastName" },
+		{ id: ANN_ID++, title: "Welcome to the club!", body: "We're glad you're here.", date: new Date(), author: "FirstName LastName" }, { id: ANN_ID++, title: "Test pinned announcement", body: "This is a pinned announcement", date: new Date(23,0,1), author: "First Last", pinned: true }
 	]);
 
 	const [formOpen, setFormOpen] = useState(false);
@@ -103,8 +105,9 @@ export default function AnnouncementsPage() {
 			<h1 className="text-2xl font-bold mb-6">Announcements</h1>
 
 			{/* Creates the popout box for adding an announcement sets the states accordingly */}
-			{/* Using a dialog instead of a popover becuase the dropdown is causing the edit box to not open */}
-			<Dialog open={formOpen} onOpenChange={setFormOpen}>
+			{/* Checks if the user is a leader or member if not a leader then the create announcement button does not appear */}
+			{isLeader && (
+				<Dialog open={formOpen} onOpenChange={setFormOpen}>
 				<DialogTrigger asChild>
 					<Button variant="outline" className="mb-2 cursor-pointer">
 						<Plus /> Create Announcement
@@ -153,9 +156,10 @@ export default function AnnouncementsPage() {
 						</Button>
 					</div>
 				</DialogContent>
-			</Dialog>
+			</Dialog>)}
 
-					<div className="space-y-6 mt-6">
+
+				<div className="space-y-6 mt-6">
 				{announcements.length === 0 && (
 					<p className="text-muted-foreground">No announcements yet.</p>
 				)}
@@ -179,8 +183,8 @@ export default function AnnouncementsPage() {
 								</div>
 								<p className="text-sm text-muted-foreground">{a.author ?? "Name"} • {format(a.date, "PPP p")}</p>
 							</div>
-
-							<div className="flex items-center gap-2">
+							{isLeader && (
+								<div className="flex items-center gap-2">
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button variant="ghost" size="icon" className="cursor-pointer">
@@ -192,7 +196,6 @@ export default function AnnouncementsPage() {
 											<Pin className="w-4 h-4 mr-2" />
 											{a.pinned ? "Unpin" : "Pin"}
 										</DropdownMenuItem>
-										{/* Edit not integrated yet */}
 										<DropdownMenuItem className="cursor-pointer" onClick={() => editAnnouncement(a.id)}>
 											<Edit className="w-4 h-4 mr-2" />
 											Edit
@@ -204,6 +207,8 @@ export default function AnnouncementsPage() {
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</div>
+							)}
+
 						</CardHeader>
 
 						{a.body && (
