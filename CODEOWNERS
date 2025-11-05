@@ -1,5 +1,3 @@
-* @ldfMion
-
 /app/(discovery)/ @ldfMion
 /services/discovery/ @ldfMion
 /db/discovery/ @ldfMion
@@ -16,3 +14,5 @@
 /app/(account)/ @kbeaverson
 /services/account/ @kbeaverson
 /db/account/ @kbeaverson
+
+* @ldfMion
