@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ClubCard from "@/components/popular_clubs/ClubCard";
+import ClubCard from "@/app/(discovery)/club-card";
 import mockClubs from "@/mock/clubs.json";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -121,15 +121,14 @@ export default function Browse() {
                         No clubs match your search and filters.
                     </p>
                 ) : (
-                    filteredClubs.map((club) => (
-                        <ClubCard
-                            key={club.id}
-                            name={club.name}
-                            interests={club.interests}
-                            description={club.description}
-                            leader={club.leader} //optional
-                            contact={club.contact}
-                        />
+                    filteredClubs.map((club, index) => (
+                        <ClubCard key={club.name || index} club={{
+                            name: club.name,
+                            description: club.description,
+                            tags: club.interests,
+                            leader: club.leader,
+                            contactEmail: club.contact,
+                        }} />
                     ))
                 )}
             </div>

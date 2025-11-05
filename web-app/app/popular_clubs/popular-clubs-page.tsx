@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import ClubCarousel from "@/components/popular_clubs/ClubCarousel";
-import ClubCard from "@/components/popular_clubs/ClubCard";
+import ClubCard from "@/app/(discovery)/club-card";
 import ClubCarouselHeader from "@/components/popular_clubs/ClubCarouselHeader";
 
 // Page to show the popular clubs
