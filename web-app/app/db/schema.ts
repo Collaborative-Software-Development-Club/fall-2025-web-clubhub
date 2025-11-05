@@ -1,4 +1,4 @@
-import { integer, pgTable, primaryKey, text, timestamp } from 'drizzle-orm/pg-core'
+import { integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core'
 
 /**
  * Run npx drizzle-kit push to push the schema to the database
