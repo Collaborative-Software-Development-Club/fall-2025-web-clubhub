@@ -1,9 +1,12 @@
-//Placeholder for admin page content
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 const AdminPage: React.FC = () => {
+  // Access environment variables (server-side only)
+  const clerkIssuerDomain = process.env.CLERK_JWT_ISSUER_DOMAIN;
+  const databaseUrl = process.env.DATABASE_URL;
+  const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Navigation Bar */}
