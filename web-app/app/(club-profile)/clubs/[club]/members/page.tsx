@@ -80,10 +80,11 @@ export default async function MembersPage({
                     </TableRow>
                 </TableBody>
             </Table>
-                
+
             </div>
             <h2 className="text-xl font-semibold">Advisors</h2>
             <h2 className="text-xl font-semibold">Members</h2>
+            <AddUserDialog addUserType={AddUserType.Member} />
             <span className="inline-flex items-center bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded-full mr-2 mb-2 align-middle">
                 <Info className="w-4 h-4 mr-1 text-blue-500" />
                 Only visible to club leaders
