@@ -8,7 +8,9 @@ import {
 } from "drizzle-orm/pg-core";
 
 export const makeUpEnum = pgEnum("make_up", ["Undergraduate", "Graduate", "Professional"]);
+export const statusEnum = pgEnum("status", ["Active", "Inactive", "Pending"]);
 export const membershipEnum = pgEnum("membership", ["Open Membership", "Application/Selection Process"]);
+export const leaderRoleEnum = pgEnum("leader_role", ["Primary", "Secondary", "Treasurer"]);
 
 export const clubsSchema = pgSchema("clubs");
 
@@ -18,13 +20,13 @@ export const clubs = clubsSchema.table("clubs", {
   name: text("name").notNull(),
   purposeStatement: text("purpose_statement").notNull(),
   campus: text("campus"),
-  status: text("status"),
+  status: statusEnum("status").notNull(),
   imageUrl: text("image_url"),
-  url: text("url"),
+  url: text("url").notNull(),
   primaryMakeUp: makeUpEnum("primary_make_up").notNull(),
   meetingTimeAndPlace: text("meeting_time_and_place"),
   officeLocation: text("office_location"),
-  membershipType: membershipEnum("membership_type"),
+  membershipType: membershipEnum("membership_type").notNull(),
   membershipContact: text("membership_contact"),
   timeOfYearForNewMembership: text("time_of_year_for_new_membership"),
   howDoesAProspectiveMemberApply: text("how_does_a_prospective_member_apply"),
@@ -36,15 +38,16 @@ export const clubs = clubsSchema.table("clubs", {
 export const leaders = clubsSchema.table("leaders", {
   id: serial("id").primaryKey(),
   clubId: integer("club_id").references(() => clubs.id).notNull(),
-  role: text("role").notNull(), //enum?
+  role: leaderRoleEnum("leader_role").notNull(),
   name: text("name").notNull(),
+  email: text("email").notNull()
 });
 
 // Advisors
 export const advisors = clubsSchema.table("advisors", {
   id: serial("id").primaryKey(),
   clubId: integer("club_id").references(() => clubs.id).notNull(),
-  role: text("role").notNull(), //enum?
+  role: text("role").notNull(),
   name: text("name").notNull(),
 });
 
@@ -52,19 +55,19 @@ export const advisors = clubsSchema.table("advisors", {
 export const socialLinks = clubsSchema.table("social_links", {
   id: serial("id").primaryKey(),
   clubId: integer("club_id").references(() => clubs.id).notNull(),
-  platform: text("platform").notNull(), //enum?
+  platform: text("platform").notNull(),
   url: text("url").notNull(),
 });
 
-// Types
-export const types = clubsSchema.table("types", {
+// Tags
+export const tags = clubsSchema.table("tags", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
 });
 
-// Many-to-many join for types
-export const clubTypes = clubsSchema.table("club_types", {
+// Many-to-many join for tags
+export const clubTags = clubsSchema.table("club_tags", {
   clubId: integer("club_id").references(() => clubs.id).notNull(),
-  typeId: integer("type_id").references(() => types.id).notNull(),
+  tagId: integer("tag_id").references(() => tags.id).notNull(),
   isPrimary: boolean("is_primary").default(false),
 }); 
