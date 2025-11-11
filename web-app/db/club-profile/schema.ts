@@ -10,7 +10,7 @@ import {
 export const makeUpEnum = pgEnum("make_up", ["Undergraduate", "Graduate", "Professional"]);
 export const statusEnum = pgEnum("status", ["Active", "Inactive", "Pending"]);
 export const membershipEnum = pgEnum("membership", ["Open Membership", "Application/Selection Process"]);
-export const leaderRoleEnum = pgEnum("leader_role", ["Primary", "Secondary", "Treasurer"]);
+export const leaderRoleEnum = pgEnum("leader_role", ["Primary Leader", "Secondary Leader", "Treasurer", "Secretary", "Other"]);
 
 export const clubsSchema = pgSchema("clubs");
 
