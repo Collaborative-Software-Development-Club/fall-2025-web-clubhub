@@ -1,5 +1,5 @@
-import { TagsService } from ".";
 import { mockTags } from "@/mock/tags";
+import { TagsService } from "@/services/definition";
 
 export const mockTagsService: TagsService = {
     getAllTags,
