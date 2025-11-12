@@ -105,10 +105,10 @@ export const clubTags = createDiscoveryTable(
         clubId: integer("club_id")
             .references(() => clubs.id, { onDelete: "cascade" })
             .notNull(),
-        tagId: integer("tag_id")
+        tag: text("tag")
             .references(() => tags.name, { onDelete: "no action" })
             .notNull(),
         isPrimary: boolean("is_primary").notNull(),
     },
-    (table) => [primaryKey({ columns: [table.clubId, table.tagId] })],
+    (table) => [primaryKey({ columns: [table.clubId, table.tag] })],
 );
