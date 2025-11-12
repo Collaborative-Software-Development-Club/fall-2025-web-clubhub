@@ -1,2 +1,2 @@
 export * from "./discovery/schema";
-export * from "./attendance/schema";
+export * from "./account/schema";
