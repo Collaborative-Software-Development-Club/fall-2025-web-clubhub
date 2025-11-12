@@ -37,7 +37,7 @@ export const meetings = pgTable(withPrefix("meeting"), {
 export const attendance = pgTable(withPrefix("meeting"), {
     attendanceID: serial("attendanceID").notNull(),
     userEmail: text("userEmail").notNull(),
-    userID: integer("userID").notNull(),
+    userID: integer("userID"),
     meetingID: integer("meetingID").notNull(),
     status: text("status").notNull(),
     timestamp: timestamp("timestamp").notNull(),
