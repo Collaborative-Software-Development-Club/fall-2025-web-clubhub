@@ -7,3 +7,15 @@ export interface StudentProps {
     timestamp: string | null;
     streak: number;
 }
+
+export interface Meeting {
+    clubId: number;
+    title: string;
+    description: string | null;
+    date: string;
+    startTime: string;
+    endTime: string;
+    code: string;
+    createdAt: string | Date;
+    createdByUserId: number;
+}

@@ -5,20 +5,7 @@ import { useParams } from "next/navigation";
 import { mockAttendance } from "@/mock/sample-attendance";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
-import { AttendanceStatus } from "./types";
-
-type Meeting = {
-    id: number;
-    clubId: number;
-    title: string;
-    description: string | null;
-    date: string;
-    startTime: string;
-    endTime: string;
-    code: string;
-    createdAt: string | Date;
-    createdByUserId: number;
-};
+import { AttendanceStatus, Meeting } from "./types";
 
 const buildMeetingDate = (meeting: Meeting) => {
     const time = meeting.startTime ?? "00:00:00";
