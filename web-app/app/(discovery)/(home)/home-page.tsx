@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { InterestBar } from "../interest-bar";
 import { FeaturedClubs } from "./featured-clubs";
-import ClubCard from "@/app/(discovery)/browse/ClubCard";
+import { ClubCard } from "@/app/(discovery)/club-card"
+
 
 // Define the ClubData type, matching what page.tsx provides
 type ClubData = {
@@ -110,11 +111,7 @@ const SearchResultsList = ({
                 filteredClubs.map((club) => (
                     <ClubCard
                         key={club.id}
-                        name={club.name}
-                        interests={club.interests}
-                        description={club.description}
-                        leader={club.leader}
-                        contact={club.contact}
+                        club={club}
                     />
                 ))
             )}
