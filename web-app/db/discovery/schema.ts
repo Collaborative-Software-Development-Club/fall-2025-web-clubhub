@@ -65,7 +65,7 @@ export const clubLeaders = createDiscoveryTable(
         clubId: integer("club_id")
             .references(() => clubs.id, { onDelete: "cascade" })
             .notNull(),
-        leaderId: integer("leader_id")
+        leaderId: text("leader_id")
             .references(() => leaders.email, { onDelete: "no action" })
             .notNull(),
         role: leaderRoleEnum("leader_role").notNull(),
