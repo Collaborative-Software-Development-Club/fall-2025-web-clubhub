@@ -33,3 +33,12 @@ export const meetings = pgTable(withPrefix("meeting"), {
     created_at: timestamp("created_at").defaultNow().notNull(),
     created_by_user_id: integer("created_by_user_id").notNull(),
 });
+
+export const attendance = pgTable(withPrefix("meeting"), {
+    attendanceID: text("attendanceID").notNull(),
+    userEmail: text("userEmail").notNull(),
+    userID: text("userID").notNull(),
+    meetingID: text("meetingID").notNull(),
+    status: text("status").notNull(),
+    timestamp: timestamp("timestamp").notNull(),
+});
