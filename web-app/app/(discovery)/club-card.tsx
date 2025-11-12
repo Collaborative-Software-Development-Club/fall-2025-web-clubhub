@@ -10,15 +10,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 
-// Unified Club type (combines PopularClubData + BrowseProps)
 export type Club = {
-    name?: string;
+    name: string;
     description?: string;
     tags?: string[];
-    interests?: string[]; 
+    interests?: string[];
     leader?: string;
     contactEmail?: string;
-    contact?: string; 
+    contact?: string;
     memberCount?: number;
     attendanceRate?: number;
     avgAttendance?: number;
@@ -27,11 +26,7 @@ export type Club = {
     image?: string;
 };
 
-type ClubCardProps = {
-    club: Club;
-};
-
-export function ClubCard({ club }: ClubCardProps) {
+export function ClubCard({ club }: { club: Club }) {
     // Normalize tags and contact for backwards compatibility
     const displayTags = club.tags || club.interests || [];
     const contactEmail = club.contactEmail || club.contact;
@@ -98,7 +93,7 @@ export function ClubCard({ club }: ClubCardProps) {
     return (
         <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer overflow-hidden">
             {/* Club Image */}
-                <div className="relative w-full h-20 bg-white">
+            <div className="relative w-full h-20 bg-white">
                 <Image
                     src={clubImage}
                     alt={club.name || "Club image"}
@@ -106,8 +101,7 @@ export function ClubCard({ club }: ClubCardProps) {
                     className="object-contain"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
-                </div>
-
+            </div>
 
             <CardHeader>
                 <CardTitle className="text-lg font-bold text-gray-900 leading-tight pb-1 border-b border-gray-300">
