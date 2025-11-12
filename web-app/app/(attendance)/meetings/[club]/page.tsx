@@ -33,18 +33,16 @@ export default function MeetingsPage() {
             date: new Date(),
             startTime: "18:00",
             endTime: "19:00",
-            description: "enter description here",
-            location: "enter location here",
+            description: "",
+            location: "",
         },
     ]);
     const [title, setTitle] = useState(`Meeting #${meetings.length}`);
     const [date, setDate] = useState<Date | undefined>(new Date(Date.now()));
     const [startTime, setStartTime] = useState<string>("18:00");
     const [endTime, setEndTime] = useState<string>("19:00");
-    const [description, setDescription] = useState<string>(
-        "enter description here",
-    );
-    const [location, setLocation] = useState<string>("enter location here");
+    const [description, setDescription] = useState<string>("");
+    const [location, setLocation] = useState<string>("");
 
     // Control popovers
     const [formOpen, setFormOpen] = useState(false);
@@ -81,8 +79,8 @@ export default function MeetingsPage() {
         setDate(new Date(Date.now()));
         setStartTime("18:00");
         setEndTime("19:00");
-        setDescription("enter description here");
-        setLocation("enter location here");
+        setDescription("");
+        setLocation("");
         setFormOpen(false);
     };
 
