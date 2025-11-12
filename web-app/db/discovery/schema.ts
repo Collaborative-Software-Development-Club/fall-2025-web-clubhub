@@ -1,11 +1,12 @@
 import {
     pgTableCreator,
-    pgSchema,
     pgEnum,
     serial,
     text,
     boolean,
     integer,
+    primaryKey,
+    date,
 } from "drizzle-orm/pg-core";
 
 const createDiscoveryTable = pgTableCreator(
@@ -30,7 +31,6 @@ export const leaderRoleEnum = pgEnum("leader_role", [
     "Other",
 ]);
 
-// Main Club Table
 export const clubs = createDiscoveryTable("scraped_clubs", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
@@ -48,52 +48,67 @@ export const clubs = createDiscoveryTable("scraped_clubs", {
     howDoesAProspectiveMemberApply: text("how_does_a_prospective_member_apply"),
     chargeDues: boolean("charge_dues").default(false).notNull(),
     organizationEmail: text("organization_email"),
+    createdAt: date("created_at", {
+        mode: "date",
+    }).defaultNow(),
 });
 
-// Leaders
 export const leaders = createDiscoveryTable("scraped_leaders", {
-    id: serial("id").primaryKey(),
-    clubId: integer("club_id")
-        .references(() => clubs.id)
-        .notNull(),
-    role: leaderRoleEnum("leader_role").notNull(),
-    name: text("name").notNull(),
-    email: text("email").notNull(),
-});
-
-// Advisors
-export const advisors = createDiscoveryTable("scraped_advisors", {
-    id: serial("id").primaryKey(),
-    clubId: integer("club_id")
-        .references(() => clubs.id)
-        .notNull(),
-    role: text("role").notNull(),
+    email: text("email").primaryKey(),
     name: text("name").notNull(),
 });
 
-// Social Links
+// Many-to-many join for leaders (since a leader can lead multiple clubs)
+export const clubLeaders = createDiscoveryTable(
+    "scraped_club_leaders",
+    {
+        clubId: integer("club_id")
+            .references(() => clubs.id, { onDelete: "cascade" })
+            .notNull(),
+        leaderId: integer("leader_id")
+            .references(() => leaders.email, { onDelete: "no action" })
+            .notNull(),
+        role: leaderRoleEnum("leader_role").notNull(),
+    },
+    (table) => [primaryKey({ columns: [table.clubId, table.leaderId] })],
+);
+
+export const advisors = createDiscoveryTable(
+    "scraped_advisors",
+    {
+        clubId: integer("club_id")
+            .references(() => clubs.id, { onDelete: "cascade" })
+            .notNull(),
+        name: text("name").notNull(),
+        role: text("role").notNull(),
+    },
+    (table) => [primaryKey({ columns: [table.clubId, table.name] })],
+);
+
 export const socialLinks = createDiscoveryTable("scraped_social_links", {
     id: serial("id").primaryKey(),
     clubId: integer("club_id")
-        .references(() => clubs.id)
+        .references(() => clubs.id, { onDelete: "cascade" })
         .notNull(),
     platform: text("platform").notNull(),
     url: text("url").notNull(),
 });
 
-// Tags
 export const tags = createDiscoveryTable("scraped_tags", {
-    id: serial("id").primaryKey(),
-    name: text("name").notNull(),
+    name: text("name").notNull().primaryKey(),
 });
 
 // Many-to-many join for tags
-export const clubTags = createDiscoveryTable("scraped_club_tags", {
-    clubId: integer("club_id")
-        .references(() => clubs.id)
-        .notNull(),
-    tagId: integer("tag_id")
-        .references(() => tags.id)
-        .notNull(),
-    isPrimary: boolean("is_primary").default(false),
-});
+export const clubTags = createDiscoveryTable(
+    "scraped_club_tags",
+    {
+        clubId: integer("club_id")
+            .references(() => clubs.id, { onDelete: "cascade" })
+            .notNull(),
+        tagId: integer("tag_id")
+            .references(() => tags.name, { onDelete: "no action" })
+            .notNull(),
+        isPrimary: boolean("is_primary").notNull(),
+    },
+    (table) => [primaryKey({ columns: [table.clubId, table.tagId] })],
+);
