@@ -35,10 +35,10 @@ export const meetings = pgTable(withPrefix("meeting"), {
 });
 
 export const attendance = pgTable(withPrefix("meeting"), {
-    attendanceID: text("attendanceID").notNull(),
+    attendanceID: serial("attendanceID").notNull(),
     userEmail: text("userEmail").notNull(),
-    userID: text("userID").notNull(),
-    meetingID: text("meetingID").notNull(),
+    userID: integer("userID").notNull(),
+    meetingID: integer("meetingID").notNull(),
     status: text("status").notNull(),
     timestamp: timestamp("timestamp").notNull(),
 });
