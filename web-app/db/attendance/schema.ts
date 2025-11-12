@@ -40,5 +40,5 @@ export const attendance = pgTable(withPrefix("meeting"), {
     userID: integer("userID"),
     meetingID: integer("meetingID").notNull(),
     status: text("status").notNull(),
-    timestamp: timestamp("timestamp").notNull(),
+    timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
