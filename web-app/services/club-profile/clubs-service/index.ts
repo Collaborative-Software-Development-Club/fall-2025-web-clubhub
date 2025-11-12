@@ -1,9 +1,4 @@
-import { ClubOverview } from "./ClubOverview";
+import { ClubsService } from "@/services/definition";
 import { mockClubsService } from "./mock-club-service";
-
-export interface ClubsService {
-    getPopularClubs(): Promise<ClubOverview[]>;
-    getAllClubs(): Promise<ClubOverview[]>;
-}
 
 export const clubsService: ClubsService = mockClubsService;

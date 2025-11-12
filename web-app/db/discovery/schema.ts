@@ -1,8 +1,8 @@
-import { pgSchema } from "drizzle-orm/pg-core";
+import { pgSchema, pgTable } from "drizzle-orm/pg-core";
 import { serial } from "drizzle-orm/pg-core";
 
-export const discovery = pgSchema("discovery");
+const withPrefix = (name: string) => "discovery_" + name;
 
-export const discoveryTest = discovery.table("test", {
+export const discoveryTest = pgTable(withPrefix("test"), {
     id: serial("id").primaryKey(),
 });
