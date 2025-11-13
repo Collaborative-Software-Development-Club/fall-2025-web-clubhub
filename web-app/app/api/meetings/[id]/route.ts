@@ -97,7 +97,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     }
 }
 
-export async function POST(_request: Request, context: RouteContext, attributes: {}) {
+export async function UPDATE(_request: Request, context: RouteContext, attributes: {}) {
     const { id } = await context.params;
     const meetingId = Number(id);
 
@@ -108,19 +108,19 @@ export async function POST(_request: Request, context: RouteContext, attributes:
     }
 
     try {
-        const [meeting] = await db.update(meetings).set(attributes).where(eq(meetings.id, meetingId));
+        const result = await db.update(meetings).set(attributes).where(eq(meetings.id, meetingId)).returning();
 
-        if (!meeting) {
+        if (result.length === 0) {
             return NextResponse.json(
                 { error: "Meeting not found" },
                 { status: 404 },
             );
         }
-        return NextResponse.json({ meeting: serializeMeeting(meeting) });
+        return NextResponse.json({ meeting: serializeMeeting(result[0]) });
     } catch (error) {
-        console.error("Failed to load meeting", error);
+        console.error("Failed to update meeting", error);
         return NextResponse.json(
-            { error: "Failed to load meeting" },
+            { error: "Failed to update meeting" },
             { status: 500 },
         );
     }
