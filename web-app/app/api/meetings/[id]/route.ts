@@ -57,3 +57,41 @@ export async function GET(_request: Request, context: RouteContext) {
         );
     }
 }
+
+export async function DELETE(_request: Request, context: RouteContext) {
+    const { id } = await context.params;
+    const meetingId = Number(id);
+
+    if (!Number.isInteger(meetingId) || meetingId <= 0) {
+        return NextResponse.json(
+            { error: "Invalid meeting id" },
+            { status: 400 },
+        );
+    }
+
+    try {
+        const result = await db
+            .delete(meetings)
+            .where(eq(meetings.id, meetingId))
+            .returning({ id: meetings.id });
+
+        if (result.length == 0){
+            return NextResponse.json(
+                { error: "Meeting not found" },
+                { status: 404 },
+            );
+        }
+
+
+        return NextResponse.json({
+            message: "Meeting deleted successfully",
+            deletedMeetingId: result[0].id,
+        })
+    } catch (error) {
+        console.error("Failed to delete meeting", error);
+        return NextResponse.json(
+            { error: "Failed to delete meeting" },
+            { status: 500 },
+        );
+    }
+}
