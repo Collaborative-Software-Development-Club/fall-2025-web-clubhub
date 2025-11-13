@@ -13,6 +13,8 @@ const createDiscoveryTable = pgTableCreator(
     (name: string) => "discovery_" + name,
 );
 
+// --- SCRAPED CLUB DATA ---
+
 export const makeUpEnum = pgEnum("make_up", [
     "Undergraduate",
     "Graduate",
@@ -112,3 +114,16 @@ export const clubTags = createDiscoveryTable(
     },
     (table) => [primaryKey({ columns: [table.clubId, table.tag] })],
 );
+
+// --- OUR OWN TAGS STUFF ---
+
+/**
+ * Custom tags created for our website
+ */
+
+export const clubHubTagsType = pgEnum("clubhub_tag_type", ["MAJOR"]);
+
+export const clubHubTags = createDiscoveryTable("clubhub_tags", {
+    name: text("name").notNull().primaryKey(),
+    type: clubHubTagsType("type").notNull(),
+});

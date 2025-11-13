@@ -6,7 +6,5 @@ export const mockTagsService: TagsService = {
 };
 
 async function getAllTags() {
-    return mockTags.map((t) => ({
-        name: t,
-    }));
+    return mockTags;
 }
