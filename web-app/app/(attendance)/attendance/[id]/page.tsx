@@ -1,15 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { mockAttendance } from "@/mock/sample-attendance";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
-import { AttendanceStatus } from "./types";
+import { AttendanceStatus, Meeting } from "./types";
+
+const buildMeetingDate = (meeting: Meeting) => {
+    const time = meeting.startTime ?? "00:00:00";
+    const dateTimeString = `${meeting.date}T${time}`;
+    const parsed = new Date(dateTimeString);
+
+    if (Number.isNaN(parsed.getTime())) {
+        return new Date(meeting.date);
+    }
+
+    return parsed;
+};
 
 export default function AttendancePage() {
-    const code = "0000";
-    const meetingDate = new Date();
+    const params = useParams<{ id?: string }>();
+    const rawMeetingId = params?.id;
+    const meetingId = Array.isArray(rawMeetingId)
+        ? rawMeetingId[0]
+        : rawMeetingId;
     const [isAdmin, setIsAdmin] = useState(false);
+    const [meeting, setMeeting] = useState<Meeting | null>(null);
+    const [meetingError, setMeetingError] = useState<string | null>(null);
+    const [isLoadingMeeting, setIsLoadingMeeting] = useState(true);
 
     // Keep copy of attendance state
     const [attendance, setAttendance] = useState(() =>
@@ -17,7 +36,57 @@ export default function AttendancePage() {
         mockAttendance.map((s) => ({ ...s }))
     );
 
-    
+    useEffect(() => {
+        if (!meetingId) {
+            setIsLoadingMeeting(false);
+            return;
+        }
+
+        let cancelled = false;
+
+        const fetchMeeting = async () => {
+            setIsLoadingMeeting(true);
+            setMeetingError(null);
+
+            try {
+                const response = await fetch(`/api/meetings/${meetingId}`);
+                const payload = (await response
+                    .json()
+                    .catch(() => null)) as { meeting?: Meeting; error?: string } | null;
+
+                if (!response.ok) {
+                    throw new Error(payload?.error ?? "Failed to load meeting");
+                }
+
+                if (!payload?.meeting) {
+                    throw new Error("Meeting response is missing data");
+                }
+
+                if (!cancelled) {
+                    setMeeting(payload.meeting);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setMeetingError(
+                        error instanceof Error
+                            ? error.message
+                            : "Failed to load meeting",
+                    );
+                }
+            } finally {
+                if (!cancelled) {
+                    setIsLoadingMeeting(false);
+                }
+            }
+        };
+
+        void fetchMeeting();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [meetingId]);
+
     const handleStatusChange = (dotNumber: string, newStatus: AttendanceStatus) => {
         // Update in-memory state so the UI reflects the change immediately
         setAttendance((prev) =>
@@ -74,7 +143,21 @@ export default function AttendancePage() {
                 </div>
             </div>
             <h1 className="text-3xl font-bold mb-8">Attendance</h1>
-            <AttendanceCodeCard code={code} meetingDate={meetingDate} />
+
+            {meetingError ? (
+                <div className="w-full text-center text-red-600">
+                    {meetingError}
+                </div>
+            ) : meeting ? (
+                <AttendanceCodeCard
+                    code={meeting.code}
+                    meetingDate={buildMeetingDate(meeting)}
+                />
+            ) : (
+                <div className="w-full text-center text-muted-foreground">
+                    {isLoadingMeeting ? "Loading meeting details..." : "Meeting not found."}
+                </div>
+            )}
 
             {/* Students who have responded */}
             <div className="w-full space-y-4">
