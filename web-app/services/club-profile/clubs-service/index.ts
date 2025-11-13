@@ -3,7 +3,7 @@ import { AnnouncementOverview } from "./AnnouncementOverview";
 //import { scrapedClubsService } from ;
 import { ClubPreview } from "./ClubPreview";
 import { db } from "../../../db/index";
-import { announcements, meetingTimes, meetingLocations } from "../../../db/club-addition/schema";
+import { announcements, meetingLocations } from "../../../db/club-addition/schema";
 import { eq, desc, inArray } from "drizzle-orm";
 
 //export const clubsService: ClubsService = mockClubsService;
