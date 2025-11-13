@@ -18,7 +18,7 @@ export default function ClubPage({
     const { club } = use(params);
     const clubData = clubs[0];
     const description = useClubDescription(1);
-    console.log(description.description);
+    console.log(description?.description);
 
     const socialMedia = [
         clubData["Contact Information"]["Instagram"] || "",
