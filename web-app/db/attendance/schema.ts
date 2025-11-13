@@ -34,7 +34,7 @@ export const meetings = pgTable(withPrefix("meeting"), {
     created_by_user_id: integer("created_by_user_id").notNull(),
 });
 
-export const attendance = pgTable(withPrefix("meeting"), {
+export const attendance = pgTable(withPrefix("attendance"), {
     attendanceID: serial("attendanceID").notNull(),
     userEmail: text("userEmail").notNull(),
     userID: integer("userID"),
