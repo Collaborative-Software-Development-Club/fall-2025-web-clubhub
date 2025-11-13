@@ -1,6 +1,5 @@
 import { tagsService } from "@/services/discovery/tags-service";
 import { HomePage } from "./home-page";
-import { mockTags } from "@/mock/tags";
 import clubsJson from "@/mock/clubs.json";
 
 // Define the type for the club data we will pass to the client
@@ -45,7 +44,7 @@ function getClubCategories(club: MockClub): string[] {
 }
 
 export default async function Home() {
-    const tags = mockTags; // Using mock tags
+    const tags = await tagsService.getAllTags();
 
     // Cast the imported JSON to the new type
     const clubs: MockClub[] = clubsJson as MockClub[];
@@ -56,12 +55,14 @@ export default async function Home() {
         description: club["Purpose Statement"],
         interests: getClubCategories(club),
         leader: club.Leaders["Primary Leader"],
-        contact: Array.isArray(club["Contact Information"]["Organization Email"])
+        contact: Array.isArray(
+            club["Contact Information"]["Organization Email"],
+        )
             ? club["Contact Information"]["Organization Email"][0]
             : (club["Contact Information"]["Organization Email"] as
                   | string
                   | undefined),
     }));
 
-    return <HomePage tags={tags} clubsData={clubsData} />;
+    return <HomePage tags={tags.map((t) => t.name)} clubsData={clubsData} />;
 }
