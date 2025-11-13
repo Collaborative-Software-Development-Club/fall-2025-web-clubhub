@@ -1,18 +1,25 @@
+"use client";
+
 import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
 import EditableText from "@/components/club-profile/EditableText";
 import clubs from "@/mock/clubs.json";
+import { useClubDescription } from "../../../../services/club-profile/clubs-hooks/useClubProfileData";
 import ContactDialog from "../../../../components/club-profile/ContactDialog";
 import DisplayContact from "@/components/club-profile/DisplayContact";
 import DisplayMultipleText from "@/components/club-profile/DisplayMultipleText";
 import { DisplayText } from "@/components/club-profile/DisplayText";
+import { use } from "react";
 
-export default async function ClubPage({
+export default function ClubPage({
     params,
 }: {
     params: Promise<{ club: string }>;
 }) {
-    const { club } = await params;
+    const { club } = use(params);
     const clubData = clubs[0];
+    const description = useClubDescription(1);
+    console.log(description.description);
+
     const socialMedia = [
         clubData["Contact Information"]["Instagram"] || "",
         clubData["Contact Information"]["Facebook Group Page"] || "",

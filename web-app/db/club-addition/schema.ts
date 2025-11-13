@@ -11,7 +11,7 @@ export const descriptions = pgTable(withPrefix("descriptions"), {
 });
 
 /* --------- Social Media Links Table ---------*/
-export const socialLinks = pgTable(withPrefix("social_links"), {
+export const addedSocialLinks = pgTable(withPrefix("social_links"), {
     id: serial("id").primaryKey(),
     clubId: integer("club_id").notNull(),
     platform: text("platform").notNull(),
@@ -25,7 +25,7 @@ export const meetingLocations = pgTable(withPrefix("meeting_locations"), {
 });
 
 /* --------- Tags Table ---------*/
-export const tags = pgTable(withPrefix("tags"), {
+export const addedTags = pgTable(withPrefix("tags"), {
     clubId: integer("club_id").notNull(),
     name: text("name").notNull().unique(),
 }, (table) => [

@@ -1,10 +1,7 @@
 "use server";
 
-import { clubCommands } from "./commands";
+import { clubCommands  } from "./commands";
 
-/**
- * Use the parameter types of your existing commands so we don't duplicate schemas.
- */
 export type ClubDescriptionInput = Parameters<
   (typeof clubCommands)["createClubDescription"]
 >[0];

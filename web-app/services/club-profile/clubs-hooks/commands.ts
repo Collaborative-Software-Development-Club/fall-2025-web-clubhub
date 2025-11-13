@@ -1,9 +1,9 @@
 import { db } from "@/db";
 import { and, eq } from "drizzle-orm";
 import {
-  meetingLocations, tags,
+  meetingLocations, addedTags,
   announcements, descriptions,
-  socialLinks
+  addedSocialLinks
 } from "@/db/club-addition/schema";
 import { z } from "zod";
 
@@ -110,8 +110,8 @@ export const clubCommands = {
   /* Social media links commands */
   async getAllSocialLinks(clubId: number){
     const records =  await db.select()
-      .from(socialLinks)
-      .where(eq(socialLinks.clubId, clubId));
+      .from(addedSocialLinks)
+      .where(eq(addedSocialLinks.clubId, clubId));
     return records;
   },
 
@@ -120,7 +120,7 @@ export const clubCommands = {
     const clubId = i.clubId;
     for (const link of i.links) {
         if (link.platform && link.url) {
-            await db.insert(socialLinks)
+            await db.insert(addedSocialLinks)
             .values({
                 clubId: clubId,
                 platform: link.platform,
@@ -136,14 +136,14 @@ export const clubCommands = {
     const clubId = i.clubId;
     for (const link of i.links) {
         if (link.socialId) {
-            await db.update(socialLinks)
+            await db.update(addedSocialLinks)
             .set({
                 platform: link.platform,
                 url: link.url,
             })
             .where(and(
-                eq(socialLinks.id, link.socialId),
-                eq(socialLinks.clubId, clubId)
+                eq(addedSocialLinks.id, link.socialId),
+                eq(addedSocialLinks.clubId, clubId)
             ));
         }
     }
@@ -154,9 +154,9 @@ export const clubCommands = {
     const i = SocialLinksParam.parse(input);
     for (const link of i.links) {
         if (link.socialId) {
-            await db.delete(socialLinks).where(and(
-                eq(socialLinks.id, link.socialId),
-                eq(socialLinks.clubId, i.clubId)
+            await db.delete(addedSocialLinks).where(and(
+                eq(addedSocialLinks.id, link.socialId),
+                eq(addedSocialLinks.clubId, i.clubId)
             ));
         }
     }
@@ -204,15 +204,15 @@ export const clubCommands = {
   /* Club Tags Commands */
   async getAllAddedTags(clubId: number){
     const records =  await db.select()
-      .from(tags)
-      .where(eq(tags.clubId, clubId));
+      .from(addedTags)
+      .where(eq(addedTags.clubId, clubId));
     return records;
   },
 
   async addClubTags(input: z.infer<typeof ClubTagsParam>) {
     const i = ClubTagsParam.parse(input);
     for (const tag of i.tags) {
-        await db.insert(tags).values({
+        await db.insert(addedTags).values({
             clubId: i.clubId,
             name: tag.tagName,
         });
@@ -223,7 +223,7 @@ export const clubCommands = {
   async deleteClubTags(input: z.infer<typeof ClubTagsParam>) {
     const i = ClubTagsParam.parse(input);
     for (const tag of i.tags) {
-        await db.delete(tags).where(and(eq(tags.clubId, i.clubId), eq(tags.name, tag.tagName)));
+        await db.delete(addedTags).where(and(eq(addedTags.clubId, i.clubId), eq(addedTags.name, tag.tagName)));
     }
     return { ok: true };
   },
