@@ -8,47 +8,32 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { PopularClubData } from "./PopularClubData";
+import Image from "next/image";
 
-// Support two usages:
-// - Popular page: <ClubCard club={club} />
-// - Browse page:  <ClubCard name=.. description=.. interests=.. />
-type BrowseProps = {
+export type Club = {
     name: string;
-    description: string;
-    interests: string[];
+    description?: string;
+    tags?: string[];
+    interests?: string[];
     leader?: string;
+    contactEmail?: string;
     contact?: string;
+    memberCount?: number;
+    attendanceRate?: number;
+    avgAttendance?: number;
+    meetingFrequency?: number;
+    isOpen?: boolean;
+    image?: string;
 };
 
-type PopularProps = {
-    club: PopularClubData;
-};
+export function ClubCard({ club }: { club: Club }) {
+    // Normalize tags and contact for backwards compatibility
+    const displayTags = club.tags || club.interests || [];
+    const contactEmail = club.contactEmail || club.contact;
 
-type ClubCardProps = PopularProps | BrowseProps;
-/*
-We should have an image, title, and some other information that would be useful
-to display on the main page. I was thinking we could make some kind of clickable or hover
-popout to show additional information but we need to define those types before I can
-add it into this ClubCard.
-*/
-
-export function ClubCard(props: ClubCardProps) {
-    // Normalize props into a `club` object used by this component
-    let club: PopularClubData;
-
-    if ("club" in props) {
-        club = props.club;
-    } else {
-        // props is BrowseProps
-        club = {
-            name: props.name,
-            description: props.description,
-            tags: props.interests,
-            leader: props.leader,
-            contactEmail: props.contact,
-        };
-    }
+    // Handle image with placeholder fallback
+    const placeholderImage = "/default-club-logo.png";
+    const clubImage = club.image || placeholderImage;
 
     // Formats attendance rate to percentage
     const formatAttendanceRate = (rate?: number) => {
@@ -81,10 +66,9 @@ export function ClubCard(props: ClubCardProps) {
         );
     };
 
-    // inside ClubCard component, after helpers
     type StatItem = { fieldTitle: string; value: string | number };
 
-    function buildStatList(club: PopularClubData): StatItem[] {
+    function buildStatList(club: Club): StatItem[] {
         const out: StatItem[] = [];
 
         if (club.memberCount != null)
@@ -105,8 +89,20 @@ export function ClubCard(props: ClubCardProps) {
     }
 
     const statList = buildStatList(club);
+
     return (
-        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer gap-3">
+        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer overflow-hidden">
+            {/* Club Image */}
+            <div className="relative w-full h-20 bg-white">
+                <Image
+                    src={clubImage}
+                    alt={club.name || "Club image"}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+            </div>
+
             <CardHeader>
                 <CardTitle className="text-lg font-bold text-gray-900 leading-tight pb-1 border-b border-gray-300">
                     {club.name || "Unknown Club Name"}
@@ -120,11 +116,10 @@ export function ClubCard(props: ClubCardProps) {
 
             <CardContent>
                 {/* Tags */}
-                {club.tags && club.tags.length > 0 && (
+                {displayTags.length > 0 && (
                     <div className="mb-3">
-                        {/* Display 3 tags in blue bubbles */}
                         <div className="flex flex-row flex-wrap gap-1">
-                            {club.tags.map((tag: string, index: number) => (
+                            {displayTags.map((tag: string, index: number) => (
                                 <Badge variant="secondary" key={index}>
                                     {tag}
                                 </Badge>
@@ -168,14 +163,14 @@ export function ClubCard(props: ClubCardProps) {
                 {club.leader && (
                     <p className="text-sm font-medium">Leader: {club.leader}</p>
                 )}
-                {club.contactEmail && (
+                {contactEmail && (
                     <p className="text-sm text-muted-foreground">
                         Contact:{" "}
                         <a
-                            href={`mailto:${club.contactEmail}`}
+                            href={`mailto:${contactEmail}`}
                             className="underline"
                         >
-                            {club.contactEmail}
+                            {contactEmail}
                         </a>
                     </p>
                 )}
