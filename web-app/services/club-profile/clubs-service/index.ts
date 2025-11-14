@@ -1,6 +1,6 @@
 import { ClubsService } from "@/services/definition";
 import { AnnouncementOverview } from "./AnnouncementOverview";
-//import { scrapedClubsService } from ;
+//import { scrapedClubsService } from "../discovery";
 import { ClubPreview } from "./ClubPreview";
 import { db } from "../../../db/index";
 import { announcements, meetingLocations } from "../../../db/club-addition/schema";
@@ -17,7 +17,6 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
     const ids = clubIds.map(Number).filter(Number.isFinite);
     if (!ids.length) return [];
 
-  // Latest announcement per club (Postgres: DISTINCT ON is great; here we do a simple sort + fold)
   const annRows = await db
     .select({
       clubId: announcements.clubId,
@@ -28,7 +27,7 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
     })
     .from(announcements)
     .where(inArray(announcements.clubId, ids))
-    .orderBy(desc(announcements.lastModified))
+    .orderBy(desc(announcements.lastModified));
 
   const latestAnnByClub = new Map<number, typeof annRows[number]>();
   for (const r of annRows) if (!latestAnnByClub.has(r.clubId)) latestAnnByClub.set(r.clubId, r);
@@ -39,19 +38,20 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
     .where(inArray(meetingLocations.clubId, ids));
   const locByClub = new Map(locRows.map(r => [r.clubId, r.location ?? "TBA"]));
 
-  const timeRows = await db
-    .select({ clubId: meetingTimes.clubId, timeText: meetingTimes.timeText }) // use meeting table
-    .from(meetingTimes)
-    .where(inArray(meetingTimes.clubId, ids));
-  const timeByClub = new Map(timeRows.map(r => [r.clubId, r.timeText ?? "TBA"]));
+  // const timeRows = await db
+  //   .select({ clubId: meetingTimes.clubId, timeText: meetingTimes.timeText })
+  //   .from(meetingTimes)
+  //   .where(inArray(meetingTimes.clubId, ids));
+  // const timeByClub = new Map(timeRows.map(r => [r.clubId, r.timeText ?? "TBA"]));
 
   return ids.map((id) => {
     const ann = latestAnnByClub.get(id);
-    const scrapedData = scrapedClubsService.getClubData(id);
+    const scrapedData = { name: `Club ${id}` };
+    //const scrapedData = scrapedClubsService.getClubData(id);
     return {
       name: scrapedData.name,
       meetingLocation: locByClub.get(id) ?? "TBA",
-      meetingTime: timeByClub.get(id) ?? "TBA",
+      //meetingTime: timeByClub.get(id) ?? "TBA",
       nextAnnouncement: {
         title: ann?.title ?? "No announcements",
         body: ann?.content ?? "No announcements",
@@ -75,4 +75,4 @@ async function getClubAnnouncements(clubId: string): Promise<AnnouncementOvervie
         author: `User ${record.userId}`, // Get user name from user service
         pinned: record.pinned || false
     }));
-}
+};
