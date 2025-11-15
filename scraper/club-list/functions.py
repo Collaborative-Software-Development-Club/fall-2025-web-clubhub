@@ -36,6 +36,9 @@ class Club:
     time_of_year_for_new_membership: str
     how_does_a_prospective_member_apply: str
     charge_dues: str
+    primary_leader_email: str
+    secondary_leader_email: str
+    treasurer_leader_email: str
 
 
 def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None) -> List[Club]:
@@ -83,7 +86,9 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
         subpage_dict = get_subpage_info(page_url=url)
         
         #debug line 
+        print('\n\n\n\n')
         print("Retrived club " + name)
+        print(subpage_dict)
 
 
         if (i == 10): 
@@ -118,7 +123,10 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
                 membership_contact=subpage_dict["membership contact"],
                 time_of_year_for_new_membership=subpage_dict["time of year for new membership"],
                 how_does_a_prospective_member_apply=subpage_dict["how does a prospective member apply"],
-                charge_dues=subpage_dict["charge dues"]
+                charge_dues=subpage_dict["charge dues"],
+                primary_leader_email=subpage_dict.get("primary leader email", ""),
+                secondary_leader_email=subpage_dict.get("secondary leader email", ""),
+                treasurer_leader_email=subpage_dict.get("treasurer leader email", "")
 
             )
         )
@@ -129,47 +137,56 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
 def get_subpage_info(page_url: str, base_url: Union[str, None] = None):
     """
     Given the url of a club subpage, extracts and returns the relevant info 
-
-    Args:
-        page_url: The URL of the student organizations listing page.
-        base_url: Optional base URL for resolving relative links.
-
-    Returns:
-        A dict of values
+    including leader names + emails.
     """
 
     info_dict = {}
 
-    # assign value for response object 
     response = requests.get(page_url)
-    response.raise_for_status() #exit if request failed 
+    response.raise_for_status()
 
-    # Initialize new BS object
     subsoup = BeautifulSoup(response.text, 'html.parser')
 
-    # locate the club information 
-    info = subsoup.find("div", {"id":"ctl00_ContentBody_pageFormControl_panel_information"})
+    info = subsoup.find("div", {"id": "ctl00_ContentBody_pageFormControl_panel_information"})
 
-    # Get the image url (will have class 'o-media')
+    # Extract image URL
     try:
-        info_dict["image_url"] = "https://activities.osu.edu"+info.find("div", {"class":"o-media__image"}).img['src']
-        
-    except Exception: 
+        img_src = info.find("div", {"class": "o-media__image"}).img['src']
+        info_dict["image_url"] = "https://activities.osu.edu" + img_src
+    except Exception:
         info_dict["image_url"] = None
-    
 
-    # Ieterate through rows of table and assign dictionary values 
+    # Find the table
     table = info.find("table", {"class": "c-table"})
-    rows=table.find_all('tr')
+    rows = table.find_all('tr')
 
-    for row in rows: 
-        # get all tds 
-        row_name = row.find("th").text.split(":")[0].lower().replace("\n", "")
-        row_value = row.find("td").text.lstrip().replace("\n", "").replace("\r", "")
-        info_dict[row_name] = row_value
-    
+    for row in rows:
+        th = row.find("th")
+        td = row.find("td")
+        if not th or not td:
+            continue
 
-        
+        # Normalize key name
+        row_name = th.get_text(strip=True).replace(":", "").lower()
+
+        # Check if there is an <a> tag (email)
+        link = td.find("a", href=True)
+
+        if link and link['href'].startswith("mailto:"):
+            # Name is link text
+            name = link.get_text(strip=True)
+
+            # Email extracted from "mailto:"
+            email = link['href'].replace("mailto:", "").strip()
+
+            info_dict[row_name] = name
+            info_dict[row_name + " email"] = email
+
+        else:
+            # Fallback: plain text value
+            row_value = td.get_text(" ", strip=True)
+            info_dict[row_name] = row_value
+
     return info_dict
 
 def save_clubs_to_json(clubs: List[Club], filename: str) -> None:
