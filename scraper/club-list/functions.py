@@ -86,9 +86,7 @@ def extract_club_info_from_url(page_url: str, base_url: Union[str, None] = None)
         subpage_dict = get_subpage_info(page_url=url)
         
         #debug line 
-        print('\n\n\n\n')
         print("Retrived club " + name)
-        print(subpage_dict)
 
 
         if (i == 10): 
