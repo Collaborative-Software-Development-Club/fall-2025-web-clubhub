@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import ClubCard from "@/app/(discovery)/browse/ClubCard";
+import { ClubCard } from "@/app/(discovery)/club-card"
 import { Toggle } from "@/components/ui/toggle";
 
 export function Browse({
@@ -80,11 +80,7 @@ export function Browse({
                     filteredClubs.map((club) => (
                         <ClubCard
                             key={club.id}
-                            name={club.name}
-                            interests={club.interests}
-                            description={club.description}
-                            leader={club.leader} //optional
-                            contact={club.contact}
+                            club={club}
                         />
                     ))
                 )}

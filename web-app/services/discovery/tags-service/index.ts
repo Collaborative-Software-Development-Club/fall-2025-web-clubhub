@@ -1,8 +1,4 @@
-import { mockTagsService } from "./mock-tags-service";
-import { Tag } from "./Tag";
+import { TagsService } from "@/services/definition";
+import { actualTagsService } from "./tags-service";
 
-export interface TagsService {
-    getAllTags(): Promise<Tag[]>;
-}
-
-export const tagsService: TagsService = mockTagsService;
+export const tagsService: TagsService = actualTagsService;
