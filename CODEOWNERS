@@ -1,5 +1,3 @@
-* @ldfMion
-
 /app/(discovery)/ @ldfMion
 /services/discovery/ @ldfMion
 /db/discovery/ @ldfMion
