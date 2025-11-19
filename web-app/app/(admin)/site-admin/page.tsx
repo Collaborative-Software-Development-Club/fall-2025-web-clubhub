@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from "react";
+import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,14 +11,25 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown, ChevronDown } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuTrigger,
+    DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
 
 // Mock data for demonstration
@@ -48,6 +60,65 @@ const SiteAdminPage: React.FC = () => {
   const totalClubs = mockClubs.length;
   const pendingClubs = mockClubs.filter(club => club.status === 'Pending').length;
 
+  // Club Management State
+  const [clubSearch, setClubSearch] = useState('');
+  const [selectedClubs, setSelectedClubs] = useState<string[]>([]);
+  const [clubSort, setClubSort] = useState<'name' | 'members' | 'status'>('name');
+
+  // User Management State
+  const [userSearch, setUserSearch] = useState('');
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [userSort, setUserSort] = useState<'name' | 'role' | 'joined'>('name');
+
+  // Filter and sort clubs
+  const filteredClubs = mockClubs
+    .filter(club => club.name.toLowerCase().includes(clubSearch.toLowerCase()))
+    .sort((a, b) => {
+      if (clubSort === 'name') return a.name.localeCompare(b.name);
+      if (clubSort === 'members') return b.members - a.members;
+      if (clubSort === 'status') return a.status.localeCompare(b.status);
+      return 0;
+    });
+
+  // Filter and sort users
+  const filteredUsers = mockUsers
+    .filter(user => 
+      user.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      user.email.toLowerCase().includes(userSearch.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (userSort === 'name') return a.name.localeCompare(b.name);
+      if (userSort === 'role') return a.role.localeCompare(b.role);
+      if (userSort === 'joined') return new Date(b.joined).getTime() - new Date(a.joined).getTime();
+      return 0;
+    });
+
+  // Club selection handlers
+  const toggleClubSelection = (clubId: string) => {
+    setSelectedClubs(prev =>
+      prev.includes(clubId) ? prev.filter(id => id !== clubId) : [...prev, clubId]
+    );
+  };
+
+  const toggleAllClubs = () => {
+    setSelectedClubs(prev =>
+      prev.length === filteredClubs.length ? [] : filteredClubs.map(club => club.id)
+    );
+  };
+
+  // User selection handlers
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUsers(prev =>
+      prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId]
+    );
+  };
+
+  const toggleAllUsers = () => {
+    setSelectedUsers(prev =>
+      prev.length === filteredUsers.length ? [] : filteredUsers.map(user => user.id)
+    );
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       {/* Header */}
@@ -58,7 +129,7 @@ const SiteAdminPage: React.FC = () => {
 
       {/* Breadcrumb */}
       <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-        <span className="hover:text-foreground cursor-pointer">Home</span>
+        <Link href="/" className="hover:text-foreground cursor-pointer">Home</Link>
         <span>/</span>
         <span className="text-foreground">Site Dashboard</span>
       </div>
@@ -92,7 +163,7 @@ const SiteAdminPage: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{pendingClubs}</div>
-            <p className="text-xs text-muted-foreground">{pendingClubs} club waiting for review</p>
+            <p className="text-xs text-muted-foreground">{pendingClubs} {pendingClubs === 1 ? "club" : "clubs"} waiting for review</p>
           </CardContent>
         </Card>
       </div>
@@ -106,100 +177,210 @@ const SiteAdminPage: React.FC = () => {
         </TabsList>
         <TabsContent value="clubs">
           <Card>
-            <CardHeader>
-              <CardTitle>All Clubs</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>All Clubs</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {selectedClubs.length > 0 && `${selectedClubs.length} selected`}
+                </p>
+              </div>
+              <Input
+                placeholder="Search clubs..."
+                value={clubSearch}
+                onChange={(e) => setClubSearch(e.target.value)}
+                className="max-w-xs"
+              />
             </CardHeader>
             <CardContent>
-              <div className="relative w-full overflow-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead className="border-b">
-                    <tr className="border-b transition-colors hover:bg-muted/50">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Club Name</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Leader</th>
-                      <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Members</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground"><span className="sr-only">Actions</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockClubs.map((club) => (
-                      <tr key={club.id} className="border-b transition-colors hover:bg-muted/50">
-                        <td className="p-4 align-middle font-medium">{club.name}</td>
-                        <td className="p-4 align-middle">
-                          <Badge variant={club.status === 'Active' ? 'default' : 'secondary'}>{club.status}</Badge>
-                        </td>
-                        <td className="p-4 align-middle">{club.leader}</td>
-                        <td className="p-4 align-middle text-right">{club.members}</td>
-                        <td className="p-4 align-middle">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button aria-haspopup="true" size="icon" variant="ghost">
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              {club.status === 'Pending' && <DropdownMenuItem>Approve</DropdownMenuItem>}
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={selectedClubs.length === filteredClubs.length && filteredClubs.length > 0}
+                        onCheckedChange={toggleAllClubs}
+                        aria-label="Select all"
+                      />
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setClubSort('name')}
+                        className="h-8 gap-2"
+                      >
+                        Club Name
+                        {clubSort === 'name' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setClubSort('status')}
+                        className="h-8 gap-2"
+                      >
+                        Status
+                        {clubSort === 'status' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead>Leader</TableHead>
+                    <TableHead className="text-right">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setClubSort('members')}
+                        className="h-8 gap-2 ml-auto"
+                      >
+                        Members
+                        {clubSort === 'members' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead><span className="sr-only">Actions</span></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredClubs.map((club) => (
+                    <TableRow key={club.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedClubs.includes(club.id)}
+                          onCheckedChange={() => toggleClubSelection(club.id)}
+                          aria-label="Select row"
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{club.name}</TableCell>
+                      <TableCell>
+                        <Badge variant={club.status === 'Active' ? 'default' : 'secondary'}>{club.status}</Badge>
+                      </TableCell>
+                      <TableCell>{club.leader}</TableCell>
+                      <TableCell className="text-right">{club.members}</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            {club.status === 'Pending' && <DropdownMenuItem>Approve</DropdownMenuItem>}
+                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {filteredClubs.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  No clubs found
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="users">
           <Card>
-            <CardHeader>
-              <CardTitle>All Users</CardTitle>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>All Users</CardTitle>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {selectedUsers.length > 0 && `${selectedUsers.length} selected`}
+                </p>
+              </div>
+              <Input
+                placeholder="Search users..."
+                value={userSearch}
+                onChange={(e) => setUserSearch(e.target.value)}
+                className="max-w-xs"
+              />
             </CardHeader>
             <CardContent>
-              <div className="relative w-full overflow-auto">
-                <table className="w-full caption-bottom text-sm">
-                  <thead className="border-b">
-                    <tr className="border-b transition-colors hover:bg-muted/50">
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Joined</th>
-                      <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground"><span className="sr-only">Actions</span></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockUsers.map((user) => (
-                      <tr key={user.id} className="border-b transition-colors hover:bg-muted/50">
-                        <td className="p-4 align-middle font-medium">{user.name}</td>
-                        <td className="p-4 align-middle">
-                          <Badge variant={user.role === 'Admin' ? 'destructive' : 'outline'}>{user.role}</Badge>
-                        </td>
-                        <td className="p-4 align-middle">{user.email}</td>
-                        <td className="p-4 align-middle">{user.joined}</td>
-                        <td className="p-4 align-middle">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button aria-haspopup="true" size="icon" variant="ghost">
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                              <DropdownMenuItem>Edit Role</DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">Delete User</DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
+                        onCheckedChange={toggleAllUsers}
+                        aria-label="Select all"
+                      />
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setUserSort('name')}
+                        className="h-8 gap-2"
+                      >
+                        Name
+                        {userSort === 'name' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setUserSort('role')}
+                        className="h-8 gap-2"
+                      >
+                        Role
+                        {userSort === 'role' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setUserSort('joined')}
+                        className="h-8 gap-2"
+                      >
+                        Joined
+                        {userSort === 'joined' && <ArrowUpDown className="h-4 w-4" />}
+                      </Button>
+                    </TableHead>
+                    <TableHead><span className="sr-only">Actions</span></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedUsers.includes(user.id)}
+                          onCheckedChange={() => toggleUserSelection(user.id)}
+                          aria-label="Select row"
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{user.name}</TableCell>
+                      <TableCell>
+                        <Badge variant={user.role === 'Admin' ? 'destructive' : 'outline'}>{user.role}</Badge>
+                      </TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.joined}</TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Toggle menu</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem>Edit Role</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">Delete User</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {filteredUsers.length === 0 && (
+                <div className="text-center py-8 text-muted-foreground">
+                  No users found
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
