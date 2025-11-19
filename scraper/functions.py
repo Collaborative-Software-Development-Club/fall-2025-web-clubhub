@@ -1,4 +1,5 @@
 import json
+import random
 from dataclasses import asdict, dataclass
 from typing import List, Union
 from urllib.parse import urljoin
@@ -45,7 +46,10 @@ class Club:
 
 
 def extract_club_info_from_url(
-    page_url: str, base_url: Union[str, None] = None, limit: int = 10
+    page_url: str,
+    base_url: Union[str, None] = None,
+    limit: Union[int, None] = 10,
+    shuffle: bool = True,  # so that it there is a limit the clubs aren't taken in alphabetical order
 ) -> List[Club]:
     """
     Fetches an HTML page from a URL and extracts club information.
@@ -69,6 +73,8 @@ def extract_club_info_from_url(
         return clubs
 
     rows = table.find_all("tr")[1:]  # skip header row
+    if shuffle:
+        random.shuffle(rows)
 
     i = 0
 

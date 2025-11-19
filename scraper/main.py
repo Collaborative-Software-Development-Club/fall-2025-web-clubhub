@@ -2,7 +2,7 @@ from functions import extract_club_info_from_url, save_clubs_to_json
 
 PAGE_URL = "https://activities.osu.edu/involvement/student_organizations/find_a_student_org?v=list&c=Columbus"
 FILENAME = "../data/club-list.json"
-LIMIT = 100
+LIMIT = 50
 
 if __name__ == "__main__":
     # Example usage:
