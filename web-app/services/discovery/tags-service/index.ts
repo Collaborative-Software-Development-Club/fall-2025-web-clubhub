@@ -1,4 +1,4 @@
 import { TagsService } from "@/services/definition";
-import { mockTagsService } from "./mock-tags-service";
+import { actualTagsService } from "./tags-service";
 
-export const tagsService: TagsService = mockTagsService;
+export const tagsService: TagsService = actualTagsService;
