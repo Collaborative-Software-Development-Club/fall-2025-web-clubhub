@@ -30,11 +30,10 @@ export default function AttendancePage() {
     const [meetingError, setMeetingError] = useState<string | null>(null);
     const [isLoadingMeeting, setIsLoadingMeeting] = useState(true);
 
-    // Keep copy of attendance state
-    const [attendance, setAttendance] = useState(() =>
-        // Clone it to avoid changing original data
-        mockAttendance.map((s) => ({ ...s }))
-    );
+    // Keep copy of attendance state; start empty and load from API
+    const [attendance, setAttendance] = useState(() => [] as typeof mockAttendance);
+    const [attendanceLoading, setAttendanceLoading] = useState(false);
+    const [attendanceError, setAttendanceError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!meetingId) {
@@ -86,6 +85,51 @@ export default function AttendancePage() {
             cancelled = true;
         };
     }, [meetingId]);
+
+        // Fetch attendance rows for this meeting from the DB-backed API
+        useEffect(() => {
+            if (!meetingId) return;
+
+            let cancelled = false;
+
+            const fetchAttendance = async () => {
+                setAttendanceLoading(true);
+                setAttendanceError(null);
+
+                try {
+                    const res = await fetch(`/api/attendance/${meetingId}`);
+                    const payload = (await res.json().catch(() => null)) as
+                        | { attendance?: Array<any>; error?: string }
+                        | null;
+
+                    if (!res.ok) {
+                        throw new Error(payload?.error ?? `HTTP ${res.status}`);
+                    }
+
+                    const rows = payload?.attendance ?? [];
+
+                    // Map DB rows to the StudentProps shape used by StudentRow.
+                    // Using userEmail as a fallback for name/dotNumber until we join users table.
+                    const mapped = rows.map((r) => ({
+                        name: r.userEmail ?? `user-${r.userID ?? r.attendanceID}`,
+                        dotNumber: (r.userEmail ?? `user-${r.userID ?? r.attendanceID}`).toLowerCase(),
+                        status: (r.status as AttendanceStatus) ?? "no-response",
+                        timestamp: r.timestamp ? new Date(r.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }) : null,
+                        streak: 0,
+                    }));
+
+                    if (!cancelled) setAttendance(mapped);
+                } catch (err) {
+                    if (!cancelled) setAttendanceError(err instanceof Error ? err.message : String(err));
+                } finally {
+                    if (!cancelled) setAttendanceLoading(false);
+                }
+            };
+
+            void fetchAttendance();
+
+            return () => { cancelled = true; };
+        }, [meetingId]);
 
     const handleStatusChange = (dotNumber: string, newStatus: AttendanceStatus) => {
         // Update in-memory state so the UI reflects the change immediately
