@@ -66,7 +66,7 @@ export function FeaturedClubs() {
                                     className="pl-2 md:pl-4 basis-1/1 md:basis-1/2 lg:basis-1/3 h-full"
                                 >
                                     <Link href="clubs/csdc">
-                                        <ClubCard club={{ ...club, name: club.name ?? "" }} />
+                                        <ClubCard club={club} />
                                     </Link>
                                 </CarouselItem>
                             ))}
