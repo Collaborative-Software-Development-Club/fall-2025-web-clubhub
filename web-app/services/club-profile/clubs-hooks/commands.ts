@@ -4,7 +4,7 @@ import {
   meetingLocations, addedTags,
   announcements, descriptions,
   addedSocialLinks
-} from "@/db/club-addition/schema";
+} from "@/db/club-profile/schema";
 import { z } from "zod";
 
 /* ------------------------------- Validation ---------------------------- */
