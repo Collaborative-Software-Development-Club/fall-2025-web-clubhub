@@ -40,6 +40,7 @@
         "input-otp": "^1.4.2",
         "input-otp": "^1.4.2",
         "lucide-react": "^0.542.0",
+        "motion": "^12.23.24",
         "next": "15.5.2",
         "node-ical": "^0.22.0",
         "react": "19.1.0",
