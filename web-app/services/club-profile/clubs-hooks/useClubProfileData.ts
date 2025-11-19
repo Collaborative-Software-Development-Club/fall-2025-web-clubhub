@@ -52,13 +52,13 @@ export const clubKeys = {
 /* ---------------------------- Description hooks --------------------------- */
 
 export function useClubDescription(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.description(clubId),
     queryFn: () => getClubDescriptionAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateClubDescription() {
@@ -101,13 +101,13 @@ export function useDeleteClubDescription() {
 
 /* ---------------------------- SocialLinks actions --------------------------- */
 export function useSocialLinks(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.socialLinks(clubId),
     queryFn: () => getSocialLinksAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateSocialLinks() {
@@ -149,13 +149,13 @@ export function useDeleteSocialLinks() {
 /* ---------------------------- Description actions --------------------------- */
 
 export function useMeetingLocation(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.meetingLocation(clubId),
     queryFn: () => getMeetingLocationAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateMeetingLocation() {
@@ -199,13 +199,13 @@ export function useDeleteMeetingLocation() {
 /* ---------------------------- Tags actions --------------------------- */
 
 export function useClubTags(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.tags(clubId),
     queryFn: () => getClubTagsAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useAddClubTags() {

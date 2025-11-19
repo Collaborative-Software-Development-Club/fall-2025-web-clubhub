@@ -1,33 +1,21 @@
-import { SOCIAL_MEDIA_PLATFORMS } from "./constants";
-
 export default function DisplayContact({
     list,
-    isEmail,
     placeholder = "",
 }: {
     list: string[];
-    isEmail: boolean;
     placeholder?: string;
 }) {
     const renderDisplayItem = (item: string, index: number) => {
         if (!item || item.trim() === "") return null;
 
         return (
-            <li
-                key={index}
-                className={isEmail ? "list-disc list-inside" : "list-none"}
-            >
-                {!isEmail && (
-                    <span className="font-semibold py-1">
-                        {SOCIAL_MEDIA_PLATFORMS[index]}:
-                    </span>
-                )}{" "}
+            <li key={index} className="list-disc list-inside">
                 {item}
             </li>
         );
     };
 
-    const title = isEmail ? "Organization Email:" : "Social Media Links:";
+    const title = "Organization Emails:";
 
     return (
         <div className="w-full">
@@ -35,7 +23,7 @@ export default function DisplayContact({
             <hr className="border-gray-400 mt-2" />
 
             {list.length > 0 ? (
-                <ul className={`p-2 ${isEmail ? "list-disc list-inside" : ""}`}>
+                <ul className="p-2 list-disc list-inside">
                     {list.map(renderDisplayItem)}
                 </ul>
             ) : (

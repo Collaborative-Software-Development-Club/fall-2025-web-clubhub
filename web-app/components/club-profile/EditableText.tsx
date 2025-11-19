@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { DisplayText } from "./DisplayText";
+import DisplayText from "./DisplayText";
 
 interface EditableTextProps {
     id: string;
