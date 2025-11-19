@@ -18,3 +18,6 @@
 /web-app/app/(account)/ @kbeaverson
 /web-app/services/account/ @kbeaverson
 /web-app/db/account/ @kbeaverson
+
+# Default reviewer for all other files
+* @ldfMion
