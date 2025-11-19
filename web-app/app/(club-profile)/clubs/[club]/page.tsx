@@ -47,6 +47,7 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                 <PurposeClient
                     purposeStatement={clubData["Purpose Statement"]}
                     isLeader={isLeader}
+                    clubId={1}
                 />
                 <EditableMultipleText
                     id={club}
@@ -54,7 +55,7 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                     path="Membership Details"
                     initialData={clubData["Membership Details"]}
                 />
-                <EditableText
+                {/* <EditableText
                     id={club}
                     title="Meeting Time and Location"
                     path="Meeting Time and Location"
@@ -63,7 +64,7 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                             "Meeting Time and Place"
                         ]
                     }
-                />
+                /> */}
                 <div
                     id="contact"
                     className="w-full grid grid-cols-2 items-start px-5 gap-4"

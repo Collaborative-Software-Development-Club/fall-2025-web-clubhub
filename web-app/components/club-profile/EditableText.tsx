@@ -6,17 +6,26 @@ import { Textarea } from "../ui/textarea";
 import DisplayText from "./DisplayText";
 
 interface EditableTextProps {
-    id: string;
+    clubId: number;
     title: string;
-    path: string;
+    handleSave: (
+        data: string,
+        initialData: string,
+        clubId: number,
+        isCreating: boolean,
+    ) => Promise<void>;
+    handleDelete: (data: string, clubId: number) => Promise<void>;
     initialText: string;
+    isCreating: boolean;
 }
 
 export default function EditableText({
-    id,
+    clubId,
     title,
-    path,
+    handleSave,
+    handleDelete,
     initialText,
+    isCreating,
 }: EditableTextProps) {
     const [text, setText] = useState(initialText);
     const [isEditing, setIsEditing] = useState(false);
@@ -28,10 +37,8 @@ export default function EditableText({
     };
 
     const saveEditing = async () => {
-        console.log("Saving:", { id, path, newText: text });
         setIsEditing(false);
-        // Call your API to save the text here
-        // await fetch("/api/updateField", { method: "POST", body: JSON.stringify({ id, path, text }) });
+        await handleSave(text, initialText, clubId, isCreating);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -40,7 +47,7 @@ export default function EditableText({
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
         const length = e.target.value.length;
-        e.target.setSelectionRange(length, length); // Move cursor to the end
+        e.target.setSelectionRange(length, length);
     };
 
     return (
@@ -73,6 +80,13 @@ export default function EditableText({
                             size="sm"
                         >
                             Cancel
+                        </Button>
+                        <Button
+                            onClick={() => {handleDelete(text, clubId)}}
+                            onMouseDown={(e) => e.preventDefault()}
+                            size="sm"
+                        >
+                            Remove
                         </Button>
                     </div>
                 </div>
