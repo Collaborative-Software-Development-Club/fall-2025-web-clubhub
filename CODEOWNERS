@@ -1,18 +1,23 @@
-/app/(discovery)/ @ldfMion
-/services/discovery/ @ldfMion
-/db/discovery/ @ldfMion
+# Discovery
+/web-app/app/(discovery)/ @ldfMion
+/web-app/services/discovery/ @ldfMion
+/web-app/db/discovery/ @ldfMion
 
-/app/(club-profile)/ @JunhoHwoang
-/services/club-profile/ @JunhoHwoang
-/components/club-profile/ @JunhoHwoang
-/db/club-profile/ @JunhoHwoang
+# Club Profile
+/web-app/app/(club-profile)/ @JunhoHwoang
+/web-app/services/club-profile/ @JunhoHwoang
+/web-app/components/club-profile/ @JunhoHwoang
+/web-app/db/club-profile/ @JunhoHwoang
 
-/app/(attendance)/ @donutdiet
-/services/attendance/ @donutdiet
-/db/attendance/ @donutdiet
+# Attendance
+/web-app/app/(attendance)/ @donutdiet
+/web-app/services/attendance/ @donutdiet
+/web-app/db/attendance/ @donutdiet
 
-/app/(account)/ @kbeaverson
-/services/account/ @kbeaverson
-/db/account/ @kbeaverson
+# Account
+/web-app/app/(account)/ @kbeaverson
+/web-app/services/account/ @kbeaverson
+/web-app/db/account/ @kbeaverson
 
+# Default reviewer for all other files
 * @ldfMion

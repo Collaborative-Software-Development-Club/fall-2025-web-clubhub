@@ -1,4 +1,4 @@
-import { ClubsService } from ".";
+import { ClubsService } from "../../definition";
 import mockClubs from "@/mock/clubs.json";
 import { ClubOverview } from "./ClubOverview";
 
