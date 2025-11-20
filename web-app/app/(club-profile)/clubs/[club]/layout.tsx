@@ -2,7 +2,7 @@ import { TagDialog } from "@/components/club-profile/TagDialog";
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
-
+import ChangeStatus from "@/components/club-profile/ChangeStatus";
 export default async function ClubLeaderLayout({
     children,
     params,
@@ -11,7 +11,7 @@ export default async function ClubLeaderLayout({
     params: Promise<{ club: string }>;
 }) {
     const { club } = await params;
-
+    const isLeader = false; // TODO: Replace with actual authentication logic
     const clubData = clubs[0]; //use mock data until we setup the database
 
     return (
@@ -29,10 +29,16 @@ export default async function ClubLeaderLayout({
                             <h1 className="text-3xl font-bold">
                                 {clubData["Club Name"] + "(Leader)"}
                             </h1>
-                            <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
-                                {/* Status Badge (Todo: Implement pop up for changing status) */}
-                                {clubData["Status"]}
-                            </div>
+                            {isLeader ? (
+                                <ChangeStatus
+                                    initialText={clubData["Status"]}
+                                />
+                            ) : (
+                                <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
+                                    {/* Status Badge (Todo: Implement pop up for changing status) */}
+                                    {clubData["Status"]}
+                                </div>
+                            )}
                         </div>
                         <h2 className="text-xl font-semibold">
                             {"Campus: " + clubData["Campus"]}

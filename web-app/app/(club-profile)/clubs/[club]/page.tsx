@@ -28,9 +28,8 @@ export default function ClubPage({ params }: { params: { club: string } }) {
             platform: "Other",
             url: clubData["Contact Information"]["Other"] || "",
         },
-    ].filter((item) => item.url.trim() !== ""); // Filter out empty social media links
+    ].filter((item) => item.url.trim() !== "");
 
-    // Ensure organizationEmail is an array
     const organizationEmail = Array.isArray(
         clubData["Contact Information"]["Organization Email"],
     )
