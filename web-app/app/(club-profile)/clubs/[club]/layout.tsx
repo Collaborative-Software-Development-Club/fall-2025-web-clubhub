@@ -75,6 +75,12 @@ export default async function ClubLeaderLayout({
                         >
                             Announcements
                         </Link>
+                        <Link
+                            href={"/clubs/" + club + "/attendanceGraph"}
+                            className="font-medium text-gray-700 hover:text-blue-600"
+                        >
+                            Attendance
+                        </Link>
                         {/* Add more links or Remove links as needed */}
                     </nav>
                 </div>

@@ -47,6 +47,7 @@ export default function Dashboard() {
                     attendance={85}
                     members={42}
                     pending={10}
+                    leader={true}
                 />
             </section>
 
