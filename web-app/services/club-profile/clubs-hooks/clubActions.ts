@@ -22,6 +22,14 @@ export type AnnouncementInput = Parameters<
   (typeof clubCommands)["createAnnouncement"]
 >[0];
 
+export type ContactInformationInput = Parameters<
+  (typeof clubCommands)["createContactInformation"]
+>[0];
+
+export type ClubStatusInput = Parameters<
+  (typeof clubCommands)["createClubStatus"]
+>[0];
+
 /* ---------------------------- Description actions --------------------------- */
 
 export async function getClubDescriptionAction(clubId: number) {
@@ -106,4 +114,40 @@ export async function updateAnnouncementAction(input: AnnouncementInput) {
 
 export async function deleteAnnouncementAction(input: AnnouncementInput) {
   return clubCommands.deleteAnnouncement(input);
+}
+
+/* ---------------------------- Contact Information actions --------------------------- */
+
+export async function getContactInformationAction(clubId: number) {
+  return clubCommands.getContactInformation(clubId);
+}
+
+export async function createContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.createContactInformation(input);
+}
+
+export async function updateContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.updateContactInformation(input);
+}
+
+export async function deleteContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.deleteContactInformation(input);
+}
+
+/* ---------------------------- Club Status actions --------------------------- */
+
+export async function getClubStatusAction(clubId: number) {
+  return clubCommands.getClubStatus(clubId);
+}
+
+export async function createClubStatusAction(input: ClubStatusInput) {
+  return clubCommands.createClubStatus(input);
+}
+
+export async function updateClubStatusAction(input: ClubStatusInput) {
+  return clubCommands.updateClubStatus(input);
+}
+
+export async function deleteClubStatusAction(clubId: number) {
+  return clubCommands.deleteClubStatus(clubId);
 }

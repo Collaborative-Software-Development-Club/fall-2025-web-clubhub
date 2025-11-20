@@ -1,42 +1,42 @@
 import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
-import EditableText from "@/components/club-profile/EditableText";
 import clubs from "@/mock/clubs.json";
 import PurposeClient from "@/components/club-profile/PurposeClient";
 import SocialClient from "@/components/club-profile/SocialClient";
-import DisplayEmail from "@/components/club-profile/DisplayEmail";
-import DisplayMultipleText from "@/components/club-profile/DisplayMultipleText";
-import DisplayText from "@/components/club-profile/DisplayText";
+import ContactClient from "@/components/club-profile/ContactClient";
 
 export default function ClubPage({ params }: { params: { club: string } }) {
-    const { club } = params;
+    //const { club } = params;
+    const club = 1;
     const clubData = clubs[0];
 
     const socialMedia = [
         {
-            platform: "Instagram",
-            url: clubData["Contact Information"]["Instagram"] || "",
+            prop1: "Instagram",
+            prop2: clubData["Contact Information"]["Instagram"] || "",
         },
         {
-            platform: "Facebook",
-            url: clubData["Contact Information"]["Facebook Group Page"] || "",
+            prop1: "Facebook",
+            prop2: clubData["Contact Information"]["Facebook Group Page"] || "",
         },
         {
-            platform: "Website",
-            url: clubData["Contact Information"]["Website"] || "",
+            prop1: "Website",
+            prop2: clubData["Contact Information"]["Website"] || "",
         },
         {
-            platform: "Other",
-            url: clubData["Contact Information"]["Other"] || "",
+            prop1: "Other",
+            prop2: clubData["Contact Information"]["Other"] || "",
         },
-    ].filter((item) => item.url.trim() !== "");
+    ].filter((item) => item.prop2.trim() !== "");
 
-    const organizationEmail = Array.isArray(
-        clubData["Contact Information"]["Organization Email"],
-    )
-        ? clubData["Contact Information"]["Organization Email"]
-        : clubData["Contact Information"]["Organization Email"]
-        ? [clubData["Contact Information"]["Organization Email"]]
-        : [];
+    const organizationEmail =
+        clubData["Contact Information"]["Organization Email"]?.map(
+            (email: string) => {
+                return {
+                    prop1: "Email",
+                    prop2: email,
+                };
+            },
+        ) || [];
 
     const isLeader = true; // TODO: Replace with actual authentication logic
 
@@ -46,7 +46,7 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                 <PurposeClient
                     purposeStatement={clubData["Purpose Statement"]}
                     isLeader={isLeader}
-                    clubId={1}
+                    clubId={club}
                 />
                 <EditableMultipleText
                     id={club}
@@ -68,9 +68,14 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                     id="contact"
                     className="w-full grid grid-cols-2 items-start px-5 gap-4"
                 >
-                    <DisplayEmail list={organizationEmail} />
+                    {/* <DisplayEmail list={organizationEmail} /> */}
+                    <ContactClient
+                        clubId={club}
+                        organizationEmail={organizationEmail}
+                        isLeader={isLeader}
+                    />
                     <SocialClient
-                        clubId={parseInt(club)}
+                        clubId={club}
                         socialLinks={socialMedia}
                         isLeader={isLeader}
                     />

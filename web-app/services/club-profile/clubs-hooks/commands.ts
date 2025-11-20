@@ -3,7 +3,8 @@ import { and, eq } from "drizzle-orm";
 import {
   meetingLocations, addedTags,
   announcements, descriptions,
-  addedSocialLinks
+  addedSocialLinks, contactInformation,
+  clubStatus
 } from "@/db/club-profile/schema";
 import { z } from "zod";
 
@@ -49,6 +50,22 @@ const SocialLink = z.object({
 const SocialLinksParam = z.object({
   clubId: ClubId,
   links: z.array(SocialLink).min(1),
+});
+
+const ContactInformation = z.object({
+  contactId: z.number().int().positive().optional(),
+  method: z.string().min(1),
+  detail: z.string().min(1),
+});
+
+const ContactInformationParam = z.object({
+  clubId: ClubId,
+  contacts: z.array(ContactInformation).min(1),
+});
+
+const ClubStatusParam = z.object({
+  clubId: ClubId,
+  status: z.enum(["Active", "Inactive", "Pending"]),
 });
 
 //TODO: Come up with Membership window and requirement schemas
@@ -157,6 +174,55 @@ export const clubCommands = {
             await db.delete(addedSocialLinks).where(and(
                 eq(addedSocialLinks.id, link.socialId),
                 eq(addedSocialLinks.clubId, i.clubId)
+            ));
+        }
+    }
+    return { ok: true };
+  },
+
+  /* Contact Information */
+  async getContactInformation(clubId: number){
+    const record = await db.select()
+      .from(contactInformation)
+      .where(eq(contactInformation.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+
+  async createContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+    const clubId = i.clubId;
+    for (const contact of i.contacts) {
+        await db.insert(contactInformation)
+        .values({
+            clubId: clubId,
+            method: contact.method,
+            detail: contact.detail,
+        });
+    }
+    return { ok: true };
+  },
+
+  async updateContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+
+    await db
+    .update(contactInformation)
+    .set({
+      method: i.contacts[0].method,
+      detail: i.contacts[0].detail,
+    })
+    .where(eq(contactInformation.clubId, i.clubId));
+
+    return { ok: true };
+  },
+
+  async deleteContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+    for (const contact of i.contacts) {
+        if (contact.contactId) {
+            await db.delete(contactInformation).where(and(
+                eq(contactInformation.clubId, i.clubId),
+                eq(contactInformation.id, contact.contactId),
             ));
         }
     }
@@ -281,6 +347,45 @@ export const clubCommands = {
 
     await db.delete(announcements)
       .where(and(eq(announcements.id, i.announcementId), eq(announcements.clubId, i.clubId)));
+    return { ok: true };
+  },
+
+  /* Club Status Commands */
+  async getClubStatus(clubId: number){
+    const record = await db.select()
+      .from(clubStatus)
+      .where(eq(clubStatus.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+
+  async createClubStatus(input: z.infer<typeof ClubStatusParam>) {
+    const i = ClubStatusParam.parse(input);
+
+    await db
+    .insert(clubStatus)
+    .values({
+      clubId: i.clubId,
+      status: i.status,
+    });
+
+    return { ok: true };
+  },
+
+  async updateClubStatus(input: z.infer<typeof ClubStatusParam>) {
+    const i = ClubStatusParam.parse(input);
+
+    await db
+    .update(clubStatus)
+    .set({
+      status: i.status,
+    })
+    .where(eq(clubStatus.clubId, i.clubId));
+    
+    return { ok: true };
+  },
+
+  async deleteClubStatus(clubId: number) {
+    await db.delete(clubStatus).where(eq(clubStatus.clubId, clubId));
     return { ok: true };
   },
 

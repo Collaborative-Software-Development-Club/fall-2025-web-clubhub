@@ -14,33 +14,38 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { LINK_REGEX } from "./constants";
-import DisplaySocial from "@/components/club-profile/DisplaySocial";
 import {
     useCreateSocialLinks,
     useUpdateSocialLinks,
     useDeleteSocialLinks,
+    useCreateContactInformation,
+    useUpdateContactInformation,
+    useDeleteContactInformation,
 } from "@/services/club-profile/clubs-hooks/useClubProfileData";
+import DisplayContacts from "./DisplayContact";
 
-export interface SocialLink {
+export interface Dialog {
     id?: number;
-    clubId?: number;
-    platform: string;
-    url: string;
+    prop1: string; // platform for social, method for contact
+    prop2: string; // url for social, detail for contact
 }
 
-interface SocialDialogProps {
-    socialLinks: SocialLink[];
-    addedSocialLinks: SocialLink[];
+interface DialogProps {
+    data: Dialog[];
+    addedData: Dialog[] | [];
+    isContact: boolean;
     clubId: number;
 }
 
-export default function SocialDialog({
-    socialLinks,
-    addedSocialLinks,
+export default function ContactDialog({
+    data,
+    addedData,
+    isContact,
     clubId,
-}: SocialDialogProps) {
+}: DialogProps) {
     clubId = 1; // Temporary hardcode for clubId
-    const [tempList, setTempList] = useState<SocialLink[]>(addedSocialLinks);
+    console.log(addedData)
+    const [tempList, setTempList] = useState<Dialog[]>(addedData);
     const [errors, setErrors] = useState<boolean[]>([]);
     const [generalError, setGeneralError] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -49,21 +54,29 @@ export default function SocialDialog({
     const updateSocialLinks = useUpdateSocialLinks();
     const deleteSocialLinks = useDeleteSocialLinks();
 
+    const createContactInfo = useCreateContactInformation();
+    const updateContactInfo = useUpdateContactInformation();
+    const deleteContactInfo = useDeleteContactInformation();
+
     const displaySocialLinks = useMemo(
-        () => socialLinks.concat(addedSocialLinks),
-        [socialLinks, addedSocialLinks],
+        () => data.concat(addedData),
+        [data, addedData],
     );
 
-    const validateUrl = (url: string): boolean => {
-        if (url.trim() === "") return true;
-        return LINK_REGEX.test(url);
+    const validateInput = (value: string): boolean => {
+        if (value.trim() === "") return true;
+        if (isContact) {
+            return true; // For contact info, any non-empty string is valid
+        } else {
+            return LINK_REGEX.test(value); // For social links, validate URL
+        }
     };
 
     const resetToOriginalState = useCallback(() => {
-        setTempList(addedSocialLinks);
+        setTempList(addedData);
         setGeneralError("");
         setErrors([]);
-    }, [addedSocialLinks]);
+    }, [addedData]);
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
@@ -78,13 +91,13 @@ export default function SocialDialog({
     };
 
     const addNewSocialLink = () => {
-        setTempList((prev) => [...prev, { platform: "", url: "" }]);
+        setTempList((prev) => [...prev, { prop1: "", prop2: "" }]);
         setErrors((prev) => [...prev, false]);
     };
 
-    const updateSocialLink = (
+    const updateItem = (
         index: number,
-        field: "platform" | "url",
+        field: "prop1" | "prop2",
         value: string,
     ) => {
         setTempList((prev) => {
@@ -114,7 +127,7 @@ export default function SocialDialog({
         let hasErrors = false;
 
         tempList.forEach((item, index) => {
-            const isInvalid = !validateUrl(item.url);
+            const isInvalid = !validateInput(item.prop2);
             newErrors[index] = isInvalid;
             if (isInvalid) hasErrors = true;
         });
@@ -122,71 +135,130 @@ export default function SocialDialog({
         setErrors(newErrors);
 
         if (hasErrors) {
-            setGeneralError("Please enter valid URLs.");
+            setGeneralError(
+                isContact
+                    ? "Please enter valid contact details."
+                    : "Please enter valid URLs.",
+            );
             return;
         }
 
         try {
-            const validSocialLinks = tempList.filter(
-                (item) => item.platform.trim() !== "" && item.url.trim() !== "",
+            const validItems = tempList.filter(
+                (item) => item.prop1.trim() !== "" && item.prop2.trim() !== "",
             );
 
-            const newSocialLinks = validSocialLinks
-                .filter((link) => !link.id)
-                .map((link) => ({
-                    platform: link.platform.trim(),
-                    url: link.url.trim(),
+            const newItems = validItems
+                .filter((item) => !item.id)
+                .map((item) => ({
+                    [isContact ? "method" : "platform"]: item.prop1.trim(),
+                    [isContact ? "detail" : "url"]: item.prop2.trim(),
                 }));
 
-            if (newSocialLinks.length > 0) {
-                await createSocialLinks.mutateAsync({
-                    clubId,
-                    links: newSocialLinks,
-                });
+            if (newItems.length > 0) {
+                if (isContact) {
+                    await createContactInfo.mutateAsync({
+                        clubId,
+                        contacts: newItems as Array<{
+                            method: string;
+                            detail: string;
+                        }>,
+                    });
+                } else {
+                    await createSocialLinks.mutateAsync({
+                        clubId,
+                        links: newItems as Array<{
+                            platform: string;
+                            url: string;
+                        }>,
+                    });
+                }
             }
 
-            const updatedSocialLinks = validSocialLinks
-                .filter((link) => !!link.id)
-                .map((link) => ({
-                    platform: link.platform.trim(),
-                    url: link.url.trim(),
-                    socialId: link.id!,
+            const updatedItems = validItems
+                .filter((item) => !!item.id)
+                .map((item) => ({
+                    [isContact ? "method" : "platform"]: item.prop1.trim(),
+                    [isContact ? "detail" : "url"]: item.prop2.trim(),
+                    [isContact ? "contactId" : "socialId"]: item.id!,
                 }));
 
-            if (updatedSocialLinks.length > 0) {
-                await updateSocialLinks.mutateAsync({
-                    clubId,
-                    links: updatedSocialLinks,
-                });
+            if (updatedItems.length > 0) {
+                if (isContact) {
+                    await updateContactInfo.mutateAsync({
+                        clubId,
+                        contacts: updatedItems as Array<{
+                            method: string;
+                            detail: string;
+                            contactId: number;
+                        }>,
+                    });
+                } else {
+                    await updateSocialLinks.mutateAsync({
+                        clubId,
+                        links: updatedItems as Array<{
+                            platform: string;
+                            url: string;
+                            socialId: number;
+                        }>,
+                    });
+                }
             }
 
-            const linksToDelete = addedSocialLinks
+            const itemsToDelete = addedData
                 .filter(
-                    (existingLink) =>
-                        !validSocialLinks.some(
-                            (link) => link.id === existingLink.id,
-                        ),
+                    (existingItem) =>
+                        !validItems.some((item) => item.id === existingItem.id),
                 )
-                .map((link) => ({
-                    platform: link.platform,
-                    url: link.url,
-                    socialId: link.id!,
+                .map((item) => ({
+                    [isContact ? "method" : "platform"]: item.prop1,
+                    [isContact ? "detail" : "url"]: item.prop2,
+                    [isContact ? "contactId" : "socialId"]: item.id!,
                 }));
 
-            if (linksToDelete.length > 0) {
-                await deleteSocialLinks.mutateAsync({
-                    clubId,
-                    links: linksToDelete,
-                });
+            if (itemsToDelete.length > 0) {
+                if (isContact) {
+                    await deleteContactInfo.mutateAsync({
+                        clubId,
+                        contacts: itemsToDelete as Array<{
+                            method: string;
+                            detail: string;
+                            contactId: number;
+                        }>,
+                    });
+                } else {
+                    await deleteSocialLinks.mutateAsync({
+                        clubId,
+                        links: itemsToDelete as Array<{
+                            platform: string;
+                            url: string;
+                            socialId: number;
+                        }>,
+                    });
+                }
             }
 
             setGeneralError("");
             setErrors([]);
             setIsOpen(false);
-            console.log("Saved social links to database:", validSocialLinks);
+            console.log(
+                `Saved ${
+                    isContact ? "contact information" : "social links"
+                } to database:`,
+                validItems,
+            );
         } catch (error) {
-            console.error("Error saving social links:", error);
-            setGeneralError("Failed to save social links. Please try again.");
+            console.error(
+                `Error saving ${
+                    isContact ? "contact information" : "social links"
+                }:`,
+                error,
+            );
+            setGeneralError(
+                `Failed to save ${
+                    isContact ? "contact information" : "social links"
+                }. Please try again.`,
+            );
         }
     };
 
@@ -194,8 +266,9 @@ export default function SocialDialog({
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 <div className="min-h-14 cursor-pointer rounded-md py-2 whitespace-pre-wrap hover:bg-gray-100 hover:shadow-sm">
-                    <DisplaySocial
+                    <DisplayContacts
                         list={displaySocialLinks}
+                        isContact={isContact}
                         placeholder="Click to edit..."
                     />
                 </div>
@@ -203,17 +276,26 @@ export default function SocialDialog({
 
             <DialogContent className="flex max-h-[80vh] flex-col sm:max-w-[425px]">
                 <DialogHeader className="flex-shrink-0">
-                    <DialogTitle>Edit Social Media Links</DialogTitle>
+                    <DialogTitle>
+                        {isContact
+                            ? "Edit Contact Information"
+                            : "Edit Social Media Links"}
+                    </DialogTitle>
                     <DialogDescription>
-                        Manage your club&apos;s social media links. These are
-                        stored separately from your basic profile information
-                        and can be updated independently.
+                        Manage your club&apos;s{" "}
+                        {isContact
+                            ? "contact information"
+                            : "social media links"}
+                        . These are stored separately from your basic profile
+                        information and can be updated independently.
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="flex flex-1 flex-col gap-2 overflow-hidden p-1">
                     <div className="flex flex-shrink-0 flex-row items-center justify-between">
-                        <h2 className="text-lg font-semibold">Social Links</h2>
+                        <h2 className="text-lg font-semibold">
+                            {isContact ? "Contact Methods" : "Social Links"}
+                        </h2>
                         <Button
                             type="button"
                             className="bg-blue-100 text-blue-500 hover:bg-blue-400 hover:text-white"
@@ -231,7 +313,8 @@ export default function SocialDialog({
                             >
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-medium">
-                                        Link {index + 1}
+                                        {isContact ? "Contact" : "Link"}{" "}
+                                        {index + 1}
                                     </p>
                                     <Button
                                         type="button"
@@ -247,38 +330,46 @@ export default function SocialDialog({
                                 <div className="flex flex-col">
                                     <div>
                                         <label className="text-xs text-gray-500">
-                                            Platform
+                                            {isContact ? "Method" : "Platform"}
                                         </label>
                                         <input
                                             type="text"
-                                            value={item.platform}
+                                            value={item.prop1}
                                             onChange={(e) =>
-                                                updateSocialLink(
+                                                updateItem(
                                                     index,
-                                                    "platform",
+                                                    "prop1",
                                                     e.target.value,
                                                 )
                                             }
-                                            placeholder="e.g. Instagram, Twitter, Facebook"
+                                            placeholder={
+                                                isContact
+                                                    ? "e.g. Email, Phone, Discord"
+                                                    : "e.g. Instagram, Twitter, Facebook"
+                                            }
                                             className="w-full rounded-md border px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                     </div>
 
                                     <div>
                                         <label className="text-xs text-gray-500">
-                                            URL
+                                            {isContact ? "Details" : "URL"}
                                         </label>
                                         <input
-                                            type="url"
-                                            value={item.url}
+                                            type={isContact ? "text" : "url"}
+                                            value={item.prop2}
                                             onChange={(e) =>
-                                                updateSocialLink(
+                                                updateItem(
                                                     index,
-                                                    "url",
+                                                    "prop2",
                                                     e.target.value,
                                                 )
                                             }
-                                            placeholder="https://..."
+                                            placeholder={
+                                                isContact
+                                                    ? "contact details..."
+                                                    : "https://..."
+                                            }
                                             className={`w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                                                 errors[index]
                                                     ? "border-red-500"

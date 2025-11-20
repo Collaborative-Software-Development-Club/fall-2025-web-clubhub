@@ -1,21 +1,30 @@
-export default function DisplayContact({
+export default function DisplayContacts({
     list,
+    isContact,
     placeholder = "",
 }: {
-    list: string[];
+    list: {
+        prop1: string;
+        prop2: string;
+    }[];
+    isContact: boolean;
     placeholder?: string;
 }) {
-    const renderDisplayItem = (item: string, index: number) => {
-        if (!item || item.trim() === "") return null;
+    const renderDisplayItem = (
+        item: { prop1: string; prop2: string },
+        index: number,
+    ) => {
+        if (!item || item.prop1.trim() === "" || item.prop2.trim() === "")
+            return null;
 
         return (
-            <li key={index} className="list-disc list-inside">
-                {item}
+            <li key={index} className="list-none">
+                <span className="font-semibold py-1 pr-1">{item.prop1}:</span>
+                {item.prop2}
             </li>
         );
     };
-
-    const title = "Organization Emails:";
+    const title = isContact ? "Organization Contacts:" : "Social Media Links:";
 
     return (
         <div className="w-full">

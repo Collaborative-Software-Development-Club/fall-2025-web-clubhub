@@ -1,8 +1,7 @@
 "use client";
 
-import DisplaySocial from "./DisplaySocial";
-import SocialDialog from "./SocialDialog";
-import { SocialLink } from "./SocialDialog";
+import DisplayContacts from "./DisplayContact";
+import ContactDialog, { Dialog } from "./ContactDialog";
 import { useSocialLinks } from "@/services/club-profile/clubs-hooks/useClubProfileData";
 
 export default function SocialClient({
@@ -11,23 +10,31 @@ export default function SocialClient({
     isLeader,
 }: {
     clubId: number;
-    socialLinks: SocialLink[];
+    socialLinks: Dialog[];
     isLeader: boolean;
 }) {
-    const { data, isLoading, error } = useSocialLinks(1);
+    const { data, isLoading, error } = useSocialLinks(clubId);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading social links</div>;
 
+    const prop = data?.map((link) => ({
+        id: link.id || undefined,
+        prop1: link.platform,
+        prop2: link.url,
+    }));
+
     return isLeader ? (
-        <SocialDialog
-            socialLinks={socialLinks}
-            addedSocialLinks={data || []}
+        <ContactDialog
+            data={socialLinks}
+            addedData={prop || []}
+            isContact={false}
             clubId={clubId}
         />
     ) : (
-        <DisplaySocial
-            list={socialLinks.concat(data || [])}
+        <DisplayContacts
+            list={socialLinks}
+            isContact={false}
             placeholder="No social links provided"
         />
     );

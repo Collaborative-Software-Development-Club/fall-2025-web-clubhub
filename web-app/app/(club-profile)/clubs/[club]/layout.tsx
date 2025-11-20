@@ -11,7 +11,7 @@ export default async function ClubLeaderLayout({
     params: Promise<{ club: string }>;
 }) {
     const { club } = await params;
-    const isLeader = false; // TODO: Replace with actual authentication logic
+    const isLeader = true; // TODO: Replace with actual authentication logic
     const clubData = clubs[0]; //use mock data until we setup the database
 
     return (
