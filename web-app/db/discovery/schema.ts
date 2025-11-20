@@ -20,7 +20,13 @@ export const makeUpEnum = pgEnum("make_up", [
     "Graduate",
     "Professional",
 ]);
-export const statusEnum = pgEnum("status", ["Active I", "Active II", "Active - Established", "Inactive", "Pending"]);
+export const statusEnum = pgEnum("status", [
+    "Active I",
+    "Active - Established",
+    "Active II",
+    "Inactive",
+    "Pending",
+]);
 export const membershipEnum = pgEnum("membership", [
     "Open Membership",
     "Application/Selection Process",
@@ -44,11 +50,12 @@ export const clubs = createDiscoveryTable("scraped_clubs", {
     primaryMakeUp: makeUpEnum("primary_make_up"),
     meetingTimeAndPlace: text("meeting_time_and_place"),
     officeLocation: text("office_location"),
+    // null because some clubs don't have it specified
     membershipType: membershipEnum("membership_type"),
     membershipContact: text("membership_contact"),
     timeOfYearForNewMembership: text("time_of_year_for_new_membership"),
     howDoesAProspectiveMemberApply: text("how_does_a_prospective_member_apply"),
-    chargeDues: boolean("charge_dues").default(false),
+    chargeDues: boolean("charge_dues").default(false).notNull(),
     organizationEmail: text("organization_email"),
     createdAt: date("created_at", {
         mode: "date",

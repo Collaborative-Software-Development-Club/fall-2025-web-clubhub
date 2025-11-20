@@ -1,3 +1,5 @@
+"use client";
+
 import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
 import clubs from "@/mock/clubs.json";
 import PurposeClient from "@/components/club-profile/PurposeClient";
