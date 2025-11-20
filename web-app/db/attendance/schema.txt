@@ -1,0 +1,14 @@
+JSON Friendly Data
+const attendanceData = [
+  {attendance: 25, date: "2024-01-10" },
+  {attendance: 30, date: "2023-12-05" },
+  {attendance: 28, date: "2024-02-01" }
+];
+
+
+Or
+
+Attendance Table in SQL format
+|date|attendance|
+
+would need sorting functions and smoothing functions by week

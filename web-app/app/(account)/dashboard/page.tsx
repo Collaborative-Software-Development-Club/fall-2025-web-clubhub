@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MyClubCard from "@/components/myClubs/myClubCard";
 
 export default function Dashboard() {
     const user = "User"; // eventually grab from convex/auth
@@ -38,15 +39,15 @@ export default function Dashboard() {
             <section className="m-8 space-y-4">
                 <h2 className="text-xl font-semibold">{`${user}'s Clubs`}</h2>
 
-                <Card className="w-48">
-                    <CardHeader>
-                        <CardTitle className="text-center">CSD</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center text-sm text-muted-foreground">
-                        <p>Next Meeting: 10/1/25 @6pm</p>
-                        <p>Hitchcock 031</p>
-                    </CardContent>
-                </Card>
+                <MyClubCard
+                    key={1}
+                    name="CSD"
+                    logo="/default-club-logo.png"
+                    nextMeeting="10/1/25 @6pm - Hitchcock 031"
+                    attendance={85}
+                    members={42}
+                    pending={10}
+                />
             </section>
 
             <Separator className="my-8" />
