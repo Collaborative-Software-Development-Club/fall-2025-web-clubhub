@@ -2,6 +2,7 @@ import { TagDialog } from "@/components/club-profile/TagDialog";
 import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
+import EditableProfilePicture from "@/components/club-profile/EditableProfilePicture";
 
 export default async function ClubLeaderLayout({
     children,
@@ -18,12 +19,14 @@ export default async function ClubLeaderLayout({
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
             <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4">
-                    <Image
-                        src="/default-club-logo.png"
-                        alt="Club Logo"
-                        width={200}
-                        height={100}
-                    />
+                    <div className="hover:grayscale transition duration-300">   
+                        <EditableProfilePicture
+                            initialSrc="/default-club-logo.png"
+                            alt="Club Logo"
+                            width={200}
+                            height={100}
+                        />
+                    </div>
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
                             <h1 className="text-3xl font-bold">
