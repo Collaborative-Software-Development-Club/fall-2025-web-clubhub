@@ -43,8 +43,7 @@ export default function ContactDialog({
     isContact,
     clubId,
 }: DialogProps) {
-    clubId = 1; // Temporary hardcode for clubId
-    console.log(addedData)
+    console.log(addedData);
     const [tempList, setTempList] = useState<Dialog[]>(addedData);
     const [errors, setErrors] = useState<boolean[]>([]);
     const [generalError, setGeneralError] = useState("");

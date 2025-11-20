@@ -18,29 +18,25 @@ export default function ContactClient({
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading contact information</div>;
 
-    const prop = data
-        ? [
-              {
-                  id: data.id || undefined,
-                  prop1: data.method,
-                  prop2: data.detail,
-              },
-          ]
-        : [];
-    console.log(prop)
+    const prop = data?.map((item) => ({
+        id: item.id || undefined,
+        prop1: item.method,
+        prop2: item.detail,
+    }));
+    console.log(prop);
     // organizationEmail is already in Dialog[] format, so we can use it directly
     const emailList = organizationEmail;
 
     return isLeader ? (
         <ContactDialog
             data={emailList}
-            addedData={prop}
+            addedData={prop || []}
             isContact={true}
             clubId={clubId}
         />
     ) : (
         <DisplayContact
-            list={organizationEmail.concat(prop)}
+            list={organizationEmail.concat(prop || [])}
             isContact={true}
             placeholder="No contact information provided"
         />

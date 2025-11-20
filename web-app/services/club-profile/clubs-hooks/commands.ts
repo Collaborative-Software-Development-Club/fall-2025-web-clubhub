@@ -182,37 +182,44 @@ export const clubCommands = {
 
   /* Contact Information */
   async getContactInformation(clubId: number){
-    const record = await db.select()
+    const records = await db.select()
       .from(contactInformation)
       .where(eq(contactInformation.clubId, clubId));
-    return record.length > 0 ? record[0] : null;
+    return records;
   },
 
   async createContactInformation(input: z.infer<typeof ContactInformationParam>) {
     const i = ContactInformationParam.parse(input);
     const clubId = i.clubId;
     for (const contact of i.contacts) {
-        await db.insert(contactInformation)
-        .values({
-            clubId: clubId,
-            method: contact.method,
-            detail: contact.detail,
-        });
+        if (contact.method && contact.detail) {
+            await db.insert(contactInformation)
+            .values({
+                clubId: clubId,
+                method: contact.method,
+                detail: contact.detail,
+            });
+        }
     }
     return { ok: true };
   },
 
   async updateContactInformation(input: z.infer<typeof ContactInformationParam>) {
     const i = ContactInformationParam.parse(input);
-
-    await db
-    .update(contactInformation)
-    .set({
-      method: i.contacts[0].method,
-      detail: i.contacts[0].detail,
-    })
-    .where(eq(contactInformation.clubId, i.clubId));
-
+    const clubId = i.clubId;
+    for (const contact of i.contacts) {
+        if (contact.contactId) {
+            await db.update(contactInformation)
+            .set({
+                method: contact.method,
+                detail: contact.detail,
+            })
+            .where(and(
+                eq(contactInformation.id, contact.contactId),
+                eq(contactInformation.clubId, clubId)
+            ));
+        }
+    }
     return { ok: true };
   },
 
