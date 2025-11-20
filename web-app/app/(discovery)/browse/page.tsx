@@ -19,8 +19,8 @@ function processClubData(clubs: ClubOverview[]) {
         const secondary = Array.isArray(secondaryRaw)
             ? secondaryRaw
             : typeof secondaryRaw === "string"
-              ? [secondaryRaw]
-              : [];
+            ? [secondaryRaw]
+            : [];
 
         const primaryLeader = club.leaders.primaryLeader;
 
@@ -41,6 +41,15 @@ function processClubData(clubs: ClubOverview[]) {
             interests: Array.from(new Set([primary, ...secondary])),
             leader: primaryLeader,
             contact,
+            // Additional fields used by the browse filters
+            campus: club.campus,
+            status: club.status,
+            meetingTimeAndPlace:
+                club.meetingInformation?.meetingTimeAndPlace || "",
+            membershipType: club.membershipDetails?.membershipType || "",
+            timeOfYearForNewMembership:
+                club.membershipDetails?.timeOfYearForNewMembership || "",
+            chargeDues: club.membershipDetails?.chargeDues || "",
         };
     });
 }
