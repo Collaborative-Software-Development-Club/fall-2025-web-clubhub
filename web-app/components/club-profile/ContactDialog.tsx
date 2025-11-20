@@ -125,7 +125,10 @@ export default function ContactDialog({
         let hasErrors = false;
 
         tempList.forEach((item, index) => {
-            const isInvalid = !validateInput(item.prop2);
+            const isProp1Invalid = !item.prop1 || item.prop1.trim() === "";
+            const isProp2Invalid = !validateInput(item.prop2);
+            const isInvalid = isProp1Invalid || isProp2Invalid;
+
             newErrors[index] = isInvalid;
             if (isInvalid) hasErrors = true;
         });
