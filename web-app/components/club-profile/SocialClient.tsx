@@ -33,7 +33,7 @@ export default function SocialClient({
         />
     ) : (
         <DisplayContacts
-            list={socialLinks}
+            list={socialLinks.concat(prop || [])}
             isContact={false}
             placeholder="No social links provided"
         />

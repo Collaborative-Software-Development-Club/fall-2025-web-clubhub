@@ -8,13 +8,8 @@ import DisplayText from "./DisplayText";
 interface EditableTextProps {
     clubId: number;
     title: string;
-    handleSave: (
-        data: string,
-        initialData: string,
-        clubId: number,
-        isCreating: boolean,
-    ) => Promise<void>;
-    handleDelete: (data: string, clubId: number) => Promise<void>;
+    handleSave: (data: string) => Promise<void>;
+    handleDelete: () => Promise<void>;
     initialText: string;
     isCreating: boolean;
 }
@@ -25,7 +20,6 @@ export default function EditableText({
     handleSave,
     handleDelete,
     initialText,
-    isCreating,
 }: EditableTextProps) {
     const [text, setText] = useState(initialText);
     const [isEditing, setIsEditing] = useState(false);
@@ -38,7 +32,7 @@ export default function EditableText({
 
     const saveEditing = async () => {
         setIsEditing(false);
-        await handleSave(text, initialText, clubId, isCreating);
+        await handleSave(text);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -82,7 +76,9 @@ export default function EditableText({
                             Cancel
                         </Button>
                         <Button
-                            onClick={() => {handleDelete(text, clubId)}}
+                            onClick={() => {
+                                handleDelete();
+                            }}
                             onMouseDown={(e) => e.preventDefault()}
                             size="sm"
                         >
