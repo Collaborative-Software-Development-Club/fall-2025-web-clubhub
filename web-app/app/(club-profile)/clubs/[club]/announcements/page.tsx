@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,23 +23,36 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
+import { useAnnouncements, useCreateAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement }  from "@/services/club-profile/clubs-hooks/useClubProfileData";
+
 type Announcement = {
-	id: number;
-	title: string;
-	body?: string;
-	date: Date;
-	author?: string;
-	pinned?: boolean;
+    id: number;
+    clubId: number;
+    userId: string;
+    title: string;
+    content: string;
+    pinned: boolean | null;
+    lastModified: Date | null;
 };
 
 let ANN_ID = 0;
+const clubId = 1;
 
 const isLeader = true; //replace with actual authentication logic
 
 export default function AnnouncementsPage() {
-	const [announcements, setAnnouncements] = useState<Announcement[]>([
-		{ id: ANN_ID++, title: "Welcome to the club!", body: "We're glad you're here.", date: new Date(), author: "FirstName LastName" }, { id: ANN_ID++, title: "Test pinned announcement", body: "This is a pinned announcement", date: new Date(23,0,1), author: "First Last", pinned: true }
-	]);
+	const {data, isLoading, error} = useAnnouncements(clubId); //Gets the annoucnements at this clubId from the db
+	const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+
+	//when data is succesfully loaded, then it sets announcemets to the values in data
+	useEffect(() => {
+	if (data) {
+		setAnnouncements(data);
+	}
+	}, [data]);
+
+	const { mutate: createAnnouncement, isPending } = useCreateAnnouncement();
+	const { mutate: updateAnnouncement } = useUpdateAnnouncement();
 
 	const [formOpen, setFormOpen] = useState(false);
 	const [title, setTitle] = useState("");
@@ -51,27 +64,54 @@ export default function AnnouncementsPage() {
 	const handleSubmit = () => {
 		if(!title) return;
 
-		//if you are editing an announcement then show the text that is already saved for that announcement
-		if(editingAnn){
-			setAnnouncements((prev: Announcement[])=>
-				prev.map((a)=>
-					a.id == editingAnn.id ? {...a, title, body, author,date: new Date() } : a
-				)
-			);
-		} else{
-			//Add a new Annoucement
-			setAnnouncements((prev: Announcement[])=> [
-				...prev, {id:ANN_ID++, title, body, date: new Date(), author, pinned: false},
-			]
-			);
+		// //if you are editing an announcement then show the text that is already saved for that announcement
+		// if(editingAnn){
+		// 	setAnnouncements((prev: Announcement[])=>
+		// 		prev.map((a)=>
+		// 			a.id == editingAnn.id ? {...a, title, body, author,date: new Date() } : a
+		// 		)
+		// 	);
+		// } else{
+		// 	//Add a new Annoucement
+		// 	setAnnouncements((prev: Announcement[])=> [
+		// 		...prev, {id:ANN_ID++, title, body, date: new Date(), author, pinned: false},
+		// 	]
+		// 	);
+		// }
+
+		// //reset the form and close
+		// setTitle("");
+		// setBody("");
+		// setAuthor("");
+		// setEditingAnn(null);
+		// setFormOpen(false);
+		if(editingAnn) {
+			updateAnnouncement({
+				id: editingAnn.id,
+				clubId,
+				userId,
+				title,
+				content: body,
+				pinned: editingAnn.pinned ?? false,
+				lastModified: new Date(),
+			});
+			setEditingAnn(null);
+			setTitle("");
+			setBody("");
+			return;
 		}
 
-		//reset the form and close
+		createAnnouncement({
+			id: 0, //IDK how the id's are created or where they are created
+			clubId,
+			userId,
+			title,
+			content: body,
+			pinned: false,
+			lastModified: new Date(),
+		});
 		setTitle("");
 		setBody("");
-		setAuthor("");
-		setEditingAnn(null);
-		setFormOpen(false);
 	};
 
 
@@ -86,8 +126,8 @@ export default function AnnouncementsPage() {
 		if(!annToEdit) return;
 
 		setTitle(annToEdit.title);
-		setBody(annToEdit.body || "");
-		setAuthor(annToEdit.author || "");
+		setBody(annToEdit.content || "");
+		setAuthor(annToEdit.userId || "");
 		setEditingAnn(annToEdit);
 		setFormOpen(true); //reopens the original form used to create the announcement
 
