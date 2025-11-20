@@ -23,8 +23,7 @@ export default function ContactClient({
         prop1: item.method,
         prop2: item.detail,
     }));
-    console.log(prop);
-    // organizationEmail is already in Dialog[] format, so we can use it directly
+
     const emailList = organizationEmail;
 
     return isLeader ? (

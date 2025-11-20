@@ -43,7 +43,6 @@ export default function ContactDialog({
     isContact,
     clubId,
 }: DialogProps) {
-    console.log(addedData);
     const [tempList, setTempList] = useState<Dialog[]>(addedData);
     const [errors, setErrors] = useState<boolean[]>([]);
     const [generalError, setGeneralError] = useState("");
