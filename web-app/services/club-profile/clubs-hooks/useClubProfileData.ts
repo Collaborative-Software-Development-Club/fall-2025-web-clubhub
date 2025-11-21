@@ -13,6 +13,8 @@ import {
   SocialLinksInput,
   ClubTagsInput,
   AnnouncementInput,
+  ContactInformationInput,
+  ClubStatusInput,
   // actions
   getClubDescriptionAction,
   createClubDescriptionAction,
@@ -33,6 +35,14 @@ import {
   createAnnouncementAction,
   updateAnnouncementAction,
   deleteAnnouncementAction,
+  getContactInformationAction,
+  createContactInformationAction,
+  updateContactInformationAction,
+  deleteContactInformationAction,
+  getClubStatusAction,
+  createClubStatusAction,
+  updateClubStatusAction,
+  deleteClubStatusAction,
 } from "./clubActions";
 
 /* -------------------------------------------------------------------------- */
@@ -47,18 +57,22 @@ export const clubKeys = {
   tags: (clubId: number) => ["clubs", clubId, "tags"] as const,
   announcements: (clubId: number) =>
     ["clubs", clubId, "announcements"] as const,
+  contactInformation: (clubId: number) =>
+    ["clubs", clubId, "contactInformation"] as const,
+  clubStatus: (clubId: number) =>
+    ["clubs", clubId, "clubStatus"] as const,
 };
 
 /* ---------------------------- Description hooks --------------------------- */
 
 export function useClubDescription(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.description(clubId),
     queryFn: () => getClubDescriptionAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateClubDescription() {
@@ -101,13 +115,13 @@ export function useDeleteClubDescription() {
 
 /* ---------------------------- SocialLinks actions --------------------------- */
 export function useSocialLinks(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.socialLinks(clubId),
     queryFn: () => getSocialLinksAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateSocialLinks() {
@@ -149,13 +163,13 @@ export function useDeleteSocialLinks() {
 /* ---------------------------- Description actions --------------------------- */
 
 export function useMeetingLocation(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.meetingLocation(clubId),
     queryFn: () => getMeetingLocationAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useCreateMeetingLocation() {
@@ -199,13 +213,13 @@ export function useDeleteMeetingLocation() {
 /* ---------------------------- Tags actions --------------------------- */
 
 export function useClubTags(clubId: number) {
-  const {data} = useQuery({
+  const {data, isLoading, error} = useQuery({
     queryKey: clubKeys.tags(clubId),
     queryFn: () => getClubTagsAction(clubId),
     enabled: !!clubId,
   });
 
-  return data;
+  return {data, isLoading, error};
 }
 
 export function useAddClubTags() {
@@ -276,6 +290,107 @@ export function useDeleteAnnouncement() {
     onSuccess: (_data: { ok: boolean }, input: AnnouncementInput) => {
       qc.invalidateQueries({
         queryKey: clubKeys.announcements(input.clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Contact Information actions --------------------------- */
+
+export function useContactInformation(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.contactInformation(clubId),
+    queryFn: () => getContactInformationAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateContactInformation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: ContactInformationInput) =>
+      createContactInformationAction(input),
+    onSuccess: (_data: { ok: boolean }, input: ContactInformationInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.contactInformation(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateContactInformation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: ContactInformationInput) =>
+      updateContactInformationAction(input),
+    onSuccess: (_data: { ok: boolean }, input: ContactInformationInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.contactInformation(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteContactInformation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: ContactInformationInput) =>
+      deleteContactInformationAction(input),
+    onSuccess: (_data: { ok: boolean }, input: ContactInformationInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.contactInformation(input.clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Club Status actions --------------------------- */
+
+export function useClubStatus(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.clubStatus(clubId),
+    queryFn: () => getClubStatusAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateClubStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: ClubStatusInput) =>
+      createClubStatusAction(input),
+    onSuccess: (_data: { ok: boolean }, input: ClubStatusInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.clubStatus(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateClubStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: ClubStatusInput) =>
+      updateClubStatusAction(input),
+    onSuccess: (_data: { ok: boolean }, input: ClubStatusInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.clubStatus(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteClubStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteClubStatusAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.clubStatus(clubId),
       });
     },
   });
