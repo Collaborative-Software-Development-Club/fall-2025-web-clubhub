@@ -53,6 +53,7 @@ export default function AnnouncementsPage() {
 
 	const { mutate: createAnnouncement, isPending } = useCreateAnnouncement();
 	const { mutate: updateAnnouncement } = useUpdateAnnouncement();
+	const { mutate: deleteAnnouncementMutation, isPending } = useDeleteAnnouncement();
 
 	const [formOpen, setFormOpen] = useState(false);
 	const [title, setTitle] = useState("");
@@ -63,28 +64,7 @@ export default function AnnouncementsPage() {
 
 	const handleSubmit = () => {
 		if(!title) return;
-
-		// //if you are editing an announcement then show the text that is already saved for that announcement
-		// if(editingAnn){
-		// 	setAnnouncements((prev: Announcement[])=>
-		// 		prev.map((a)=>
-		// 			a.id == editingAnn.id ? {...a, title, body, author,date: new Date() } : a
-		// 		)
-		// 	);
-		// } else{
-		// 	//Add a new Annoucement
-		// 	setAnnouncements((prev: Announcement[])=> [
-		// 		...prev, {id:ANN_ID++, title, body, date: new Date(), author, pinned: false},
-		// 	]
-		// 	);
-		// }
-
-		// //reset the form and close
-		// setTitle("");
-		// setBody("");
-		// setAuthor("");
-		// setEditingAnn(null);
-		// setFormOpen(false);
+		
 		if(editingAnn) {
 			updateAnnouncement({
 				id: editingAnn.id,
@@ -136,8 +116,18 @@ export default function AnnouncementsPage() {
 	};
 
 	// Callback function that takes the previous state of the announcements array and returns a new array. Deletes the array with the id from the parameter by keeping all of the other ones
-	const deleteAnnouncement = (id: number) => {
-		setAnnouncements((prev: Announcement[]) => prev.filter((a) => a.id !== id));
+	const deleteAnnouncement = (announcement: Announcement) => {
+		//setAnnouncements((prev: Announcement[]) => prev.filter((a) => a.id !== id));
+		deleteAnnouncementMutation({
+			id: announcement.id,
+			clubId: announcement.clubId,
+			userId: announcement.userId,
+			title: announcement.title,
+			content: announcement.content,
+			pinned: announcement.pinned,
+			lastModified: announcement.lastModified
+
+		});
 	};
 
 	return (
@@ -211,7 +201,7 @@ export default function AnnouncementsPage() {
 						if ((a.pinned ? 1 : 0) !== (b.pinned ? 1 : 0)) {
 							return a.pinned ? -1 : 1;
 						}
-						return b.date.getTime() - a.date.getTime();
+						return b.lastModified.getTime() - a.lastModified.getTime();
 					})
 					.map((a: Announcement) => (
 					<Card key={a.id} className="p-6">
@@ -221,7 +211,7 @@ export default function AnnouncementsPage() {
 									<CardTitle className="text-base">{a.title}</CardTitle>
 									{a.pinned && <Badge className="ml-2">Pinned</Badge>}
 								</div>
-								<p className="text-sm text-muted-foreground">{a.author ?? "Name"} • {format(a.date, "PPP p")}</p>
+								<p className="text-sm text-muted-foreground">{a.userId ?? "Name"} • {format(a.lastModified, "PPP p")}</p>
 							</div>
 							{isLeader && (
 								<div className="flex items-center gap-2">
@@ -251,9 +241,9 @@ export default function AnnouncementsPage() {
 
 						</CardHeader>
 
-						{a.body && (
+						{a.content && (
 							<CardContent className="py-6">
-								<p className="text-sm text-muted-foreground">{a.body}</p>
+								<p className="text-sm text-muted-foreground">{a.content}</p>
 							</CardContent>
 						)}
 					</Card>
