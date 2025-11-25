@@ -111,7 +111,7 @@ export function InterestSelection() {
                             )}
                         </div>
 
-                        <Button disabled={selected.length < REQUIRED} asChild>
+                        <Button disabled={selected.length < REQUIRED}>
                             <Link href="for-you">Continue</Link>
                         </Button>
                     </div>
