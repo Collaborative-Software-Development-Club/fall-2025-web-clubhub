@@ -3,7 +3,7 @@
 import { startTransition, useState } from "react";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
-import { AttendanceStatus, AttendanceRecord } from "./types";
+import { AttendanceStatus, AttendanceRecord, NO_RESPONSE } from "./types";
 import { updateAttendanceStatus } from "./action";
 
 interface AttendanceClientProps {
@@ -95,7 +95,7 @@ export default function AttendanceClient({
             {/* Students who have responded */}
             <div className="w-full space-y-4">
                 {attendance
-                    .filter((student) => student.status != "no-response")
+                    .filter((student) => student.status !== NO_RESPONSE)
                     .sort((a, b) => {
                         const dateA = a.timestamp ? new Date(a.timestamp) : new Date(0);
                         const dateB = b.timestamp ? new Date(b.timestamp) : new Date(0);
@@ -121,7 +121,7 @@ export default function AttendanceClient({
             {/* No-response students */}
             <div className="w-full space-y-4">
                 {attendance
-                    .filter((student) => student.status == "no-response")
+                    .filter((student) => student.status === NO_RESPONSE)
                     .map((student) => (
                         <StudentRow
                             key={student.email}

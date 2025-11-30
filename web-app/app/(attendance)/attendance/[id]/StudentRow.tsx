@@ -3,6 +3,7 @@
 import {
     AttendanceStatus,
     AttendanceRecord,
+    ATTENDANCE_STATUSES,
 } from "@/app/(attendance)/attendance/[id]/types";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
@@ -106,29 +107,27 @@ const StatusBadge = ({
     return (
         <Select value={status} onValueChange={onStatusChange}>
             <SelectTrigger
-                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[100px] hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100`}
-            >
+                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[120px] hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100 h-auto py-0.5 px-2.5 text-xs font-small`}>
                 {statusConfig.icon}
                 {statusConfig.text}
             </SelectTrigger>
             <SelectContent>
-                {(
-                    Object.entries(statusConfigs) as [
-                        AttendanceStatus,
-                        (typeof statusConfigs)["present"],
-                    ][]
-                ).map(([key, config]) => (
-                    <SelectItem
-                        key={key}
-                        value={key}
-                        className={`${config.className} my-1 cursor-pointer`}
-                    >
-                        <div className="flex items-center gap-2">
-                            {config.icon}
-                            {config.text}
-                        </div>
-                    </SelectItem>
-                ))}
+                {ATTENDANCE_STATUSES.map((key) => {
+                    const config = statusConfigs[key];
+                    return (
+                        <SelectItem
+                            key={key}
+                            value={key}
+                            className={`my-1 cursor-pointer ${config.className.replace('hover:', 'focus:')}
+                                focus:brightness-90 hover:brightness-110 focus:text-white`}
+                        >
+                            <div className="flex items-center gap-2">
+                                {config.icon}
+                                {config.text}
+                            </div>
+                        </SelectItem>
+                    );
+                })}
             </SelectContent>
         </Select>
     );
