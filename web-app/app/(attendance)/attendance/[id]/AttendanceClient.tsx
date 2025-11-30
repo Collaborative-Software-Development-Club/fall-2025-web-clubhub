@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
 import { AttendanceStatus, AttendanceRecord } from "./types";
+import { updateAttendanceStatus } from "./action";
 
 interface AttendanceClientProps {
     meetingId: string;
@@ -27,30 +28,33 @@ export default function AttendanceClient({
     const [attendance, setAttendance] = useState(attendanceData);
 
     const handleStatusChange = (student: AttendanceRecord, newStatus: AttendanceStatus) => {
-        // Update in-memory state so the UI reflects the change immediately
+        // Optimistic update
         setAttendance((prev) =>
-            prev.map((s) => {
-                let value = s;
-                if (s.id === student.id || s.email === student.email) {
-                    let timestamp = null;
-
-                    if (newStatus !== "no-response") {
-                        timestamp = new Date().toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true
-                        });
+            prev.map((record) => {
+                if (record.id === student.id || record.email === student.email) {
+                    return {
+                        ...record,
+                        status: newStatus
                     }
-
-                    value = {
-                        ...s,
-                        status: newStatus,
-                        timestamp,
-                    };
                 }
-                return value;
+                return record;
             })
         );
+
+        // Save to database
+        startTransition(async () => {
+            try {
+                await updateAttendanceStatus(student.id, newStatus);
+            } catch (error) {
+                // Rollback optimistic update
+                console.error("Failed to update attendance: ", error);
+                setAttendance((prev) =>
+                    prev.map((record) =>
+                        record.id === student.id ? { ...record, status: record.status } : record
+                    )
+                );
+            }
+        });
     };
 
     return (
