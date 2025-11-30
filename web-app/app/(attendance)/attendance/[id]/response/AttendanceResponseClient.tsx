@@ -11,7 +11,7 @@ import AttendanceStatusForm, {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AttendanceStatus } from "../types";
-import { submitAttendance } from "../action";
+import { submitAttendanceCode, submitAttendanceStatus } from "../action";
 
 const OTP_LENGTH = 4;
 
@@ -83,13 +83,12 @@ const AttendanceResponseClient = ({
 
     const [isPending, startTransition] = useTransition();
 
-    const handleCodeSubmit = useCallback(
-        async (value: string, userEmail: string) => {
+    const handleCodeSubmit = useCallback(async (value: string) => {
             if (hasCompleted || value.length !== OTP_LENGTH) {
                 return;
             }
 
-            if (!userEmail) {
+            if (!email) {
                 // TODO: Get user context using cookie to populate user id and email
             }
 
@@ -97,11 +96,11 @@ const AttendanceResponseClient = ({
 
             startTransition(async () => {
                 try {
-                    const result = await submitAttendance(
+                    const result = await submitAttendanceCode(
                         value,
                         parseInt(code),
                         meetingId,
-                        userEmail,
+                        email,
                     );
 
                     if (result.success) {
@@ -120,19 +119,36 @@ const AttendanceResponseClient = ({
     );
 
     const handleStatusSubmit = useCallback(async () => {
-        if (hasCompleted) {
+        if (hasCompleted || !email) {
             return;
+        }
+
+        if (!email) {
+            // TODO: Get user context using cookie to populate user id and email
         }
 
         setIsSubmittingStatus(true);
 
-        try {
-            console.log("Logging status", { meetingId, status });
-            setHasCompleted(true);
-        } finally {
-            setIsSubmittingStatus(false);
-        }
-    }, [hasCompleted, meetingId, status]);
+        startTransition(async () => {
+            try {
+                const result = await submitAttendanceStatus(
+                    status as AttendanceStatus,
+                    meetingId,
+                    email
+                );
+
+                if (result.success) {
+                    setHasCompleted(true);
+                } else {
+                    console.error("Submission failed:", result.error);
+                }
+            } catch (err) {
+                console.error("Error submitting status:", err);
+            } finally {
+                setIsSubmittingStatus(false);
+            }
+        });
+    }, [hasCompleted, meetingId, status, email, startTransition]);
 
     return (
         <main className="flex flex-col items-center p-8 w-full max-w-3xl mx-auto">
@@ -177,13 +193,14 @@ const AttendanceResponseClient = ({
                             isSubmitting={isSubmittingOtp}
                         />
                         <Separator />
+                        {/* TODO: Only disable due to null email when user is not signed in */}
                         <AttendanceStatusForm
                             status={status}
                             options={STATUS_OPTIONS}
                             onStatusChange={(value) => setStatus(value as AttendanceStatus)}
                             onSubmit={handleStatusSubmit}
                             isSubmitting={isSubmittingStatus}
-                            disabled={hasCompleted || isSubmittingOtp}
+                            disabled={hasCompleted || isSubmittingOtp || !email}
                         />
                     </CardContent>
                 </Card>

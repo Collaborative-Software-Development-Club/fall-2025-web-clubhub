@@ -53,7 +53,6 @@ const AttendanceStatusForm = ({
                 <Select
                     value={status}
                     onValueChange={onStatusChange}
-                    disabled={disabled}
                 >
                     <SelectTrigger id="attendance-status" className="w-full">
                         <SelectValue placeholder="Select a status" />

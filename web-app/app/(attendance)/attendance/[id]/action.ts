@@ -19,7 +19,7 @@ export async function updateAttendanceStatus(
     return { success: true };
 }
 
-export async function submitAttendance(
+export async function submitAttendanceCode(
     inputCode: string,
     code: number,
     meetingId: number,
@@ -52,6 +52,43 @@ export async function submitAttendance(
         email: email,
         user_id: userId,
         status: PRESENT,
+    });
+
+    return { success: true };
+}
+
+export async function submitAttendanceStatus(
+    status: AttendanceStatus,
+    meetingId: number,
+    email: string,
+    userId?: number,
+) {
+    if (status === PRESENT) {
+        return { success: false, error: "Must use code to submit present status" };
+    }
+
+    // Currenlty only allow users to submit attendance once
+    const existingRecord = await db
+        .select()
+        .from(attendance)
+        .where(
+            and(
+                eq(attendance.meeting_id, meetingId),
+                eq(attendance.email, email)
+            )
+        )
+        .limit(1);
+
+    if (existingRecord.length > 0) {
+        return { success: false, error: "You have already submitted your attendance" };
+    }
+
+
+    await db.insert(attendance).values({
+        meeting_id: meetingId,
+        email: email,
+        user_id: userId,
+        status: status,
     });
 
     return { success: true };
