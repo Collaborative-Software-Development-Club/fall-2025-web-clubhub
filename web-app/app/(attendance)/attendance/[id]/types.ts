@@ -4,6 +4,7 @@ export type AttendanceStatus = (typeof attendanceStatusEnum.enumValues)[number];
 
 export const ATTENDANCE_STATUSES = attendanceStatusEnum.enumValues;
 
+export const PRESENT: AttendanceStatus = "present";
 export const NO_RESPONSE: AttendanceStatus = "no-response";
 
 export interface AttendanceRecord {

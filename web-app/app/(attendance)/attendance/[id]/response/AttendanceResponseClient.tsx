@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Calendar, Clock } from "lucide-react";  
 
 import AttendanceCompletionCard from "./AttendanceCompletionCard";
@@ -11,6 +11,7 @@ import AttendanceStatusForm, {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AttendanceStatus } from "../types";
+import { submitAttendance } from "../action";
 
 const OTP_LENGTH = 4;
 
@@ -43,6 +44,7 @@ const AttendanceResponseClient = ({
     const [isSubmittingOtp, setIsSubmittingOtp] = useState(false);
     const [isSubmittingStatus, setIsSubmittingStatus] = useState(false);
     const [hasCompleted, setHasCompleted] = useState(false);
+    const [email, setEmail] = useState("");
 
     const otpInputRef = useRef<HTMLDivElement | null>(null);
 
@@ -79,26 +81,42 @@ const AttendanceResponseClient = ({
         return () => window.clearTimeout(focusTimeout);
     }, [hasCompleted]);
 
-    const submitAttendance = useCallback(
-        async (value: string) => {
+    const [isPending, startTransition] = useTransition();
+
+    const handleCodeSubmit = useCallback(
+        async (value: string, userEmail: string) => {
             if (hasCompleted || value.length !== OTP_LENGTH) {
                 return;
             }
 
+            if (!userEmail) {
+                // TODO: Get user context using cookie to populate user id and email
+            }
+
             setIsSubmittingOtp(true);
 
-            try {
-                console.log("Submitting attendance", {
-                    meetingId,
-                    otp: value,
-                    status: "present",
-                });
-                setHasCompleted(true);
-            } finally {
-                setIsSubmittingOtp(false);
-            }
+            startTransition(async () => {
+                try {
+                    const result = await submitAttendance(
+                        value,
+                        parseInt(code),
+                        meetingId,
+                        userEmail,
+                    );
+
+                    if (result.success) {
+                        setHasCompleted(true);
+                    } else {
+                        console.error("Submission failed:", result.error);
+                    }
+                } catch (err) {
+                    console.error("Error submitting attendance:", err);
+                } finally {
+                    setIsSubmittingOtp(false);
+                }
+            });
         },
-        [hasCompleted, meetingId],
+        [hasCompleted, meetingId, code, startTransition],
     );
 
     const handleStatusSubmit = useCallback(async () => {
@@ -150,7 +168,9 @@ const AttendanceResponseClient = ({
                         <AttendanceOtpForm
                             otp={otp}
                             onOtpChange={setOtp}
-                            onSubmit={(value) => submitAttendance(value)}
+                            email={email}
+                            onEmailChange={setEmail}
+                            onSubmit={handleCodeSubmit}
                             otpLength={OTP_LENGTH}
                             inputRef={otpInputRef}
                             disabled={hasCompleted || isSubmittingStatus}
