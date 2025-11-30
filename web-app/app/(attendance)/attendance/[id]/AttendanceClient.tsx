@@ -26,12 +26,12 @@ export default function AttendanceClient({
 
     const [attendance, setAttendance] = useState(attendanceData);
 
-    const handleStatusChange = (dotNumber: string, newStatus: AttendanceStatus) => {
+    const handleStatusChange = (email: string, newStatus: AttendanceStatus) => {
         // Update in-memory state so the UI reflects the change immediately
         setAttendance((prev) =>
             prev.map((s) => {
                 let value = s;
-                if (s.dotNumber === dotNumber) {
+                if (s.email === email) {
                     let timestamp = null;
 
                     if (newStatus !== "no-response") {
@@ -99,10 +99,10 @@ export default function AttendanceClient({
                     })
                     .map((student) => (
                         <StudentRow
-                            key={student.dotNumber}
+                            key={student.email}
                             {...student}
                             onStatusChange={
-                                isAdmin ? ((newStatus) => handleStatusChange(student.dotNumber, newStatus)) : undefined
+                                isAdmin ? ((newStatus) => handleStatusChange(student.email, newStatus)) : undefined
                             }
                         />
                     ))}
@@ -120,10 +120,10 @@ export default function AttendanceClient({
                     .filter((student) => student.status == "no-response")
                     .map((student) => (
                         <StudentRow
-                            key={student.dotNumber}
+                            key={student.email}
                             {...student}
                             onStatusChange={
-                                isAdmin ? ((newStatus) => handleStatusChange(student.dotNumber, newStatus)) : undefined
+                                isAdmin ? ((newStatus) => handleStatusChange(student.email, newStatus)) : undefined
                             }
                         />
                     ))}

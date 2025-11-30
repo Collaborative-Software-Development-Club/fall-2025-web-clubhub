@@ -42,7 +42,7 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
 
         return {
             name: student.name,
-            dotNumber: record.email,
+            email: record.email,
             status: record.status as AttendanceStatus,
             timestamp: record.timestamp.toLocaleTimeString([], {
                 hour: "2-digit",

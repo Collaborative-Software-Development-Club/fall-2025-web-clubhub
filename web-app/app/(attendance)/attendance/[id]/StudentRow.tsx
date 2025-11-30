@@ -19,7 +19,7 @@ interface StudentRowProps extends StudentProps {
 
 export function StudentRow({
     name,
-    dotNumber,
+    email,
     status,
     timestamp,
     streak,
@@ -30,7 +30,7 @@ export function StudentRow({
             <div className="flex items-baseline gap-2 basis-1/2 shrink-0 grow-0">
                 <p className="font-medium">{name}</p>
                 <p className="text-sm text-gray-400">
-                    {dotNumber.toLowerCase()}
+                    {email.toLowerCase()}
                 </p>
             </div>
 
