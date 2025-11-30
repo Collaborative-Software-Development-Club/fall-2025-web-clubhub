@@ -1,19 +1,29 @@
 import { Card, CardTitle, CardContent, CardAction } from "@/components/ui/card";
 import Link from "next/link";
 
+interface AttendanceCodeCardProps {
+    code: string;
+    meetingDate: Date;
+    meetingTitle: string;
+    meetingDescription: string | null;
+}
+
 export default function AttendanceCodeCard({
     code,
     meetingDate,
-}: {
-    code: string;
-    meetingDate: Date;
-}) {
+    meetingTitle,
+    meetingDescription,
+}: AttendanceCodeCardProps) {
     return (
         <Card className="flex flex-col md:flex-row items-center gap-8 shadow-md rounded-2xl p-8 mb-14">
             <CardContent className="text-center">
-                <CardTitle className="text-lg mb-2">
+                <CardTitle className="text-lg mb-2">{meetingTitle}</CardTitle>
+                {meetingDescription && (
+                    <p className="text-gray-500 text-sm mb-4">{meetingDescription}</p>
+                )}
+                <p className="text-sm mb-2">
                     {meetingDate.toLocaleDateString()}
-                </CardTitle>
+                </p>
                 <p className="text-5xl font-mono font-bold tracking-widest text-blue-600">
                     {code}
                 </p>

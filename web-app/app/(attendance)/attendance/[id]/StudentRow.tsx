@@ -36,7 +36,7 @@ export function StudentRow({
 
             <div className="flex items-center gap-6 basis-1/2 shrink-0 grow-0 justify-end">
                 <StatusBadge status={status} onStatusChange={onStatusChange} />
-                <p className="text-sm text-gray-600 basis-3/20 shrink-0 grow-0">
+                <p className="text-sm text-gray-600 basis-3/20 shrink-0 grow-0 whitespace-nowrap">
                     {timestamp ?? "--:--"}
                 </p>
                 <Badge
