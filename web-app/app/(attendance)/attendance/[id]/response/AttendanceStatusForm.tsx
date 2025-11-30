@@ -1,9 +1,17 @@
 import { FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
-export type AttendanceStatusOption = {
-    value: string;
+export type AttendanceStatusOption<T extends string = string> = {
+    value: T;
     label: string;
 };
 
@@ -34,30 +42,30 @@ const AttendanceStatusForm = ({
 
     return (
         <form
-            className="space-y-3"
+            className="space-y-4"
             onSubmit={handleSubmit}
             aria-busy={isSubmitting ? "true" : "false"}
         >
             <div className="space-y-2">
-                <label
-                    htmlFor="attendance-status"
-                    className="text-base font-medium"
-                >
+                <Label htmlFor="attendance-status" className="text-base font-medium">
                     Not attending? Log your status
-                </label>
-                <select
-                    id="attendance-status"
-                    className="w-full mt-2 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                </Label>
+                <Select
                     value={status}
-                    onChange={(event) => onStatusChange(event.target.value)}
+                    onValueChange={onStatusChange}
                     disabled={disabled}
                 >
-                    {options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
+                    <SelectTrigger id="attendance-status" className="w-full">
+                        <SelectValue placeholder="Select a status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
 
             <Button

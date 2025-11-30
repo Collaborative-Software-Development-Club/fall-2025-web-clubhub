@@ -5,36 +5,39 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Button } from "@/components/ui/button";
 
 type AttendanceOtpFormProps = {
     otp: string;
     onOtpChange: (value: string) => void;
-    onOtpComplete: (value: string) => void;
     onSubmit: (value: string) => Promise<void> | void;
     otpLength: number;
     inputRef: Ref<HTMLDivElement>;
     disabled?: boolean;
+    isSubmitting?: boolean;
 };
 
 const AttendanceOtpForm = ({
     otp,
     onOtpChange,
-    onOtpComplete,
     onSubmit,
     otpLength,
     inputRef,
     disabled = false,
+    isSubmitting = false,
 }: AttendanceOtpFormProps) => {
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (disabled) {
+        if (disabled || otp.length !== otpLength) {
             return;
         }
         onSubmit(otp);
     };
 
+    const isComplete = otp.length === otpLength;
+
     return (
-        <form className="space-y-2" onSubmit={handleFormSubmit} aria-busy={disabled ? "true" : "false"}>
+        <form className="space-y-4" onSubmit={handleFormSubmit} aria-busy={disabled ? "true" : "false"}>
             <label htmlFor="attendance-code" className="text-base font-medium">
                 Attendance Code
             </label>
@@ -43,7 +46,6 @@ const AttendanceOtpForm = ({
                     id="attendance-code"
                     value={otp}
                     onChange={onOtpChange}
-                    onComplete={onOtpComplete}
                     maxLength={otpLength}
                     autoFocus
                     disabled={disabled}
@@ -51,11 +53,22 @@ const AttendanceOtpForm = ({
                 >
                     <InputOTPGroup className="mt-2 mx-auto">
                         {Array.from({ length: otpLength }).map((_, index) => (
-                            <InputOTPSlot key={index} index={index} />
+                            <InputOTPSlot 
+                                key={index} 
+                                index={index} 
+                                className="h-14 w-14 text-xl first:rounded-none last:rounded-none"
+                            />
                         ))}
                     </InputOTPGroup>
                 </InputOTP>
             </div>
+            <Button 
+                type="submit" 
+                className="w-full"
+                disabled={disabled || !isComplete || isSubmitting}
+            >
+                {isSubmitting ? "Submitting..." : "Submit Attendance"}
+            </Button>
         </form>
     );
 };

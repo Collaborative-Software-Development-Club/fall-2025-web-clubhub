@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useState } from "react";
-import AttendanceCodeCard from "./response/AttendanceCodeCard";
+import AttendanceCodeCard from "./AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
 import { AttendanceStatus, AttendanceRecord, NO_RESPONSE } from "./types";
 import { updateAttendanceStatus } from "./action";
