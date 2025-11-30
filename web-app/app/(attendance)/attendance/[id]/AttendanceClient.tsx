@@ -3,7 +3,7 @@
 import { useState } from "react";
 import AttendanceCodeCard from "./response/AttendanceCodeCard";
 import { StudentRow } from "./StudentRow";
-import { AttendanceStatus, StudentProps } from "./types";
+import { AttendanceStatus, AttendanceRecord } from "./types";
 
 interface AttendanceClientProps {
     meetingId: string;
@@ -11,7 +11,7 @@ interface AttendanceClientProps {
     meetingDescription: string | null;
     code: string;
     meetingDate: Date;
-    attendanceData: StudentProps[];
+    attendanceData: AttendanceRecord[];
 }
 
 export default function AttendanceClient({
@@ -26,12 +26,12 @@ export default function AttendanceClient({
 
     const [attendance, setAttendance] = useState(attendanceData);
 
-    const handleStatusChange = (email: string, newStatus: AttendanceStatus) => {
+    const handleStatusChange = (student: AttendanceRecord, newStatus: AttendanceStatus) => {
         // Update in-memory state so the UI reflects the change immediately
         setAttendance((prev) =>
             prev.map((s) => {
                 let value = s;
-                if (s.email === email) {
+                if (s.id === student.id || s.email === student.email) {
                     let timestamp = null;
 
                     if (newStatus !== "no-response") {
@@ -102,7 +102,7 @@ export default function AttendanceClient({
                             key={student.email}
                             {...student}
                             onStatusChange={
-                                isAdmin ? ((newStatus) => handleStatusChange(student.email, newStatus)) : undefined
+                                isAdmin ? ((newStatus) => handleStatusChange(student, newStatus)) : undefined
                             }
                         />
                     ))}
@@ -123,7 +123,7 @@ export default function AttendanceClient({
                             key={student.email}
                             {...student}
                             onStatusChange={
-                                isAdmin ? ((newStatus) => handleStatusChange(student.email, newStatus)) : undefined
+                                isAdmin ? ((newStatus) => handleStatusChange(student, newStatus)) : undefined
                             }
                         />
                     ))}

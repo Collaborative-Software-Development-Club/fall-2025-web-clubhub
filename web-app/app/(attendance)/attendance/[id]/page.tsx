@@ -3,7 +3,7 @@ import AttendanceClient from "./AttendanceClient";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { meetings, attendance } from "@/db/attendance/schema";
-import { AttendanceStatus, StudentProps } from "./types";
+import { AttendanceRecord, AttendanceStatus } from "./types";
 
 interface AttendancePageProps {
     params: Promise<{ id: string }>;
@@ -35,12 +35,13 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
 
     const meetingData = meeting[0];
 
-    const attendanceData: StudentProps[] = attendanceRecords.map((record) => {
+    const attendanceData: AttendanceRecord[] = attendanceRecords.map((record) => {
         // TODO: Get student name from user table
         // const student = await ...
         const student = { name: "placeholder" };
 
         return {
+            id: record.id,
             name: student.name,
             email: record.email,
             status: record.status as AttendanceStatus,

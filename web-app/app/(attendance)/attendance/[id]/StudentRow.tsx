@@ -2,7 +2,7 @@
 
 import {
     AttendanceStatus,
-    StudentProps,
+    AttendanceRecord,
 } from "@/app/(attendance)/attendance/[id]/types";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
@@ -13,7 +13,7 @@ import {
     SelectTrigger,
 } from "@/components/ui/select";
 
-interface StudentRowProps extends StudentProps {
+interface StudentRowProps extends AttendanceRecord {
     onStatusChange?: (newStatus: AttendanceStatus) => void;
 }
 
