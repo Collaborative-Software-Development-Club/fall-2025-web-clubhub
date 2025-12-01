@@ -16,7 +16,6 @@ interface AttendanceClientProps {
 }
 
 export default function AttendanceClient({
-    meetingId,
     meetingTitle,
     meetingDescription,
     code,

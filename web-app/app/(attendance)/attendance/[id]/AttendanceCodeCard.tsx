@@ -31,6 +31,7 @@ export default function AttendanceCodeCard({
 
             <Link href="/attendance/0/response">
                 <CardAction className="shrink-0">
+                    {/* TODO: Replace with dynamically generated QR code for the attendance URL */}
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/500px-QR_code_for_mobile_English_Wikipedia.svg.png"
                         alt="QR Code"

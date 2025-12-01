@@ -1,4 +1,3 @@
-import { mockAttendance } from "@/mock/sample-attendance";
 import AttendanceClient from "./AttendanceClient";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
