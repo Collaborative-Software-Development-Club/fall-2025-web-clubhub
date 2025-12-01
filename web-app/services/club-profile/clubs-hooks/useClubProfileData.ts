@@ -16,6 +16,8 @@ import {
   AnnouncementInput,
   ContactInformationInput,
   ClubStatusInput,
+  MembershipWindowInput,
+  MembershipApplicationMethodInput,
   // actions
   getClubDescriptionAction,
   createClubDescriptionAction,
@@ -48,6 +50,14 @@ import {
   createClubStatusAction,
   updateClubStatusAction,
   deleteClubStatusAction,
+  getMembershipWindowAction,
+  createMembershipWindowAction,
+  updateMembershipWindowAction,
+  deleteMembershipWindowAction,
+  getMembershipApplicationMethodAction,
+  createMembershipApplicationMethodAction,
+  updateMembershipApplicationMethodAction,
+  deleteMembershipApplicationMethodAction,
 } from "./clubActions";
 
 /* -------------------------------------------------------------------------- */
@@ -68,6 +78,10 @@ export const clubKeys = {
     ["clubs", clubId, "contactInformation"] as const,
   clubStatus: (clubId: number) =>
     ["clubs", clubId, "clubStatus"] as const,
+  membershipWindow: (clubId: number) =>
+    ["clubs", clubId, "membershipWindow"] as const,
+  membershipApplicationMethod: (clubId: number) =>
+    ["clubs", clubId, "membershipApplicationMethod"] as const,
 };
 
 /* ---------------------------- Description hooks --------------------------- */
@@ -448,6 +462,106 @@ export function useDeleteClubStatus() {
     onSuccess: (_data: { ok: boolean }, clubId: number) => {
       qc.invalidateQueries({
         queryKey: clubKeys.clubStatus(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Membership Window actions --------------------------- */
+
+export function useMembershipWindow(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.membershipWindow(clubId),
+    queryFn: () => getMembershipWindowAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipWindowInput) =>
+      createMembershipWindowAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipWindowInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipWindowInput) =>
+      updateMembershipWindowAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipWindowInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMembershipWindowAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------- Membership Application Method actions ---------------------- */
+
+export function useMembershipApplicationMethod(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.membershipApplicationMethod(clubId),
+    queryFn: () => getMembershipApplicationMethodAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipApplicationMethodInput) =>
+      createMembershipApplicationMethodAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipApplicationMethodInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipApplicationMethodInput) =>
+      updateMembershipApplicationMethodAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipApplicationMethodInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMembershipApplicationMethodAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(clubId),
       });
     },
   });

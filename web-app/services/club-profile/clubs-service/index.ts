@@ -38,11 +38,11 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
     .where(inArray(meetingLocations.clubId, ids));
   const locByClub = new Map(locRows.map(r => [r.clubId, r.location ?? "TBA"]));
 
-  // const timeRows = await db
-  //   .select({ clubId: meetingTimes.clubId, timeText: meetingTimes.timeText })
-  //   .from(meetingTimes)
-  //   .where(inArray(meetingTimes.clubId, ids));
-  // const timeByClub = new Map(timeRows.map(r => [r.clubId, r.timeText ?? "TBA"]));
+  const timeRows = await db
+    .select({ clubId: meetingLocations.clubId, time: meetingLocations.location })
+    .from(meetingLocations)
+    .where(inArray(meetingLocations.clubId, ids));
+  const timeByClub = new Map(timeRows.map(r => [r.clubId, r.time ?? "TBA"]));
 
   return ids.map((id) => {
     const ann = latestAnnByClub.get(id);
@@ -51,7 +51,7 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
     return {
       name: scrapedData.name,
       meetingLocation: locByClub.get(id) ?? "TBA",
-      //meetingTime: timeByClub.get(id) ?? "TBA",
+      meetingTime: timeByClub.get(id) ?? "TBA",
       nextAnnouncement: {
         title: ann?.title ?? "No announcements",
         body: ann?.content ?? "No announcements",

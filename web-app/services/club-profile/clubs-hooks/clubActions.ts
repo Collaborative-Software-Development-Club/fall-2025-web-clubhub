@@ -34,6 +34,14 @@ export type ClubStatusInput = Parameters<
   (typeof clubCommands)["createClubStatus"]
 >[0];
 
+export type MembershipWindowInput = Parameters<
+  (typeof clubCommands)["createMembershipWindow"]
+>[0];
+
+export type MembershipApplicationMethodInput = Parameters<
+  (typeof clubCommands)["createMembershipApplicationMethod"]
+>[0];
+
 /* ---------------------------- Description actions --------------------------- */
 
 export async function getClubDescriptionAction(clubId: number) {
@@ -172,4 +180,40 @@ export async function updateClubStatusAction(input: ClubStatusInput) {
 
 export async function deleteClubStatusAction(clubId: number) {
   return clubCommands.deleteClubStatus(clubId);
+}
+
+/* ------------------------ Membership Window actions ------------------------ */
+
+export async function getMembershipWindowAction(clubId: number) {
+  return clubCommands.getMembershipWindow(clubId);
+}
+
+export async function createMembershipWindowAction(input: MembershipWindowInput) {
+  return clubCommands.createMembershipWindow(input);
+}
+
+export async function updateMembershipWindowAction(input: MembershipWindowInput) {
+  return clubCommands.updateMembershipWindow(input);
+}
+
+export async function deleteMembershipWindowAction(clubId: number) {
+  return clubCommands.deleteMembershipWindow(clubId);
+}
+
+/* ------------------ Membership Application Method actions ------------------ */
+
+export async function getMembershipApplicationMethodAction(clubId: number) {
+  return clubCommands.getMembershipApplicationMethod(clubId);
+}
+
+export async function createMembershipApplicationMethodAction(input: MembershipApplicationMethodInput) {
+  return clubCommands.createMembershipApplicationMethod(input);
+}
+
+export async function updateMembershipApplicationMethodAction(input: MembershipApplicationMethodInput) {
+  return clubCommands.updateMembershipApplicationMethod(input);
+}
+
+export async function deleteMembershipApplicationMethodAction(clubId: number) {
+  return clubCommands.deleteMembershipApplicationMethod(clubId);
 }

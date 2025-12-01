@@ -7,7 +7,7 @@ import DisplayMultipleText from "./DisplayMultipleText";
 interface Props {
     title: string;
     handleSave: (data: string) => Promise<void>;
-    handleDelete?: () => Promise<void>;
+    handleDelete: () => Promise<void>;
     initialText: string;
 }
 
@@ -80,20 +80,18 @@ export default function EditableMultipleText({
                         >
                             Cancel
                         </Button>
-                        {handleDelete && (
-                            <Button
-                                onClick={() =>
-                                    handleDelete().catch((err) =>
-                                        console.error(err),
-                                    )
-                                }
-                                onMouseDown={(e) => e.preventDefault()}
-                                variant="destructive"
-                                size="sm"
-                            >
-                                Remove
-                            </Button>
-                        )}
+                        <Button
+                            onClick={() =>
+                                handleDelete().catch((err) =>
+                                    console.error(err),
+                                )
+                            }
+                            onMouseDown={(e) => e.preventDefault()}
+                            variant="destructive"
+                            size="sm"
+                        >
+                            Remove
+                        </Button>
                     </div>
                 </div>
             ) : (

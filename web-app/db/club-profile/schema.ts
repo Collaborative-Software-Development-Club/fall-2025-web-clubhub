@@ -74,4 +74,8 @@ export const clubStatus = pgTable(withPrefix("club_status"), {
      timePeriod: timePeriodEnum("time_period").notNull(),
  });
 
- 
+ /*---------- Member Application Method Table ---------*/
+ export const memberApplicationMethod = pgTable(withPrefix("member_application_method"), {
+     clubId: integer("club_id").primaryKey(),
+     method: text("application_method").notNull(),
+ });

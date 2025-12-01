@@ -5,7 +5,8 @@ import {
   announcements, descriptions,
   addedSocialLinks, contactInformation,
   clubStatus, meetingTimes,
-  timeOfYearForNewMembership, timePeriodEnum
+  timeOfYearForNewMembership,
+  memberApplicationMethod
 } from "@/db/club-profile/schema";
 import { z } from "zod";
 
@@ -69,18 +70,15 @@ const ClubStatusParam = z.object({
   status: z.enum(["Active", "Inactive", "Pending"]),
 });
 
-//TODO: Come up with Membership window and requirement schemas
-// const UpsertMembershipWindow = z.object({
-//   clubId: ClubId,
-//
-// });
+const MembershipWindow = z.object({
+  clubId: ClubId,
+  timePeriod: z.enum(["Fall", "Spring", "Anytime"]),
+});
 
-// const UpsertMembershipRequirement = z.object({
-//   clubId: ClubId,
-//   requirementId: z.number().int().optional(),
-//   label: z.string().min(1),         // e.g., "Application", "Audition"
-//   details: z.string().optional(),   // free text
-// });
+const MembershipApplicationMethod = z.object({
+  clubId: ClubId,
+  method: z.string().min(1),
+});
 
 /* ------------------------------- Command API ------------------------------ */
 
@@ -435,5 +433,67 @@ export const clubCommands = {
     return { ok: true };
   },
 
-//TODO: Membership requirement
-};
+  /* Membership Application Window Commands */
+  async getMembershipWindow(clubId: number){
+    const record = await db.select()
+      .from(timeOfYearForNewMembership)
+      .where(eq(timeOfYearForNewMembership.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+  
+  async createMembershipWindow(input: z.infer<typeof MembershipWindow>) {
+    const i = MembershipWindow.parse(input);
+    await db.insert(timeOfYearForNewMembership).values({
+      clubId: i.clubId,
+      timePeriod: i.timePeriod,
+    });
+    return { ok: true };
+  },
+
+  async updateMembershipWindow(input: z.infer<typeof MembershipWindow>) {
+    const i = MembershipWindow.parse(input);
+    await db.update(timeOfYearForNewMembership)
+    .set({
+      timePeriod: i.timePeriod,
+    })
+    .where(eq(timeOfYearForNewMembership.clubId, i.clubId));
+    return { ok: true };
+  },
+  
+  async deleteMembershipWindow(clubId: number) {
+    await db.delete(timeOfYearForNewMembership).where(eq(timeOfYearForNewMembership.clubId, clubId));
+    return { ok: true };
+  },
+
+  /* Membership Application Method Commands */
+  async getMembershipApplicationMethod(clubId: number){
+    const record = await db.select()
+      .from(memberApplicationMethod)
+      .where(eq(memberApplicationMethod.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+  
+  async createMembershipApplicationMethod(input: z.infer<typeof MembershipApplicationMethod>) {
+    const i = MembershipApplicationMethod.parse(input);
+    await db.insert(memberApplicationMethod).values({
+      clubId: i.clubId,
+      method: i.method,
+    });
+    return { ok: true };
+  },  
+
+  async updateMembershipApplicationMethod(input: z.infer<typeof MembershipApplicationMethod>) {
+    const i = MembershipApplicationMethod.parse(input);
+    await db.update(memberApplicationMethod)
+    .set({
+      method: i.method,
+    })
+    .where(eq(memberApplicationMethod.clubId, i.clubId));
+    return { ok: true };
+  }, 
+
+  async deleteMembershipApplicationMethod(clubId: number) {
+    await db.delete(memberApplicationMethod).where(eq(memberApplicationMethod.clubId, clubId));
+    return { ok: true };
+  },
+}
