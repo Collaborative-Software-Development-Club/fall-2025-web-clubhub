@@ -85,12 +85,10 @@ export default function PurposeClient({
     // Render helpers
     const renderEditableDescription = () => (
         <EditableText
-            clubId={clubId}
             title="Club Description"
             handleSave={(text) => handleSave(text)}
             handleDelete={handleDelete}
             initialText={data?.description || ""}
-            isCreating={isCreating}
         />
     );
 
@@ -123,7 +121,6 @@ export default function PurposeClient({
         </div>
     );
 
-    // Main render logic
     return (
         <div className="w-full">
             {hasClubDescription ? (

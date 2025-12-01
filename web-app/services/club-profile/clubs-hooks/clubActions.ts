@@ -10,6 +10,10 @@ export type MeetingLocationInput = Parameters<
   (typeof clubCommands)["createMeetingLocation"]
 >[0];
 
+export type MeetingTimeInput = Parameters<
+  (typeof clubCommands)["createMeetingTime"]
+>[0];
+
 export type SocialLinksInput = Parameters<
   (typeof clubCommands)["createSocialLinks"]
 >[0];
@@ -82,6 +86,24 @@ export async function updateMeetingLocationAction(input: MeetingLocationInput) {
 
 export async function deleteMeetingLocationAction(clubId: number) {
   return clubCommands.deleteMeetingLocation(clubId);
+}
+
+/* ------------------------- Meeting time actions ------------------------- */
+
+export async function getMeetingTimeAction(clubId: number) {
+  return clubCommands.getMeetingTime(clubId);
+}
+
+export async function createMeetingTimeAction(input: MeetingTimeInput) {
+  return clubCommands.createMeetingTime(input);
+}
+
+export async function updateMeetingTimeAction(input: MeetingTimeInput) {
+  return clubCommands.updateMeetingTime(input);
+}
+
+export async function deleteMeetingTimeAction(clubId: number) {
+  return clubCommands.deleteMeetingTime(clubId);
 }
 
 /* ------------------------------- Tags actions ------------------------------- */

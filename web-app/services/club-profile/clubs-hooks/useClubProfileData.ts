@@ -10,6 +10,7 @@ import {
   // types
   ClubDescriptionInput,
   MeetingLocationInput,
+  MeetingTimeInput,
   SocialLinksInput,
   ClubTagsInput,
   AnnouncementInput,
@@ -28,6 +29,10 @@ import {
   createMeetingLocationAction,
   updateMeetingLocationAction,
   deleteMeetingLocationAction,
+  getMeetingTimeAction,
+  createMeetingTimeAction,
+  updateMeetingTimeAction,
+  deleteMeetingTimeAction,
   getClubTagsAction,
   addClubTagsAction,
   deleteClubTagsAction,
@@ -54,6 +59,8 @@ export const clubKeys = {
   socialLinks: (clubId: number) => ["clubs", clubId, "socialLinks"] as const,
   meetingLocation: (clubId: number) =>
     ["clubs", clubId, "meetingLocation"] as const,
+  meetingTime: (clubId: number) =>
+    ["clubs", clubId, "meetingTime"] as const,
   tags: (clubId: number) => ["clubs", clubId, "tags"] as const,
   announcements: (clubId: number) =>
     ["clubs", clubId, "announcements"] as const,
@@ -160,7 +167,7 @@ export function useDeleteSocialLinks() {
   });
 }
 
-/* ---------------------------- Description actions --------------------------- */
+/* ---------------------------- Meeting location hooks --------------------------- */
 
 export function useMeetingLocation(clubId: number) {
   const {data, isLoading, error} = useQuery({
@@ -205,6 +212,56 @@ export function useDeleteMeetingLocation() {
     onSuccess: (_data: { ok: boolean }, clubId: number) => {
       qc.invalidateQueries({
         queryKey: clubKeys.meetingLocation(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Meeting time hooks --------------------------- */
+
+export function useMeetingTime(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.meetingTime(clubId),
+    queryFn: () => getMeetingTimeAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MeetingTimeInput) =>
+      createMeetingTimeAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MeetingTimeInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MeetingTimeInput) =>
+      updateMeetingTimeAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MeetingTimeInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMeetingTimeAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(clubId),
       });
     },
   });
