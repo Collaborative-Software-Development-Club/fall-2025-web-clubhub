@@ -3,7 +3,7 @@ import { AccountService } from "@/services/definition";
 import { Account } from "./Account";
 import { eq } from "drizzle-orm";
 import { userDetails } from "@/db/account/schema";
-import { isProfileVisibility, parseProfileVisibility } from "./validators";
+import { parseProfileVisibility } from "./validators";
 
 export const actualAccountService: AccountService = {
     getUserForId,
@@ -26,7 +26,7 @@ async function getUserForId(userId: string): Promise<Account> {
         email: row.email,
         year: row.year,
         major: row.major,
-        profileVisibility: parseProfileVisibility(row.profileVisibility, "private"),
+        profileVisibility: row.profileVisibility,
         bio: row.bio,
     };
 }
