@@ -35,7 +35,7 @@ type Announcement = {
     lastModified: Date | null;
 };
 
-let ANN_ID = 0;
+const ANN_ID = 0;
 const clubId = 1;
 
 const isLeader = true; //replace with actual authentication logic
