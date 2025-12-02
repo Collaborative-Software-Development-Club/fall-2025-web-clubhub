@@ -26,7 +26,7 @@ async function getUserForId(userId: string): Promise<Account> {
         email: row.email,
         year: row.year,
         major: row.major,
-        profileVisibility: parseProfileVisibility(row.profileVisibility, "private"),
+        profileVisibility: row.profileVisibility,
         bio: row.bio,
     };
 }
