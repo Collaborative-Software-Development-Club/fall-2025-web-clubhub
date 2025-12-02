@@ -1,3 +1,5 @@
+import { ProfileVisibility } from "@/db/schema";
+
 export interface Account {
     id: string;
     firstName: string;
@@ -5,6 +7,6 @@ export interface Account {
     email: string;
     year: number | null;
     major: string | null;
-    profileVisibility: "public" | "private" | "club-members-only";
+    profileVisibility: ProfileVisibility;
     bio: string | null;
 }
