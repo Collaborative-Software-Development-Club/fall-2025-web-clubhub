@@ -41,19 +41,12 @@ const clubId = 1;
 const isLeader = true; //replace with actual authentication logic
 
 export default function AnnouncementsPage() {
-	const {data, isLoading, error} = useAnnouncements(clubId); //Gets the annoucnements at this clubId from the db
-	const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+	const {data: announcements, isLoading, error} = useAnnouncements(clubId); //Gets the annoucnements at this clubId from the db
 
-	//when data is succesfully loaded, then it sets announcemets to the values in data
-	useEffect(() => {
-	if (data) {
-		setAnnouncements(data);
-	}
-	}, [data]);
 
-	const { mutate: createAnnouncement, isPending } = useCreateAnnouncement();
+	const { mutate: createAnnouncement} = useCreateAnnouncement();
 	const { mutate: updateAnnouncement } = useUpdateAnnouncement();
-	const { mutate: deleteAnnouncementMutation, isPending } = useDeleteAnnouncement();
+	const { mutate: deleteAnnouncementMutation} = useDeleteAnnouncement();
 
 	const [formOpen, setFormOpen] = useState(false);
 	const [title, setTitle] = useState("");
@@ -67,42 +60,33 @@ export default function AnnouncementsPage() {
 		
 		if(editingAnn) {
 			updateAnnouncement({
-				id: editingAnn.id,
-				clubId,
-				userId,
-				title,
+				announcementId: editingAnn.id,
+				clubId: editingAnn.clubId,
+				authorId: author,
+				title: title,
 				content: body,
 				pinned: editingAnn.pinned ?? false,
-				lastModified: new Date(),
 			});
-			setEditingAnn(null);
-			setTitle("");
-			setBody("");
-			return;
-		}
 
-		createAnnouncement({
-			id: 0, //IDK how the id's are created or where they are created
-			clubId,
-			userId,
-			title,
-			content: body,
-			pinned: false,
-			lastModified: new Date(),
-		});
+			return;
+		}else{
+			createAnnouncement({
+				clubId,
+				authorId:author,
+				title,
+				content: body,
+				pinned: false,
+			});
+		}
+		setEditingAnn(null);
 		setTitle("");
 		setBody("");
-	};
-
-
-	const togglePin = (id: number) => {
-		setAnnouncements((prev: Announcement[]) =>
-			prev.map((a) => (a.id === id ? { ...a, pinned: !a.pinned } : a))
-		);
+		setAuthor("");
+		setFormOpen(false);
 	};
 
 	const editAnnouncement = (id: number) => {
-		const annToEdit = announcements.find((a) => a.id == id);
+		const annToEdit = announcements?.find((a) => a.id == id);
 		if(!annToEdit) return;
 
 		setTitle(annToEdit.title);
@@ -116,19 +100,32 @@ export default function AnnouncementsPage() {
 	};
 
 	// Callback function that takes the previous state of the announcements array and returns a new array. Deletes the array with the id from the parameter by keeping all of the other ones
-	const deleteAnnouncement = (announcement: Announcement) => {
+	const deleteAnnouncement = (a: Announcement) => {
 		//setAnnouncements((prev: Announcement[]) => prev.filter((a) => a.id !== id));
 		deleteAnnouncementMutation({
-			id: announcement.id,
-			clubId: announcement.clubId,
-			userId: announcement.userId,
-			title: announcement.title,
-			content: announcement.content,
-			pinned: announcement.pinned,
-			lastModified: announcement.lastModified
-
+			announcementId: a.id,
+			clubId: a.clubId,
+			authorId: a.userId,
+			title: a.title,
+			content:a.content,
+			pinned:a.pinned ?? false,
 		});
 	};
+
+	//toggle pin handler
+	const togglePin = (a:Announcement) => {
+		updateAnnouncement({
+			announcementId: a.id,
+			clubId: a.clubId,
+			authorId: a.userId,
+			title: a.title,
+			content: a.content,
+			pinned: !a.pinned,
+		});
+	}
+
+	if (isLoading) return <p>Loading Announcements...</p>
+	if (error) return <p>Error Loading Announcements</p>
 
 	return (
 		<main className="container mx-auto max-w-4xl py-8">
@@ -140,7 +137,7 @@ export default function AnnouncementsPage() {
 				<Dialog open={formOpen} onOpenChange={setFormOpen}>
 				<DialogTrigger asChild>
 					<Button variant="outline" className="mb-2 cursor-pointer">
-						<Plus /> Create Announcement
+						<Plus /> {editingAnn ? "Edit Announcement" : "Create Announcement"}
 					</Button>
 				</DialogTrigger>
 
@@ -149,9 +146,7 @@ export default function AnnouncementsPage() {
 					<DialogHeader>
 						<DialogTitle>{editingAnn ? "Edit Announcement" : "New Announcement"}</DialogTitle>
 					</DialogHeader>
-					{/* <h2 className="text-lg font-semibold mb-4 text-center"> {editingAnn ? "Edit Announcement" : "New Announcement"}</h2> */}
 					<div className="flex flex-col gap-3">
-
 						<Input
 							placeholder="Title"
 							value={title}
@@ -190,20 +185,20 @@ export default function AnnouncementsPage() {
 
 
 				<div className="space-y-6 mt-6">
-				{announcements.length === 0 && (
+				{!announcements?.length && (
 					<p className="text-muted-foreground">No announcements yet.</p>
 				)}
 
 				{announcements
-					.slice()
+					?.slice()
 					.sort((a, b) => {
 						// pinned first
 						if ((a.pinned ? 1 : 0) !== (b.pinned ? 1 : 0)) {
 							return a.pinned ? -1 : 1;
 						}
-						return b.lastModified.getTime() - a.lastModified.getTime();
+						return new Date(b.lastModified || 0).getTime() - new Date(a.lastModified || 0).getTime();
 					})
-					.map((a: Announcement) => (
+					.map((a) => (
 					<Card key={a.id} className="p-6">
 						<CardHeader className="flex items-start justify-between gap-4">
 							<div className="flex-1">
@@ -211,7 +206,7 @@ export default function AnnouncementsPage() {
 									<CardTitle className="text-base">{a.title}</CardTitle>
 									{a.pinned && <Badge className="ml-2">Pinned</Badge>}
 								</div>
-								<p className="text-sm text-muted-foreground">{a.userId ?? "Name"} • {format(a.lastModified, "PPP p")}</p>
+								<p className="text-sm text-muted-foreground">{a.userId ?? "Name"} • {a.lastModified ? format(new Date(a.lastModified), "PPP p"): ""}</p>
 							</div>
 							{isLeader && (
 								<div className="flex items-center gap-2">
@@ -222,7 +217,7 @@ export default function AnnouncementsPage() {
 										</Button>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end">
-										<DropdownMenuItem className="cursor-pointer" onClick={() => togglePin(a.id)}>
+										<DropdownMenuItem className="cursor-pointer" onClick={() => togglePin(a)}>
 											<Pin className="w-4 h-4 mr-2" />
 											{a.pinned ? "Unpin" : "Pin"}
 										</DropdownMenuItem>
@@ -230,7 +225,7 @@ export default function AnnouncementsPage() {
 											<Edit className="w-4 h-4 mr-2" />
 											Edit
 										</DropdownMenuItem>
-										<DropdownMenuItem className="cursor-pointer" onClick={() => deleteAnnouncement(a.id)}>
+										<DropdownMenuItem className="cursor-pointer" onClick={() => deleteAnnouncement(a)}>
 											<Trash2 className="w-4 h-4 mr-2" />
 											Delete
 										</DropdownMenuItem>
