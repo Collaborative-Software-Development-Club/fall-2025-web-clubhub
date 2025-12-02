@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -71,9 +71,9 @@ export default function AnnouncementsPage() {
 			return;
 		}else{
 			createAnnouncement({
-				clubId,
-				authorId:author,
-				title,
+				clubId: clubId,
+				authorId: author,
+				title: title,
 				content: body,
 				pinned: false,
 			});
