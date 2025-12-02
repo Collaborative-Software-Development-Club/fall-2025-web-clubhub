@@ -3,6 +3,7 @@ import { AccountService } from "@/services/definition";
 import { Account } from "./Account";
 import { eq } from "drizzle-orm";
 import { userDetails } from "@/db/account/schema";
+import { isProfileVisibility, parseProfileVisibility } from "./validators";
 
 export const actualAccountService: AccountService = {
     getUserForId,
@@ -18,17 +19,26 @@ async function getUserForId(userId: string): Promise<Account> {
     const row = rows[0];
     if (!row) throw new Error("Account not found");
 
+    const rawProfileVisibility = row.profileVisibility; // unknown/string
+    if (!isProfileVisibility(rawProfileVisibility)) {
+        // handle invalid value
+        console.warn(
+            "Invalid profileVisibility from DB, using default",
+            { raw: rawProfileVisibility }
+        );
+        row.profileVisibility = "private";
+    } else {
+        row.profileVisibility = rawProfileVisibility;
+    }
+
     return {
         id: row.userId,
         firstName: row.firstName,
         lastName: row.lastName,
         email: row.email,
-        year: parseInt(row.year || "0", 10),
+        year: row.year,
         major: row.major,
-        profileVisibility: row.profileVisibility as
-            | "public"
-            | "private"
-            | "club-members-only",
+        profileVisibility: parseProfileVisibility(row.profileVisibility, "private"),
         bio: row.bio,
     };
 }

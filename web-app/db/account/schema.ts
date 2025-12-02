@@ -1,6 +1,6 @@
-import { pgTableCreator, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
 
-const createAccountTable = pgTableCreator((name: string) => "account_" + name);
+const withPrefix = (name: string) => "account_" + name;
 
 /**
  * Run npx drizzle-kit push to push the schema to the database
@@ -11,7 +11,7 @@ export const userDetails = pgTable(withPrefix("user_details"), {
     firstName: text("first_name").notNull(),
     lastName: text("last_name").notNull(),
     email: text("email").notNull(),
-    year: text("year"),
+    year: integer("year"),
     major: text("major"),
     profileVisibility: text("profile_visibility").default("private").notNull(),
     bio: text("bio"),
