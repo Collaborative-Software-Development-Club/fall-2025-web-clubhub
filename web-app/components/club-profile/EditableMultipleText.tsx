@@ -2,6 +2,15 @@
 import { useCallback, useState } from "react";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectGroup,
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+} from "../ui/select";
 import DisplayMultipleText from "./DisplayMultipleText";
 
 interface Props {
@@ -9,13 +18,17 @@ interface Props {
     handleSave: (data: string) => Promise<void>;
     handleDelete: () => Promise<void>;
     initialText: string;
+    isWindow: boolean;
 }
+
+const windowEnum = ["Fall", "Spring", "Summer"];
 
 export default function EditableMultipleText({
     title,
     handleSave,
     handleDelete,
     initialText,
+    isWindow,
 }: Props) {
     const [text, setText] = useState(initialText);
     const [isEditing, setIsEditing] = useState(false);
@@ -50,19 +63,48 @@ export default function EditableMultipleText({
     return (
         <div className="flex flex-col w-full">
             {isEditing ? (
-                <div className="flex flex-col gap-2 px-2">
+                <div
+                    className={
+                        `flex px-2` +
+                        (isWindow
+                            ? "flex-row gap-8 items-center"
+                            : " flex-col gap-2")
+                    }
+                >
                     <label className="text-md font-semibold capitalize">
                         {title}:
                     </label>
-                    <Textarea
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        onBlur={cancelEditing}
-                        onFocus={handleFocus}
-                        autoFocus
-                        className="resize-none"
-                    />
+                    {isWindow ? (
+                        <Select>
+                            <SelectTrigger className="w-[230px]">
+                                <SelectValue placeholder="Select Application Window" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>
+                                        Membership Application Windows
+                                    </SelectLabel>
+                                    <SelectItem value="Fall">Fall</SelectItem>
+                                    <SelectItem value="Spring">
+                                        Spring
+                                    </SelectItem>
+                                    <SelectItem value="Anytime">
+                                        Anytime
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    ) : (
+                        <Textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            onBlur={cancelEditing}
+                            onFocus={handleFocus}
+                            autoFocus
+                            className="resize-none"
+                        />
+                    )}
 
                     <div className="flex gap-2 pt-2">
                         <Button

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import EditableMultipleText from "./EditableMultipleText";
 import DisplayMultipleText from "./DisplayMultipleText";
-import { timePeriodEnum } from "@/db/club-profile/schema";
 
 export type MembershipData = {
     membership_type: string | null;
@@ -46,12 +45,14 @@ export default function MembershipClient({
                         handleSave={async (data: string) => {}}
                         handleDelete={async () => {}}
                         initialText={data.how_does_a_prospective_member_apply}
+                        isWindow={false}
                     />
                     <EditableMultipleText
                         title="Time of Year for New Membership"
                         handleSave={async (data: string) => {}}
                         handleDelete={async () => {}}
                         initialText={data.time_of_year_for_new_membership}
+                        isWindow={true}
                     />
                 </>
             ) : (
