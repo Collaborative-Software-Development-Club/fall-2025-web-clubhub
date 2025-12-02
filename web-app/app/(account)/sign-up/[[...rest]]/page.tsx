@@ -9,7 +9,8 @@ export default function SignUpPage() {
     >
             <div className='flex justify-center p-5'>
                 <SignUp appearance={{
-                    elements: {
+                    elements: {    
+                        formButtonPrimary: 'bg-red-500 hover:bg-red-700'
                     }
                 }}/>
             </div>
