@@ -17,7 +17,7 @@ async function getUserForId(userId: string): Promise<Account> {
         .limit(1);
 
     const row = rows[0];
-    if (!row) throw new Error("Account not found");
+    if (!row) throw new Error(`Account not found for userId: ${userId}`);
 
     const rawProfileVisibility = row.profileVisibility; // unknown/string
     if (!isProfileVisibility(rawProfileVisibility)) {
