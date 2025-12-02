@@ -1,3 +1,4 @@
+import { Account } from "./account/user-service/Account";
 import { ClubOverview } from "./club-profile/clubs-service/ClubOverview";
 import { Tag } from "./discovery/tags-service/Tag";
 
@@ -47,6 +48,12 @@ export interface MeetingsService {
         start: Date,
         end: Date,
     ): Promise<Meeting>;
+}
+
+// --- account ---
+
+export interface AccountService {
+    getUserForId(userId: string): Promise<Account>;
 }
 
 // temporary types (remove when an actual one is created)
