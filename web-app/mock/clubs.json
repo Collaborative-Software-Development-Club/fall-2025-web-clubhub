@@ -53,7 +53,7 @@
             "Advisor": "Taner Pirim"
         },
         "Contact Information": {
-            "Organization Email": "buckeyefintech@gmail.com",
+            "Organization Email": ["buckeyefintech@gmail.com"],
             "Instagram": "https://www.instagram.com/buckeyefintech/",
             "Other": "https://www.linkedin.com/company/buckeye-fintech/",
             "Website": "https://www.buckeyefintech.org/"
@@ -91,7 +91,7 @@
             "Co-Advisor": "Sachin Kumar"
         },
         "Contact Information": {
-            "Organization Email": "osuaiclub@gmail.com",
+            "Organization Email": ["osuaiclub@gmail.com"],
             "Instagram": "https://www.instagram.com/ohiostateaiclub/",
             "Other": "https://www.linkedin.com/company/artificial-intelligence-club/",
             "Website": "https://www.osuaiclub.com/"
@@ -167,7 +167,7 @@
             "Advisor": "Ralph Greco"
         },
         "Contact Information": {
-            "Organization Email": "ohiostatebdaa@gmail.com",
+            "Organization Email": ["ohiostatebdaa@gmail.com"],
             "Instagram": "https://www.instagram.com/bdaaosu/",
             "Website": "http://bdaaosu.org"
         },
@@ -203,7 +203,7 @@
             "Advisor": "Jason Goodman"
         },
         "Contact Information": {
-            "Organization Email": "baseballclub@osu.edu",
+            "Organization Email": ["baseballclub@osu.edu"],
             "Facebook Group Page": "https://www.facebook.com/osuclubbaseball/?fref=ts",
             "Website": "https://www.osuclubbaseball.org"
         },

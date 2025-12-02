@@ -1,33 +1,30 @@
-import { SOCIAL_MEDIA_PLATFORMS } from "./constants";
-
-export default function DisplayContact({
+export default function DisplayContacts({
     list,
-    isEmail,
+    isContact,
     placeholder = "",
 }: {
-    list: string[];
-    isEmail: boolean;
+    list: {
+        prop1: string;
+        prop2: string;
+    }[];
+    isContact: boolean;
     placeholder?: string;
 }) {
-    const renderDisplayItem = (item: string, index: number) => {
-        if (!item || item.trim() === "") return null;
+    const renderDisplayItem = (
+        item: { prop1: string; prop2: string },
+        index: number,
+    ) => {
+        if (!item || item.prop1.trim() === "" || item.prop2.trim() === "")
+            return null;
 
         return (
-            <li
-                key={index}
-                className={isEmail ? "list-disc list-inside" : "list-none"}
-            >
-                {!isEmail && (
-                    <span className="font-semibold py-1">
-                        {SOCIAL_MEDIA_PLATFORMS[index]}:
-                    </span>
-                )}{" "}
-                {item}
+            <li key={index} className="list-none">
+                <span className="font-semibold py-1 pr-1">{item.prop1}:</span>
+                {item.prop2}
             </li>
         );
     };
-
-    const title = isEmail ? "Organization Email:" : "Social Media Links:";
+    const title = isContact ? "Organization Contacts:" : "Social Media Links:";
 
     return (
         <div className="w-full">
@@ -35,7 +32,7 @@ export default function DisplayContact({
             <hr className="border-gray-400 mt-2" />
 
             {list.length > 0 ? (
-                <ul className={`p-2 ${isEmail ? "list-disc list-inside" : ""}`}>
+                <ul className="p-2 list-disc list-inside">
                     {list.map(renderDisplayItem)}
                 </ul>
             ) : (
