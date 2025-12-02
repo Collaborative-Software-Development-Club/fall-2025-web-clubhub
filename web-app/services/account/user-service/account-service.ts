@@ -3,7 +3,6 @@ import { AccountService } from "@/services/definition";
 import { Account } from "./Account";
 import { eq } from "drizzle-orm";
 import { userDetails } from "@/db/account/schema";
-import { parseProfileVisibility } from "./validators";
 
 export const actualAccountService: AccountService = {
     getUserForId,
