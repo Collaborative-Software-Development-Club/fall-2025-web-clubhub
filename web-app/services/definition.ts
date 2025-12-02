@@ -1,5 +1,7 @@
 import { Account } from "./account/user-service/Account";
 import { ClubOverview } from "./club-profile/clubs-service/ClubOverview";
+import { AnnouncementOverview } from "./club-profile/clubs-service/AnnouncementOverview";
+import { ClubPreview } from "./club-profile/clubs-service/ClubPreview";
 import { Tag } from "./discovery/tags-service/Tag";
 
 // --- discovery ---
@@ -29,8 +31,8 @@ export interface LeadershipVerificationService {
  * data and leader-modified data
  */
 export interface ClubsService {
-    getClubPreviews(clubIds: string[]): Promise<ClubOverview[]>;
-    getClubAnnouncements(clubId: string): Promise<Announcement>;
+    getClubPreviews(clubIds: string[]): Promise<ClubPreview[]>;
+    getClubAnnouncements(clubId: string): Promise<AnnouncementOverview[]>;
 }
 
 // --- attendance ---

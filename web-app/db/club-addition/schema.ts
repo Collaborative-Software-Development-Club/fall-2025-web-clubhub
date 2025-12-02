@@ -3,7 +3,6 @@ import { serial, integer, text, boolean, timestamp, primaryKey } from "drizzle-o
 
 const withPrefix = (name: string) => "clubAddition_" + name;
 export const timePeriodEnum = pgEnum("time_period_enum", ["Fall", "WINTER", "ANYTIME"]);
-export const clubStatusEnum = pgEnum("status_enum", ["Active", "Inactive", "Pending"]);
 
 /* --------- Club Descriptions Table ---------*/
 export const descriptions = pgTable(withPrefix("descriptions"), {
@@ -45,20 +44,6 @@ export const announcements = pgTable(withPrefix("announcements"), {
   content: text("content").notNull(),
   pinned: boolean("pinned").default(false),
   lastModified: timestamp("last_modified", { withTimezone: false }).defaultNow(),
-});
-
-/*---------- Contact Information Table ---------*/ 
-export const contactInformation = pgTable(withPrefix("contact_information"), {
-    id: serial("id").primaryKey(),
-    clubId: integer("club_id").notNull(),
-    method: text("contact_method").notNull(),
-    detail: text("details").notNull(),
-});
-
-/*---------- Status Table ---------*/
-export const clubStatus = pgTable(withPrefix("club_status"), {
-    clubId: integer("club_id").primaryKey(),
-    status: clubStatusEnum("status").notNull(),
 });
 
 // TODO

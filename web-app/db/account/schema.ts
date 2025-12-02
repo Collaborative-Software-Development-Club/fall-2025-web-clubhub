@@ -1,6 +1,6 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTableCreator, text, timestamp } from "drizzle-orm/pg-core";
 
-const withPrefix = (name: string) => "account_" + name;
+const createAccountTable = pgTableCreator((name: string) => "account_" + name);
 
 /**
  * Run npx drizzle-kit push to push the schema to the database
