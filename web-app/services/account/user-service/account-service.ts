@@ -20,16 +20,6 @@ async function getUserForId(userId: string): Promise<Account> {
     if (!row) throw new Error(`Account not found for userId: ${userId}`);
 
     const rawProfileVisibility = row.profileVisibility; // unknown/string
-    if (!isProfileVisibility(rawProfileVisibility)) {
-        // handle invalid value
-        console.warn(
-            "Invalid profileVisibility from DB, using default",
-            { raw: rawProfileVisibility }
-        );
-        row.profileVisibility = "private";
-    } else {
-        row.profileVisibility = rawProfileVisibility;
-    }
 
     return {
         id: row.userId,
