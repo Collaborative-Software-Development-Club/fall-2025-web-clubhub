@@ -14,8 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, X } from "lucide-react";
-import { fetchInterests } from "./actions";
-import { useQuery } from "@tanstack/react-query";
 import { Tag } from "@/services/discovery/tags-service/Tag";
 import { useInterestCategories } from "../(interests)/use-interest-categories";
 import { CategorizedInterestList } from "../(interests)/categorized-list";
@@ -24,10 +22,12 @@ const REQUIRED = 3;
 type Category = Tag["type"];
 
 export function InterestSelection({
+    allInterests,
     setDoneSelecting,
     setInterests: setSelected,
     interests: selected,
 }: {
+    allInterests: Tag[];
     setDoneSelecting: () => void;
     interests: string[];
     setInterests: (interests: string[]) => void;
@@ -36,11 +36,6 @@ export function InterestSelection({
     const [openCategories, setOpenCategories] = useState<Set<Category>>(
         new Set(["DIRECTORY", "MAJOR"]),
     );
-
-    const { data: allInterests, isLoading } = useQuery({
-        queryKey: ["interests"],
-        queryFn: () => fetchInterests(),
-    });
 
     const { availableQuickFilters, categorizedTags } = useInterestCategories(
         allInterests || [],
@@ -165,32 +160,18 @@ export function InterestSelection({
                         />
                     </div>
 
-                    {/* Loading state */}
-                    {isLoading && (
-                        <div className="flex flex-wrap gap-2">
-                            {[0, 1, 2, 3, 4, 5].map((i) => (
-                                <div
-                                    key={i}
-                                    className="h-8 w-20 bg-muted animate-pulse rounded"
-                                />
-                            ))}
-                        </div>
-                    )}
-
                     {/* Categorized interests */}
-                    {!isLoading && allInterests && (
-                        <ScrollArea className="h-96">
-                            <CategorizedInterestList
-                                categorizedTags={categorizedTags}
-                                openCategories={openCategories}
-                                onToggleCategory={toggleCategory}
-                                selectedInterests={selected}
-                                onToggleInterest={toggleInterest}
-                                renderInterest={renderInterest}
-                                searchValue={searchValue}
-                            />
-                        </ScrollArea>
-                    )}
+                    <ScrollArea className="h-96">
+                        <CategorizedInterestList
+                            categorizedTags={categorizedTags}
+                            openCategories={openCategories}
+                            onToggleCategory={toggleCategory}
+                            selectedInterests={selected}
+                            onToggleInterest={toggleInterest}
+                            renderInterest={renderInterest}
+                            searchValue={searchValue}
+                        />
+                    </ScrollArea>
 
                     {/* Progress and Continue Button */}
                     <div className="flex items-center justify-between gap-4 pt-4 border-t">
