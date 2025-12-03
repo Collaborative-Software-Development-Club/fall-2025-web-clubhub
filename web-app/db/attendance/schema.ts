@@ -51,7 +51,7 @@ export const attendance = pgTable(withPrefix("attendance"), {
     timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
-export const roster = pgTable(withPrefix("attendance"), {
+export const roster = pgTable(withPrefix("roster"), {
     id: serial("id").primaryKey().notNull(),
     user_id: integer("user_id"),
     email: text("email").notNull(),

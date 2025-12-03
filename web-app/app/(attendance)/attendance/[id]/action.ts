@@ -1,6 +1,6 @@
 "use server";
 
-import { attendance } from "@/db/attendance/schema";
+import { attendance, meetings, roster } from "@/db/attendance/schema";
 import { AttendanceStatus, PRESENT } from "./types";
 import { db } from "@/db";
 import { eq, and } from "drizzle-orm";
@@ -28,6 +28,33 @@ export async function submitAttendanceCode(
 ) {
     if (parseInt(inputCode) !== code) {
         return { success: false, error: "Invalid code" };
+    }
+
+    const meeting = await db
+    .select()
+    .from(meetings)
+    .where(eq(meetings.id, meetingId))
+    .limit(1);
+
+    // Check if user is on the roster; add them if not
+    const rosterRecord = await db
+        .select()
+        .from(roster)
+        .where(
+            and(
+                eq(roster.email, email),
+                ...(userId != null ? [eq(roster.user_id, userId)] : []),
+                eq(roster.club_id, meeting[0].club_id)
+            )
+        )
+        .limit(1);
+
+    if (rosterRecord.length === 0) {
+        await db.insert(roster).values({
+            email: email,
+            user_id: userId,
+            club_id: meeting[0].club_id,
+        });
     }
 
     // Currenlty only allow users to submit attendance once
@@ -65,6 +92,33 @@ export async function submitAttendanceStatus(
 ) {
     if (status === PRESENT) {
         return { success: false, error: "Must use code to submit present status" };
+    }
+
+    const meeting = await db
+        .select()
+        .from(meetings)
+        .where(eq(meetings.id, meetingId))
+        .limit(1);
+
+    // Check if user is on the roster; add them if not
+    const rosterRecord = await db
+        .select()
+        .from(roster)
+        .where(
+            and(
+                eq(roster.email, email),
+                ...(userId != null ? [eq(roster.user_id, userId)] : []),
+                eq(roster.club_id, meeting[0].club_id)
+            )
+        )
+        .limit(1);
+
+    if (rosterRecord.length === 0) {
+        await db.insert(roster).values({
+            email: email,
+            user_id: userId,
+            club_id: meeting[0].club_id,
+        });
     }
 
     // Currenlty only allow users to submit attendance once

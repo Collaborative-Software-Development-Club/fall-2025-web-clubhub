@@ -115,7 +115,7 @@ const AttendanceResponseClient = ({
                 }
             });
         },
-        [hasCompleted, meetingId, code, startTransition],
+        [hasCompleted, meetingId, code, startTransition, email],
     );
 
     const handleStatusSubmit = useCallback(async () => {
