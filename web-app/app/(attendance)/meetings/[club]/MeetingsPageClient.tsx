@@ -19,9 +19,16 @@ import { createMeeting, updateMeeting, deleteMeeting as deleteMeetingAction } fr
 interface MeetingsPageClientProps {
     meetingsData: Meeting[];
     clubId: number;
+    clubName: string;
+    purposeStatement: string | null;
 }
 
-export default function MeetingsPageClient({ meetingsData, clubId }: MeetingsPageClientProps) {
+export default function MeetingsPageClient({ 
+    meetingsData, 
+    clubId, 
+    clubName,
+    purposeStatement 
+}: MeetingsPageClientProps) {
     const { user } = useUser();
     
     const [meetings, setMeetings] = useState<Meeting[]>(meetingsData);
@@ -166,104 +173,115 @@ export default function MeetingsPageClient({ meetingsData, clubId }: MeetingsPag
 
     return (
         <main className="container mx-auto max-w-xl py-8">
-            <h1 className="text-3xl font-bold mb-6">Club Meetings</h1>
+            {/* Club Header */}
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold">{clubName}</h1>
+                {purposeStatement && (
+                    <p className="text-muted-foreground mt-2">{purposeStatement}</p>
+                )}
+            </div>
 
-            {/* Create New Meeting Popover */}
-            <Popover open={formOpen} onOpenChange={setFormOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="outline" className="mb-2 cursor-pointer">
-                        <Plus /> Create New Meeting
-                    </Button>
-                </PopoverTrigger>
-
-                <PopoverContent className="w-[300px] p-4">
-                    <h2 className="text-lg font-semibold mb-4 text-center">
-                        New Meeting
-                    </h2>
-                    <div className="flex flex-col gap-3">
-                        <Input
-                            placeholder="Meeting Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                        />
-
-                        {/* Date Picker */}
-                        <Popover
-                            open={calendarOpen}
-                            onOpenChange={setCalendarOpen}
-                        >
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className="w-full justify-start text-left font-normal cursor-pointer"
-                                >
-                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {date ? (
-                                        format(date, "PPP")
-                                    ) : (
-                                        <span>Pick a date</span>
-                                    )}
-                                </Button>
-                            </PopoverTrigger>
-
-                            <PopoverContent className="w-auto p-0">
-                                <Calendar
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={(selectedDate) => {
-                                        setDate(selectedDate);
-                                        setCalendarOpen(false);
-                                    }}
-                                />
-                            </PopoverContent>
-                        </Popover>
-
-                        <div className="flex items-center">
-                            <Input
-                                type="time"
-                                step={60}
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                            />
-                            <span className="px-2">to</span>
-                            <Input
-                                type="time"
-                                step={60}
-                                value={endTime}
-                                onChange={(e) => setEndTime(e.target.value)}
-                                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                            />
-                        </div>
-                        <div className="flex items-center">
-                            <Input
-                                placeholder="Description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex items-center">
-                            <Input
-                                placeholder="Location"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                            />
-                        </div>
-
-                        {formError && (
-                            <p className="text-sm text-destructive">{formError}</p>
-                        )}
-
-                        <Button
-                            onClick={addMeeting}
-                            className="mt-2 cursor-pointer"
-                            disabled={!title || !date || !startTime || !endTime}
-                        >
-                            <Plus className="w-4 h-4 mr-2" /> Add Meeting
+            {/* Meetings Section */}
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Meetings</h2>
+                
+                {/* Create New Meeting Popover */}
+                <Popover open={formOpen} onOpenChange={setFormOpen}>
+                    <PopoverTrigger asChild>
+                        <Button variant="outline" size="sm">
+                            <Plus className="w-4 h-4 mr-2" /> New Meeting
                         </Button>
-                    </div>
-                </PopoverContent>
-            </Popover>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-[300px] p-4">
+                        <h2 className="text-lg font-semibold mb-4 text-center">
+                            New Meeting
+                        </h2>
+                        <div className="flex flex-col gap-3">
+                            <Input
+                                placeholder="Meeting Title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+
+                            {/* Date Picker */}
+                            <Popover
+                                open={calendarOpen}
+                                onOpenChange={setCalendarOpen}
+                            >
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full justify-start text-left font-normal cursor-pointer"
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {date ? (
+                                            format(date, "PPP")
+                                        ) : (
+                                            <span>Pick a date</span>
+                                        )}
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={date}
+                                        onSelect={(selectedDate) => {
+                                            setDate(selectedDate);
+                                            setCalendarOpen(false);
+                                        }}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+
+                            <div className="flex items-center">
+                                <Input
+                                    type="time"
+                                    step={60}
+                                    value={startTime}
+                                    onChange={(e) => setStartTime(e.target.value)}
+                                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
+                                <span className="px-2">to</span>
+                                <Input
+                                    type="time"
+                                    step={60}
+                                    value={endTime}
+                                    onChange={(e) => setEndTime(e.target.value)}
+                                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
+                            </div>
+                            <div className="flex items-center">
+                                <Input
+                                    placeholder="Description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex items-center">
+                                <Input
+                                    placeholder="Location"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                />
+                            </div>
+
+                            {formError && (
+                                <p className="text-sm text-destructive">{formError}</p>
+                            )}
+
+                            <Button
+                                onClick={addMeeting}
+                                className="mt-2 cursor-pointer"
+                                disabled={!title || !date || !startTime || !endTime}
+                            >
+                                <Plus className="w-4 h-4 mr-2" /> Add Meeting
+                            </Button>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
 
             {/* Edit Meeting Popover-Style Overlay */}
             {editFormOpen && (
