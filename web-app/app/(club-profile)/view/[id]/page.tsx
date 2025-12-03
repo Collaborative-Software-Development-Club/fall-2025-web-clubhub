@@ -20,13 +20,16 @@ import {
     TwitterIcon,
     InstagramIcon,
     CheckCircle2Icon,
+    CirclePlus,
+    UserCog,
 } from "lucide-react";
 import { ClubData, clubsService } from "@/services/club-profile/clubs-service";
+import Link from "next/link";
 
 interface ClubProfilePageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 // Helper to determine status styling
@@ -72,7 +75,7 @@ function getContactMethodIcon(method: string) {
 export default async function ClubProfilePage({
     params,
 }: ClubProfilePageProps) {
-    const clubId = parseInt(params.id);
+    const clubId = parseInt((await params).id);
 
     if (isNaN(clubId)) {
         notFound();
@@ -144,26 +147,34 @@ export default async function ClubProfilePage({
 
                             {/* Action Buttons */}
                             <div className="flex gap-3">
+                                <Button>
+                                    <CirclePlus />
+                                    Join
+                                </Button>
                                 {club.url && (
-                                    <Button asChild>
-                                        <a
+                                    <Button asChild variant="secondary">
+                                        <Link
                                             href={club.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
                                             Official Page
                                             <ExternalLinkIcon className="ml-2 h-4 w-4" />
-                                        </a>
+                                        </Link>
                                     </Button>
                                 )}
+                                <Button variant="secondary">
+                                    <UserCog />
+                                    Manage
+                                </Button>
                                 {/* Fallback to mailto if no URL, or add a secondary button */}
                                 {!club.url && club.organizationEmail && (
                                     <Button asChild>
-                                        <a
+                                        <Link
                                             href={`mailto:${club.organizationEmail}`}
                                         >
                                             Contact Us
-                                        </a>
+                                        </Link>
                                     </Button>
                                 )}
                             </div>
@@ -226,11 +237,11 @@ export default async function ClubProfilePage({
                                                     className="h-8 w-8 text-gray-400 hover:text-primary"
                                                     asChild
                                                 >
-                                                    <a
+                                                    <Link
                                                         href={`mailto:${leader.email}`}
                                                     >
                                                         <MailIcon className="h-4 w-4" />
-                                                    </a>
+                                                    </Link>
                                                 </Button>
                                             </CardContent>
                                         </Card>
@@ -349,12 +360,12 @@ export default async function ClubProfilePage({
                                         <div className="bg-primary/30 p-2 rounded-full group-hover:bg-primary/10 transition-colors">
                                             <MailIcon className="h-4 w-4 text-primary" />
                                         </div>
-                                        <a
+                                        <Link
                                             href={`mailto:${club.organizationEmail}`}
                                             className="text-sm font-medium hover:underline truncate"
                                         >
                                             {club.organizationEmail}
-                                        </a>
+                                        </Link>
                                     </div>
                                 )}
 
@@ -419,7 +430,7 @@ export default async function ClubProfilePage({
                                                         className="w-full justify-start text-xs"
                                                         asChild
                                                     >
-                                                        <a
+                                                        <Link
                                                             href={link.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
@@ -430,7 +441,7 @@ export default async function ClubProfilePage({
                                                                 )}
                                                             </span>
                                                             {link.platform}
-                                                        </a>
+                                                        </Link>
                                                     </Button>
                                                 ),
                                             )}
