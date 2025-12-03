@@ -6,16 +6,7 @@ import { FeaturedClubs } from "./featured-clubs";
 import { ClubCard } from "@/app/(discovery)/club-card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tag } from "@/services/discovery/tags-service/Tag";
-
-// Define the ClubData type, matching what page.tsx provides
-type ClubData = {
-    id: number;
-    name: string;
-    description: string;
-    interests: string[];
-    leader: string;
-    contact: string | undefined;
-};
+import { ScrapedClub } from "@/services/discovery/scraped-clubs";
 
 // Animation Variants for the overall section transition (Search vs. Featured)
 const sectionVariants = {
@@ -44,10 +35,10 @@ const listItemVariants = {
 
 export function HomePage({
     tags,
-    clubsData,
+    clubs,
 }: {
     tags: Tag[];
-    clubsData: ClubData[];
+    clubs: ScrapedClub[];
 }) {
     // --- Logic copied from browse.tsx ---
     const [searchTerm, setSearchTerm] = useState("");
@@ -61,14 +52,17 @@ export function HomePage({
         );
     };
 
-    const filteredClubs = clubsData.filter((club) => {
+    const filteredClubs = clubs.filter((club) => {
         const matchesSearch =
             club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            club.description.toLowerCase().includes(searchTerm.toLowerCase());
+            (club.purposeStatement &&
+                club.purposeStatement
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()));
         const matchesInterests =
             selectedInterests.length === 0 ||
             selectedInterests.some((interest) =>
-                club.interests.includes(interest),
+                club.tags.find((tag) => tag.name == interest),
             );
         return matchesSearch && matchesInterests;
     });
@@ -113,7 +107,7 @@ export function HomePage({
                         exit="exit"
                         variants={sectionVariants}
                     >
-                        <FeaturedClubs />
+                        <FeaturedClubs clubs={clubs} />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -144,7 +138,7 @@ const SearchBar = ({
 const SearchResultsList = ({
     filteredClubs,
 }: {
-    filteredClubs: ClubData[];
+    filteredClubs: ScrapedClub[];
 }) => (
     <motion.main
         className="flex flex-col items-center p-8 w-full max-w-4xl mx-auto"
@@ -163,7 +157,7 @@ const SearchResultsList = ({
                         key={club.id}
                         variants={listItemVariants}
                     >
-                        <ClubCard club={club} />
+                        <ClubCard club={club} mode="side" />
                     </motion.div>
                 ))
             )}

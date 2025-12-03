@@ -58,7 +58,7 @@ async function getClub(id: number) {
 
 async function getAllClubs() {
     // Step 1: Get all clubs in one query
-    const clubs = await db.select().from(scrapedClubs).limit(10);
+    const clubs = await db.select().from(scrapedClubs).limit(20);
     if (clubs.length === 0) return [];
 
     // Collect all club IDs to join efficiently
