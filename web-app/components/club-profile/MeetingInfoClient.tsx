@@ -46,9 +46,18 @@ export default function MeetingInfoClient({
     const updateLocation = useUpdateMeetingLocation();
     const deleteLocation = useDeleteMeetingLocation();
 
-    if (isLoadingTime || isLoadingLocation) return <div>Loading...</div>;
+    if (isLoadingTime || isLoadingLocation)
+        return (
+            <div className="w-full text-center py-5 text-gray-500">
+                Loading...
+            </div>
+        );
     if (errorTime || errorLocation)
-        return <div>Error Loading Meeting Information</div>;
+        return (
+            <div className="w-full text-center py-5 text-gray-500">
+                Error Loading Meeting Information
+            </div>
+        );
 
     const haveLocationAndTime = !!(meetingTimeData && meetingLocationData);
 
