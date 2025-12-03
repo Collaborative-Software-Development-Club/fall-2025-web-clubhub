@@ -30,6 +30,7 @@ export const meetings = pgTable(withPrefix("meeting"), {
     description: text("description"),
 
     date: date("date").notNull(),
+    location: text("location").notNull(),
     start_time: time("start_time", { precision: 0 }).notNull(),
     end_time: time("end_time", { precision: 0 }).notNull(),
 
