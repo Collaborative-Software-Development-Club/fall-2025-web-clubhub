@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 import { meetings } from "@/db/attendance/schema";
 import { Meeting } from "./types";
 import MeetingsPageClient from "./MeetingsPageClient";
+import { scrapedClubsService } from "@/services/discovery/scraped-clubs";
 
 interface MeetingsPageProps {
     params: Promise<{ club: string }>;
@@ -11,6 +12,9 @@ interface MeetingsPageProps {
 export default async function MeetingsPage({ params }: MeetingsPageProps) {
     const { club } = await params;
     const clubId = parseInt(club);
+
+    // Fetch club details
+    const clubData = await scrapedClubsService.getClub(clubId);
 
     const meetingRecords = await db
         .select()
@@ -35,6 +39,8 @@ export default async function MeetingsPage({ params }: MeetingsPageProps) {
         <MeetingsPageClient 
             meetingsData={meetingData}
             clubId={clubId}
+            clubName={clubData.name}
+            purposeStatement={clubData.purposeStatement}  
         />
     );
 }

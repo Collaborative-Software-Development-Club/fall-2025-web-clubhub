@@ -98,8 +98,11 @@ const AttendanceResponseClient = ({
                 return;
             }
 
-            if (!email) {
-                // TODO: Get user context using cookie to populate user id and email
+            const submissionEmail = user?.primaryEmailAddress?.emailAddress ?? email;
+            const userId = user?.id;
+
+            if (!submissionEmail) {
+                return;
             }
 
             setIsSubmittingOtp(true);
@@ -110,7 +113,8 @@ const AttendanceResponseClient = ({
                         value,
                         parseInt(code),
                         meetingId,
-                        email,
+                        submissionEmail,
+                        userId,
                     );
 
                     if (result.success) {
@@ -125,7 +129,7 @@ const AttendanceResponseClient = ({
                 }
             });
         },
-        [hasCompleted, meetingId, code, startTransition, email],
+        [hasCompleted, meetingId, code, startTransition, email, user],
     );
 
     const handleStatusSubmit = useCallback(async () => {
