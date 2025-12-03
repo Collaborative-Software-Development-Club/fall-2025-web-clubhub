@@ -56,6 +56,11 @@ export function MeetingCard({
                 {/* Meeting info */}
                 <div className="flex-1 min-w-0">
                     <h3 className="font-semibold truncate">{meeting.title}</h3>
+                    {meeting.description && (
+                            <p className="text-sm text-muted-foreground truncate mb-0.5">
+                                {meeting.description}
+                            </p>
+                        )}
                     <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
@@ -68,11 +73,6 @@ export function MeetingCard({
                             </span>
                         )}
                     </div>
-                    {meeting.description && (
-                        <p className="text-sm text-muted-foreground truncate mt-0.5">
-                            {meeting.description}
-                        </p>
-                    )}
                 </div>
 
                 {/* Actions */}
