@@ -1,19 +1,11 @@
 import { AttendanceService, MeetingsService, MembershipService } from "@/services/definition";
 import { db } from "@/db";
-<<<<<<< HEAD
 import { meetings, roster } from "@/db/attendance/schema";
-import { eq } from "drizzle-orm";
-import { ScrapedClub, scrapedClubsService } from "@/services/discovery/scraped-clubs";
-import { actualAccountService } from "@/services/account/user-service/account-service";
-import { Account } from "@/services/account/user-service/Account";
 import { Meeting } from "@/app/(attendance)/meetings/[club]/types";
-import { and, between, inArray } from "drizzle-orm";
+import { between, inArray, and, eq } from "drizzle-orm";
 import { format } from "date-fns";
 import { attendance } from "@/db/attendance/schema";
 import { desc, count, sql } from "drizzle-orm";
-=======
-import { roster } from "@/db/attendance/schema";
-import { and, eq } from "drizzle-orm";
 import {
     ScrapedClub,
     scrapedClubsService,
@@ -21,7 +13,6 @@ import {
 import { actualAccountService } from "@/services/account/user-service/account-service";
 import { Account } from "@/services/account/user-service/Account";
 import { auth, currentUser } from "@clerk/nextjs/server";
->>>>>>> d9e7812 (functionality to join and manage clubs in view page)
 
 export const membershipService: MembershipService = {
     addUserToRoster,
@@ -31,7 +22,6 @@ export const membershipService: MembershipService = {
     isMember,
 };
 
-<<<<<<< HEAD
 export const attendanceService: AttendanceService = {
     getPopularClubs,
 };
@@ -40,8 +30,6 @@ export const meetingsService: MeetingsService = {
     getMeetingsForDateRange,
 };
 
-async function addUserToRoster(email: string, clubId: number, userId?: string): Promise<void> {
-=======
 async function joinClub(clubId: number) {
     const email = await getUserEmail();
     addUserToRoster(email, clubId);
@@ -61,7 +49,6 @@ async function addUserToRoster(
     clubId: number,
     userId?: number,
 ): Promise<void> {
->>>>>>> d9e7812 (functionality to join and manage clubs in view page)
     await db.insert(roster).values({
         email: email,
         user_id: userId,
@@ -115,7 +102,7 @@ async function getPopularClubs(limit: number): Promise<ScrapedClub[]> {
 
 async function getMeetingsForDateRange(clubIds: number[], start: Date, end: Date): Promise<Meeting[]> {
     if (clubIds.length === 0) return [];
-    
+
     const meetingRecords = await db
         .select()
         .from(meetings)
