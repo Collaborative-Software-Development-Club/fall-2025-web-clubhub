@@ -1,9 +1,9 @@
-import { scrapedClubsService } from "@/services/discovery/scraped-clubs";
+import { scrapedClubsUploadService } from "@/services/discovery/scraped-clubs-upload";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        await scrapedClubsService.uploadScrapedClubs();
+        await scrapedClubsUploadService.uploadScrapedClubs();
         return NextResponse.json({ message: "OK" });
     } catch (error) {
         console.error(error);

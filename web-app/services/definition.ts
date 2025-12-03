@@ -2,6 +2,7 @@ import { Account } from "./account/user-service/Account";
 import { ClubOverview } from "./club-profile/clubs-service/ClubOverview";
 import { AnnouncementOverview } from "./club-profile/clubs-service/AnnouncementOverview";
 import { ClubPreview } from "./club-profile/clubs-service/ClubPreview";
+import { ScrapedClub } from "./discovery/scraped-clubs";
 import { Tag } from "./discovery/tags-service/Tag";
 
 // --- discovery ---
@@ -11,7 +12,7 @@ export interface TagsService {
 }
 
 export interface ScrapedClubsService {
-    getClub(id: string): Promise<ScrapedClub>;
+    getClub(id: number): Promise<ScrapedClub>;
     getAllClubs(): Promise<ScrapedClub[]>;
 }
 
@@ -20,8 +21,8 @@ export interface ScrapedClubsService {
  * a club as specified in the university registry
  */
 export interface LeadershipVerificationService {
-    getClubsCurrentUserIsALeaderOf(): Promise<string[]>;
-    isCurrentUserALeaderOfClub(clubId: string): Promise<boolean>;
+    getClubsCurrentUserIsALeaderOf(): Promise<number[]>;
+    isCurrentUserALeaderOfClub(clubId: number): Promise<boolean>;
 }
 
 // --- club profile ---
@@ -59,7 +60,5 @@ export interface AccountService {
 }
 
 // temporary types (remove when an actual one is created)
-type ScrapedClub = { _temp: "Scraped Club" };
-type Announcement = { _temp: "Announcement" };
 type Meeting = { _temp: "Meeting" };
 type Member = { _temp: "Member" };
