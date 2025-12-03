@@ -26,7 +26,7 @@ export default async function ClubLeaderLayout({
                     />
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
-                            <h1 className="text-3xl font-bold">
+                            <h1 className="text-xl lg:text-3xl font-bold">
                                 {clubData["Club Name"] + "(Leader)"}
                             </h1>
                             {isLeader ? (

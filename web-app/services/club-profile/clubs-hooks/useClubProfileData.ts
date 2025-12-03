@@ -10,11 +10,14 @@ import {
   // types
   ClubDescriptionInput,
   MeetingLocationInput,
+  MeetingTimeInput,
   SocialLinksInput,
   ClubTagsInput,
   AnnouncementInput,
   ContactInformationInput,
   ClubStatusInput,
+  MembershipWindowInput,
+  MembershipApplicationMethodInput,
   // actions
   getClubDescriptionAction,
   createClubDescriptionAction,
@@ -28,6 +31,10 @@ import {
   createMeetingLocationAction,
   updateMeetingLocationAction,
   deleteMeetingLocationAction,
+  getMeetingTimeAction,
+  createMeetingTimeAction,
+  updateMeetingTimeAction,
+  deleteMeetingTimeAction,
   getClubTagsAction,
   addClubTagsAction,
   deleteClubTagsAction,
@@ -43,6 +50,14 @@ import {
   createClubStatusAction,
   updateClubStatusAction,
   deleteClubStatusAction,
+  getMembershipWindowAction,
+  createMembershipWindowAction,
+  updateMembershipWindowAction,
+  deleteMembershipWindowAction,
+  getMembershipApplicationMethodAction,
+  createMembershipApplicationMethodAction,
+  updateMembershipApplicationMethodAction,
+  deleteMembershipApplicationMethodAction,
 } from "./clubActions";
 
 /* -------------------------------------------------------------------------- */
@@ -54,6 +69,8 @@ export const clubKeys = {
   socialLinks: (clubId: number) => ["clubs", clubId, "socialLinks"] as const,
   meetingLocation: (clubId: number) =>
     ["clubs", clubId, "meetingLocation"] as const,
+  meetingTime: (clubId: number) =>
+    ["clubs", clubId, "meetingTime"] as const,
   tags: (clubId: number) => ["clubs", clubId, "tags"] as const,
   announcements: (clubId: number) =>
     ["clubs", clubId, "announcements"] as const,
@@ -61,6 +78,10 @@ export const clubKeys = {
     ["clubs", clubId, "contactInformation"] as const,
   clubStatus: (clubId: number) =>
     ["clubs", clubId, "clubStatus"] as const,
+  membershipWindow: (clubId: number) =>
+    ["clubs", clubId, "membershipWindow"] as const,
+  membershipApplicationMethod: (clubId: number) =>
+    ["clubs", clubId, "membershipApplicationMethod"] as const,
 };
 
 /* ---------------------------- Description hooks --------------------------- */
@@ -160,7 +181,7 @@ export function useDeleteSocialLinks() {
   });
 }
 
-/* ---------------------------- Description actions --------------------------- */
+/* ---------------------------- Meeting location hooks --------------------------- */
 
 export function useMeetingLocation(clubId: number) {
   const {data, isLoading, error} = useQuery({
@@ -205,6 +226,56 @@ export function useDeleteMeetingLocation() {
     onSuccess: (_data: { ok: boolean }, clubId: number) => {
       qc.invalidateQueries({
         queryKey: clubKeys.meetingLocation(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Meeting time hooks --------------------------- */
+
+export function useMeetingTime(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.meetingTime(clubId),
+    queryFn: () => getMeetingTimeAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MeetingTimeInput) =>
+      createMeetingTimeAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MeetingTimeInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MeetingTimeInput) =>
+      updateMeetingTimeAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MeetingTimeInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMeetingTime() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMeetingTimeAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.meetingTime(clubId),
       });
     },
   });
@@ -391,6 +462,106 @@ export function useDeleteClubStatus() {
     onSuccess: (_data: { ok: boolean }, clubId: number) => {
       qc.invalidateQueries({
         queryKey: clubKeys.clubStatus(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------------- Membership Window actions --------------------------- */
+
+export function useMembershipWindow(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.membershipWindow(clubId),
+    queryFn: () => getMembershipWindowAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipWindowInput) =>
+      createMembershipWindowAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipWindowInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipWindowInput) =>
+      updateMembershipWindowAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipWindowInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMembershipWindow() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMembershipWindowAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipWindow(clubId),
+      });
+    },
+  });
+}
+
+/* ---------------------- Membership Application Method actions ---------------------- */
+
+export function useMembershipApplicationMethod(clubId: number) {
+  const {data, isLoading, error} = useQuery({
+    queryKey: clubKeys.membershipApplicationMethod(clubId),
+    queryFn: () => getMembershipApplicationMethodAction(clubId),
+    enabled: !!clubId,
+  });
+
+  return {data, isLoading, error};
+}
+
+export function useCreateMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipApplicationMethodInput) =>
+      createMembershipApplicationMethodAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipApplicationMethodInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(input.clubId),
+      });
+    },
+  });
+}
+
+export function useUpdateMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: MembershipApplicationMethodInput) =>
+      updateMembershipApplicationMethodAction(input),
+    onSuccess: (_data: { ok: boolean }, input: MembershipApplicationMethodInput) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(input.clubId),
+      });
+    },
+  });
+}
+
+export function useDeleteMembershipApplicationMethod() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (clubId: number) => deleteMembershipApplicationMethodAction(clubId),
+    onSuccess: (_data: { ok: boolean }, clubId: number) => {
+      qc.invalidateQueries({
+        queryKey: clubKeys.membershipApplicationMethod(clubId),
       });
     },
   });
