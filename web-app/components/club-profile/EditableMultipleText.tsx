@@ -21,8 +21,6 @@ interface Props {
     isWindow: boolean;
 }
 
-const windowEnum = ["Fall", "Spring", "Summer"];
-
 export default function EditableMultipleText({
     title,
     handleSave,

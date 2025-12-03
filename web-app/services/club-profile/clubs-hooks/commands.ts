@@ -496,4 +496,4 @@ export const clubCommands = {
     await db.delete(memberApplicationMethod).where(eq(memberApplicationMethod.clubId, clubId));
     return { ok: true };
   },
-}
+};

@@ -3,7 +3,7 @@ import { AnnouncementOverview } from "./AnnouncementOverview";
 //import { scrapedClubsService } from "../discovery";
 import { ClubPreview } from "./ClubPreview";
 import { db } from "../../../db/index";
-import { announcements, meetingLocations } from "../../../db/club-profile/schema";
+import { announcements, meetingLocations, meetingTimes } from "../../../db/club-profile/schema";
 import { eq, desc, inArray } from "drizzle-orm";
 
 //export const clubsService: ClubsService = mockClubsService;
@@ -39,9 +39,9 @@ async function getClubPreviews(clubIds: string[]): Promise<ClubPreview[]> {
   const locByClub = new Map(locRows.map(r => [r.clubId, r.location ?? "TBA"]));
 
   const timeRows = await db
-    .select({ clubId: meetingLocations.clubId, time: meetingLocations.location })
-    .from(meetingLocations)
-    .where(inArray(meetingLocations.clubId, ids));
+    .select({ clubId: meetingTimes.clubId, time: meetingTimes.time })
+    .from(meetingTimes)
+    .where(inArray(meetingTimes.clubId, ids));
   const timeByClub = new Map(timeRows.map(r => [r.clubId, r.time ?? "TBA"]));
 
   return ids.map((id) => {
