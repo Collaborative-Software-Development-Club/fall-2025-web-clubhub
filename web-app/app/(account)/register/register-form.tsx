@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { ClerkAPIError } from "@clerk/types";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { insertNewUserDetails } from "@/app/actions";
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -43,6 +44,13 @@ export default function RegisterForm() {
             // If verification was completed, set the session to active
             // and redirect the user
             if (signUpAttempt.status === 'complete') {
+                // Write user info to your database here
+                await insertNewUserDetails(
+                    signUpAttempt.createdUserId!,
+                    formData.email,
+                    formData.firstName,
+                    formData.lastName
+                )
                 await setActive({
                 session: signUpAttempt.createdSessionId,
                 navigate: async ({ session }) => {
