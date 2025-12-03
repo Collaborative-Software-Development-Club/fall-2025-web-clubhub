@@ -19,8 +19,8 @@ export interface ScrapedClubsService {
  * a club as specified in the university registry
  */
 export interface LeadershipVerificationService {
-    getClubsCurrentUserIsALeaderOf(): Promise<string[]>;
-    isCurrentUserALeaderOfClub(clubId: string): Promise<boolean>;
+    getClubsCurrentUserIsALeaderOf(): Promise<number[]>;
+    isCurrentUserALeaderOfClub(clubId: number): Promise<boolean>;
 }
 
 // --- club profile ---
