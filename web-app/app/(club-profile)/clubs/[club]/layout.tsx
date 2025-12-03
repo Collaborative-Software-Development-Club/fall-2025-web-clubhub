@@ -1,51 +1,89 @@
 import { TagDialog } from "@/components/club-profile/TagDialog";
-import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
 import ChangeStatus from "@/components/club-profile/ChangeStatus";
+import { scrapedClubsService } from "@/services/discovery/scraped-clubs";
+import React from "react";
+import ClubProvider from "@/components/club-profile/ClubClientProvider";
+import type { ScrapedClub } from "@/services/discovery/scraped-clubs";
+
+export interface ClubInjectedProps {
+    clubId: number;
+    clubData: ScrapedClub;
+    isLeader: boolean;
+}
+
 export default async function ClubLeaderLayout({
     children,
     params,
 }: {
     children: React.ReactNode;
-    params: Promise<{ club: string }>;
+    params: { club: string };
 }) {
-    const { club } = await params;
+    const { club } = params;
     const isLeader = true; // TODO: Replace with actual authentication logic
-    const clubData = clubs[0]; //use mock data until we setup the database
+    const clubId = Number(club);
+    if (isNaN(clubId)) {
+        throw new Error("Invalid club ID");
+    }
+    let clubData: ScrapedClub | null = null;
+    let error: string | null = null;
+    try {
+        clubData = await scrapedClubsService.getClub(clubId);
+        if (!clubData) {
+            error = "Club not found.";
+        }
+    } catch (e) {
+        error = "Error loading club data.";
+    }
+    if (error) {
+        return (
+            <div className="flex flex-col min-h-screen w-full items-center pt-4 justify-center">
+                <div className="bg-red-100 text-red-700 px-6 py-4 rounded shadow max-w-md text-center">
+                    {error}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
             <header className="w-full max-w-5xl">
-                <div className="flex w-full justify-start p-4">
+                <div className="flex w-full justify-start p-4 gap-3">
                     <Image
-                        src="/default-club-logo.png"
+                        src={clubData["imageUrl"] || "/default-club-logo.png"}
                         alt="Club Logo"
-                        width={200}
-                        height={100}
+                        width={240}
+                        height={240}
                     />
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
                             <h1 className="text-xl lg:text-3xl font-bold">
-                                {clubData["Club Name"] + "(Leader)"}
+                                {clubData["name"]}
                             </h1>
                             {isLeader ? (
                                 <ChangeStatus
-                                    initialText={clubData["Status"]}
+                                    initialText={clubData["status"]}
                                 />
                             ) : (
                                 <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
                                     {/* Status Badge (Todo: Implement pop up for changing status) */}
-                                    {clubData["Status"]}
+                                    {clubData["status"]}
                                 </div>
                             )}
                         </div>
                         <h2 className="text-xl font-semibold">
-                            {"Campus: " + clubData["Campus"]}
+                            {"Campus: " + clubData["campus"]}
                         </h2>
                         <div className="flex flex-wrap pt-4 gap-2 mb-6">
                             {/* Club Tags(eg. rounded badges and modify button when hovered) */}
-                            <TagDialog data={softwareTags} />
+                            <TagDialog
+                                data={
+                                    (
+                                        clubData["tags"] as { name: string }[]
+                                    ).map((t) => t.name) || []
+                                }
+                            />
                         </div>
                     </div>
                 </div>
@@ -78,9 +116,11 @@ export default async function ClubLeaderLayout({
                     </nav>
                 </div>
             </header>
-            <main className="w-full max-w-5xl px-4">{children}</main>
+            <main className="w-full max-w-5xl px-4">
+                <ClubProvider value={{ clubData, clubId, isLeader }}>
+                    {children}
+                </ClubProvider>
+            </main>
         </div>
     );
 }
-
-const softwareTags = ["Technology", "Special Interest"];

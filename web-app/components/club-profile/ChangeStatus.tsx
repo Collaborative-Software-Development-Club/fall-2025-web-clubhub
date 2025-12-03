@@ -15,18 +15,27 @@ interface ChangeStatusProps {
 export default function ChangeStatus({ initialText }: ChangeStatusProps) {
     const [status, changeStatus] = useState(initialText);
     const buttonStyleActive =
-        "cursor-pointer bg-green-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-green-100";
+        "cursor-pointer bg-green-200 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-green-100";
     const buttonStyleInactive =
-        "cursor-pointer bg-red-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-red-100";
+        "cursor-pointer bg-red-200 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-red-100";
     const buttonStylePending =
-        "cursor-pointer bg-yellow-200 px-3 py-1 w-20 text-sm font-medium text-gray-700 hover:bg-yellow-100";
-    let startState =
-        initialText === "Pending"
+        "cursor-pointer bg-yellow-200 px-3 py-1 text-sm font-medium text-gray-700 hover:bg-yellow-100";
+    // normalize active-like initial texts into a single 'Active' display state
+    const normalizedInitial = [
+        "Active",
+        "Active - Established",
+        "Active I",
+        "Active II",
+    ].includes(initialText)
+        ? "Active"
+        : initialText;
+
+    const startState =
+        normalizedInitial === "Pending"
             ? buttonStylePending
-            : initialText === "Active"
+            : normalizedInitial === "Active"
             ? buttonStyleActive
             : buttonStyleInactive;
-    startState = buttonStyleInactive;
 
     const [buttonColor, changeButtonColor] = useState(startState);
 

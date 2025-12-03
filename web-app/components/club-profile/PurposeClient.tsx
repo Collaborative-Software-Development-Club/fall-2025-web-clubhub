@@ -35,11 +35,11 @@ export default function PurposeClient({
 
     // Loading and error states
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className="w-full text-center py-5 text-gray-500">Loading...</div>;
     }
 
     if (error) {
-        return <div>Error loading club description.</div>;
+        return <div className="w-full text-center py-5 text-gray-500">Error loading club description.</div>;
     }
 
     // Event handlers
