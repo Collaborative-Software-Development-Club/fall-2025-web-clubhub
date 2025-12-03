@@ -218,16 +218,18 @@ function getClubTags(club: Club) {
     if (club.primary_type) {
         clubTags.add(club.primary_type);
     }
-    if (club.secondary_type) {
-        club.secondary_type
-            .split(" ")
-            .map((t) => t.trim())
-            .filter(Boolean)
-            .forEach((t) => clubTags.add(t));
-    }
+    // if (club.secondary_type) {
+    //     club.secondary_type
+    //         .split(" ")
+    //         .map((t) => t.trim())
+    //         .filter(Boolean)
+    //         .forEach((t) => clubTags.add(t));
+    // }
 
-    return Array.from(clubTags).map((tag) => ({
-        tag,
-        isPrimary: tag === club.primary_type,
-    }));
+    return Array.from(clubTags)
+        .filter((tag) => !tag.toLowerCase().includes("columbus"))
+        .map((tag) => ({
+            tag,
+            isPrimary: tag === club.primary_type,
+        }));
 }
