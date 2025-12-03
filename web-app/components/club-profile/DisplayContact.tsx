@@ -27,7 +27,7 @@ export default function DisplayContacts({
     const title = isContact ? "Organization Contacts:" : "Social Media Links:";
 
     return (
-        <div className="w-full">
+        <div className="w-full px-5">
             <label className="text-xl font-bold px-2">{title}</label>
             <hr className="border-gray-400 mt-2" />
 

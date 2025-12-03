@@ -1,20 +1,14 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { InterestBar } from "../interest-bar";
-import { FeaturedClubs } from "./featured-clubs";
+import { InterestBar } from "./interest-bar";
+import { FeaturedClubs as FeaturedClubsComponent } from "./featured-clubs";
 import { ClubCard } from "@/app/(discovery)/club-card";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Define the ClubData type, matching what page.tsx provides
-type ClubData = {
-    id: number;
-    name: string;
-    description: string;
-    interests: string[];
-    leader: string;
-    contact: string | undefined;
-};
+import { Tag } from "@/services/discovery/tags-service/Tag";
+import { FeaturedClubs, ScrapedClub } from "@/services/discovery/scraped-clubs";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
 
 // Animation Variants for the overall section transition (Search vs. Featured)
 const sectionVariants = {
@@ -41,40 +35,74 @@ const listItemVariants = {
     visible: { opacity: 1, y: 0 },
 };
 
+const TAGS_PARAM = "tags";
+
 export function HomePage({
     tags,
-    clubsData,
+    featuredClubs,
+    searchedClubs,
 }: {
-    tags: string[];
-    clubsData: ClubData[];
+    tags: Tag[];
+    featuredClubs: FeaturedClubs;
+    searchedClubs: ScrapedClub[] | null;
 }) {
-    // --- Logic copied from browse.tsx ---
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { replace } = useRouter();
+    const handleSearch = useDebouncedCallback((term: string) => {
+        const params = new URLSearchParams(searchParams);
+        if (term) {
+            params.set("query", term);
+        } else {
+            params.delete("query");
+        }
+        replace(`${pathname}?${params.toString()}`);
+    }, 300);
 
-    const toggleInterest = (interest: string) => {
-        setSelectedInterests((prev) =>
-            prev.includes(interest)
-                ? prev.filter((i) => i !== interest)
-                : [...prev, interest],
-        );
-    };
+    const searchTerm = searchParams.get("query")?.toString();
+    const selectedInterests =
+        searchParams
+            .get(TAGS_PARAM)
+            ?.split(",")
+            .filter((interest) => interest !== "") || [];
+    console.log(selectedInterests);
 
-    const filteredClubs = clubsData.filter((club) => {
-        const matchesSearch =
-            club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            club.description.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesInterests =
-            selectedInterests.length === 0 ||
-            selectedInterests.some((interest) =>
-                club.interests.includes(interest),
+    const handleToggleInterest = useDebouncedCallback((interest: string) => {
+        const params = new URLSearchParams(searchParams);
+        if (selectedInterests.includes(interest)) {
+            const newInterests = selectedInterests.filter(
+                (i) => i !== interest,
             );
-        return matchesSearch && matchesInterests;
-    });
+            if (newInterests.length > 0) {
+                params.set(TAGS_PARAM, newInterests.join(","));
+            } else {
+                params.delete(TAGS_PARAM);
+            }
+        } else {
+            params.set(TAGS_PARAM, [...selectedInterests, interest].join(","));
+        }
+        replace(`${pathname}?${params.toString()}`);
+    }, 100);
+
+    // const filteredClubs = clubs.filter((club) => {
+    //     const matchesSearch =
+    //         club.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //         (club.purposeStatement &&
+    //             club.purposeStatement
+    //                 .toLowerCase()
+    //                 .includes(searchTerm.toLowerCase()));
+    //     const matchesInterests =
+    //         selectedInterests.length === 0 ||
+    //         selectedInterests.some((interest) =>
+    //             club.tags.find((tag) => tag.name == interest),
+    //         );
+    //     return matchesSearch && matchesInterests;
+    // });
     // --- End of copied logic ---
 
     // Check if user is searching
-    const isSearching = searchTerm.length > 0 || selectedInterests.length > 0;
+    // const isSearching = searchTerm.length > 0 || selectedInterests.length > 0;
+    const isSearching = searchedClubs != null;
 
     return (
         <div className="flex flex-col">
@@ -82,12 +110,12 @@ export function HomePage({
                 <div className="relative z-10 flex w-full flex-col items-center space-y-4 px-4">
                     <SearchBar
                         searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
+                        handleSearch={handleSearch}
                     />
                     <InterestBar
                         allTags={tags}
                         selectedInterests={selectedInterests}
-                        onToggleInterest={toggleInterest}
+                        onToggleInterest={handleToggleInterest}
                     />
                 </div>
             </section>
@@ -102,7 +130,7 @@ export function HomePage({
                         exit="exit"
                         variants={sectionVariants}
                     >
-                        <SearchResultsList filteredClubs={filteredClubs} />
+                        <SearchResultsList filteredClubs={searchedClubs} />
                     </motion.div>
                 ) : (
                     <motion.div
@@ -112,7 +140,7 @@ export function HomePage({
                         exit="exit"
                         variants={sectionVariants}
                     >
-                        <FeaturedClubs />
+                        <FeaturedClubsComponent featuredClubs={featuredClubs} />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -123,27 +151,29 @@ export function HomePage({
 // Updated SearchBar to be controlled and have no button
 const SearchBar = ({
     searchTerm,
-    setSearchTerm,
+    handleSearch,
 }: {
-    searchTerm: string;
-    setSearchTerm: (term: string) => void;
-}) => (
-    <div className="w-full max-w-lg items-center space-x-2">
-        <Input
-            type="text"
-            placeholder="Search clubs or keywords"
-            className="shadow-primary/50 shadow-2xl flex-1 px-8 py-6 w-full rounded-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-        />
-    </div>
-);
+    searchTerm: string | undefined;
+    handleSearch: (term: string) => void;
+}) => {
+    return (
+        <div className="w-full max-w-lg items-center space-x-2">
+            <Input
+                type="text"
+                placeholder="Search clubs or keywords"
+                className="shadow-primary/50 shadow-2xl flex-1 px-8 py-6 w-full rounded-full"
+                onChange={(e) => handleSearch(e.target.value)}
+                defaultValue={searchTerm}
+            />
+        </div>
+    );
+};
 
 // New component to render search results (logic from browse.tsx)
 const SearchResultsList = ({
     filteredClubs,
 }: {
-    filteredClubs: ClubData[];
+    filteredClubs: ScrapedClub[];
 }) => (
     <motion.main
         className="flex flex-col items-center p-8 w-full max-w-4xl mx-auto"
@@ -162,9 +192,7 @@ const SearchResultsList = ({
                         key={club.id}
                         variants={listItemVariants}
                     >
-                        <ClubCard
-                            club={club}
-                        />
+                        <ClubCard club={club} mode="side" />
                     </motion.div>
                 ))
             )}

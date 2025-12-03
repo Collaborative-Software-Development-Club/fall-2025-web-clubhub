@@ -1,10 +1,9 @@
-"use client";
-
-import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
+import MembershipClient from "@/components/club-profile/MembershipClient";
 import clubs from "@/mock/clubs.json";
 import PurposeClient from "@/components/club-profile/PurposeClient";
 import SocialClient from "@/components/club-profile/SocialClient";
 import ContactClient from "@/components/club-profile/ContactClient";
+import MeetingInfoClient from "@/components/club-profile/MeetingInfoClient";
 
 export default function ClubPage({ params }: { params: { club: string } }) {
     //const { club } = params;
@@ -40,6 +39,18 @@ export default function ClubPage({ params }: { params: { club: string } }) {
             },
         ) || [];
 
+    const membership = {
+        membership_type: clubData["Membership Details"]["Membership Type"],
+        membership_contact:
+            clubData["Membership Details"]["Membership Contact"],
+        time_of_year_for_new_membership:
+            clubData["Membership Details"]["Time of Year for New Membership"],
+        how_does_a_prospective_member_apply:
+            clubData["Membership Details"][
+                "How does a Prospective Member Apply"
+            ],
+        charge_dues: clubData["Membership Details"]["Charge Dues"],
+    };
     const isLeader = true; // TODO: Replace with actual authentication logic
 
     return (
@@ -50,27 +61,26 @@ export default function ClubPage({ params }: { params: { club: string } }) {
                     isLeader={isLeader}
                     clubId={club}
                 />
-                <EditableMultipleText
-                    id={club}
-                    title="Membership Details"
-                    path="Membership Details"
-                    initialData={clubData["Membership Details"]}
+                <MembershipClient
+                    clubId={club}
+                    isLeader={isLeader}
+                    initialData={membership}
                 />
-                {/* <EditableText
-                    id={club}
-                    title="Meeting Time and Location"
-                    path="Meeting Time and Location"
-                    initialText={
+
+                <MeetingInfoClient
+                    meetingInfo={
                         clubData["Meeting Information"][
                             "Meeting Time and Place"
                         ]
                     }
-                /> */}
+                    clubId={club}
+                    isLeader={isLeader}
+                />
+
                 <div
                     id="contact"
-                    className="w-full grid grid-cols-2 items-start px-5 gap-4"
+                    className="w-full md:grid md:grid-cols-2 md:items-start"
                 >
-                    {/* <DisplayEmail list={organizationEmail} /> */}
                     <ContactClient
                         clubId={club}
                         organizationEmail={organizationEmail}

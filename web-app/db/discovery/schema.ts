@@ -39,7 +39,7 @@ export const leaderRoleEnum = pgEnum("leader_role", [
     "Other",
 ]);
 
-export const clubs = createDiscoveryTable("scraped_clubs", {
+export const scrapedClubs = createDiscoveryTable("scraped_clubs", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
     purposeStatement: text("purpose_statement"),
@@ -72,7 +72,7 @@ export const clubLeaders = createDiscoveryTable(
     "scraped_club_leaders",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         leaderId: text("leader_id")
             .references(() => leaders.email, { onDelete: "no action" })
@@ -86,7 +86,7 @@ export const advisors = createDiscoveryTable(
     "scraped_advisors",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         name: text("name").notNull(),
         role: text("role").notNull(),
@@ -97,7 +97,7 @@ export const advisors = createDiscoveryTable(
 export const socialLinks = createDiscoveryTable("scraped_social_links", {
     id: serial("id").primaryKey(),
     clubId: integer("club_id")
-        .references(() => clubs.id, { onDelete: "cascade" })
+        .references(() => scrapedClubs.id, { onDelete: "cascade" })
         .notNull(),
     platform: text("platform").notNull(),
     url: text("url").notNull(),
@@ -112,7 +112,7 @@ export const clubTags = createDiscoveryTable(
     "scraped_club_tags",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         tag: text("tag")
             .references(() => tags.name, { onDelete: "no action" })

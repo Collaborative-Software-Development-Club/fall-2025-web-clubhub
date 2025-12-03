@@ -2,7 +2,7 @@ import { pgTable, pgEnum } from "drizzle-orm/pg-core";
 import { serial, integer, text, boolean, timestamp, primaryKey } from "drizzle-orm/pg-core";
 
 const withPrefix = (name: string) => "clubAddition_" + name;
-export const timePeriodEnum = pgEnum("time_period_enum", ["Fall", "WINTER", "ANYTIME"]);
+export const timePeriodEnum = pgEnum("time_period_enum", ["Fall", "Spring", "Anytime"]);
 export const clubStatusEnum = pgEnum("status_enum", ["Active", "Inactive", "Pending"]);
 
 /* --------- Club Descriptions Table ---------*/
@@ -25,6 +25,12 @@ export const meetingLocations = pgTable(withPrefix("meeting_locations"), {
     location: text("location").notNull(),
 });
 
+/* --------- Meeting Times Table ---------*/
+export const meetingTimes = pgTable(withPrefix("meeting_times"), {
+     clubId: integer("club_id").primaryKey(),
+     time: text("meeting_time").notNull(),
+});
+
 /* --------- Tags Table ---------*/
 export const addedTags = pgTable(withPrefix("tags"), {
     clubId: integer("club_id").notNull(),
@@ -32,6 +38,7 @@ export const addedTags = pgTable(withPrefix("tags"), {
 }, (table) => [
       primaryKey({ columns: [table.clubId, table.name] })
   ]);
+
 
 /*---------- Announcement Table ---------*/
 export const announcements = pgTable(withPrefix("announcements"), {
@@ -61,15 +68,14 @@ export const clubStatus = pgTable(withPrefix("club_status"), {
     status: clubStatusEnum("status").notNull(),
 });
 
-// TODO
 /*---------- Time of Year for New Membership Table ---------*/
-// export const timeOfYearForNewMembership = pgTable(withPrefix("time_of_year_for_new_membership"), {
-//     clubId: integer("club_id").primaryKey(),
-//     timePeriod: timePeriodEnum("time_period").notNull(),
-// });
+ export const timeOfYearForNewMembership = pgTable(withPrefix("time_of_year_for_new_membership"), {
+     clubId: integer("club_id").primaryKey(),
+     timePeriod: timePeriodEnum("time_period").notNull(),
+ });
 
-// /* --------- Meeting Times Table ---------*/
-// export const meetingTimes = pgTable(withPrefix("meeting_times"), {
-//     clubId: integer("club_id").primaryKey(),
-//     //Based on meeting schema
-// });
+ /*---------- Member Application Method Table ---------*/
+ export const memberApplicationMethod = pgTable(withPrefix("member_application_method"), {
+     clubId: integer("club_id").primaryKey(),
+     method: text("application_method").notNull(),
+ });

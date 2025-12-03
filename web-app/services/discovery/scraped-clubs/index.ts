@@ -1,233 +1,186 @@
-import { z } from "zod";
-import scrapedClubsData from "../../../../data/club-list.json";
 import { db } from "@/db";
 import {
-    tags,
-    leaders,
-    clubs,
     clubLeaders,
-    advisors,
-    socialLinks,
     clubTags,
-    leaderRoleEnum,
-} from "@/db/discovery/schema";
-import { clubSchema } from "./scraped-club-zod";
+    leaders,
+    scrapedClubs,
+    socialLinks,
+    tags,
+} from "@/db/schema";
+import { ScrapedClubsService } from "@/services/definition";
+import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
+import { tagsService } from "../tags-service";
 
-export const scrapedClubsService = {
-    uploadScrapedClubs,
+// I couldn't to everything in a single query even though I know it is possible and should be done that way
+
+export const scrapedClubsService: ScrapedClubsService = {
+    getClub,
+    getAllClubs,
+    getFeaturedClubs,
+    searchClubs,
 };
 
-type Club = z.infer<typeof clubSchema>;
+export type ScrapedClub = Awaited<ReturnType<typeof getClub>>;
+export type FeaturedClubs = Awaited<ReturnType<typeof getFeaturedClubs>>;
 
-async function uploadScrapedClubs() {
-    const scrapedClubs = z.array(clubSchema).parse(scrapedClubsData);
-    const { tags: newTags, leaders: newLeaders } =
-        collectUniqueTagsAndLeaders(scrapedClubs);
+async function getClub(id: number) {
+    const club = (
+        await db.select().from(scrapedClubs).where(eq(scrapedClubs.id, id))
+    )[0]!;
 
-    await db.transaction(async (tx) => {
-        if (newTags.length > 0) {
-            await tx.insert(tags).values(newTags).onConflictDoNothing();
-        }
+    const leadersFromClub = await db
+        .select({
+            email: leaders.email,
+            name: leaders.name,
+            role: clubLeaders.role,
+        })
+        .from(clubLeaders)
+        .innerJoin(leaders, eq(leaders.email, clubLeaders.leaderId))
+        .where(eq(clubLeaders.clubId, id));
 
-        if (newLeaders.length > 0) {
-            await tx
-                .insert(leaders)
-                .values(
-                    newLeaders.map((l) => ({
-                        name: l.name,
-                        email: l.email,
-                    })),
-                )
-                .onConflictDoNothing();
-        }
+    const socialLinksFromClub = await db
+        .select({
+            platform: socialLinks.platform,
+            url: socialLinks.url,
+        })
+        .from(socialLinks)
+        .where(eq(socialLinks.clubId, id));
 
-        for (const club of scrapedClubs) {
-            const clubDataForDb = mapClubData(club);
-            if (!clubDataForDb) {
-                continue;
-            }
+    const tagsFromClub = await db
+        .select({
+            name: clubTags.tag,
+        })
+        .from(clubTags)
+        .where(eq(clubTags.clubId, id));
 
-            const [insertedClub] = await tx
-                .insert(clubs)
-                .values(clubDataForDb)
-                .returning({ id: clubs.id });
-
-            const clubId = insertedClub.id;
-
-            const leaders = getClubLeaders(club).map((l) => ({
-                leaderId: l.email,
-                role: l.role,
-                clubId,
-            }));
-
-            if (leaders.length > 0) {
-                await tx
-                    .insert(clubLeaders)
-                    .values(leaders)
-                    .onConflictDoNothing();
-            }
-
-            const newAdvisors = getClubAdvisors(club).map((a) => ({
-                ...a,
-                clubId,
-            }));
-            if (newAdvisors.length > 0) {
-                await tx
-                    .insert(advisors)
-                    .values(newAdvisors)
-                    .onConflictDoNothing();
-            }
-
-            const socials = getClubSocials(club).map((s) => ({
-                ...s,
-                clubId,
-            }));
-            if (socials.length > 0) {
-                await tx.insert(socialLinks).values(socials);
-            }
-
-            const tags = getClubTags(club);
-            if (tags.length > 0) {
-                await tx
-                    .insert(clubTags)
-                    .values(tags.map((t) => ({ ...t, clubId })))
-                    .onConflictDoNothing();
-            }
-        }
-    });
-}
-
-function collectUniqueTagsAndLeaders(clubs: Club[]) {
-    const allTags = new Set<string>();
-    const allLeaders = new Map<
-        string,
-        {
-            name: string;
-            email: string;
-            role: (typeof leaderRoleEnum.enumValues)[number];
-        }
-    >();
-
-    for (const club of clubs) {
-        getClubTags(club).forEach((t) => allTags.add(t.tag));
-        getClubLeaders(club).forEach((l) => {
-            if (!allLeaders.has(l.email)) {
-                allLeaders.set(l.email, l);
-            }
-        });
-    }
     return {
-        tags: Array.from(allTags).map((tag) => ({
-            name: tag,
-        })),
-        leaders: Array.from(allLeaders.values()),
+        ...club,
+        leaders: leadersFromClub,
+        socialLinks: socialLinksFromClub,
+        tags: tagsFromClub,
     };
 }
 
-// --- Mappers & Parsers ---
+async function getAllClubs() {
+    // Step 1: Get all clubs in one query
+    const clubs = await db.select().from(scrapedClubs).limit(20);
+    if (clubs.length === 0) return [];
 
-function mapClubData(club: Club) {
-    return {
-        name: club.name,
-        purposeStatement: club.purpose_statement,
-        campus: club.campus,
-        status: club.status,
-        imageUrl: club.image_url,
-        url: club.url,
-        primaryMakeUp: club.primary_make_up,
-        meetingTimeAndPlace: club.meeting_time_and_place,
-        officeLocation: club.office_location,
-        membershipType: club.membership_type,
-        membershipContact: club.membership_contact,
-        timeOfYearForNewMembership: club.time_of_year_for_new_membership,
-        howDoesAProspectiveMemberApply:
-            club.how_does_a_prospective_member_apply,
-        chargeDues: club.charge_dues === "Yes",
-        organizationEmail: club.orgainization_email,
-    };
+    return await mergeAdditionalClubInfo(clubs);
 }
 
-function getClubLeaders(club: Club) {
-    const leaders: {
-        email: string;
-        role: (typeof leaderRoleEnum.enumValues)[number];
-        name: string;
-    }[] = [];
-    leaders.push({
-        email: club.primary_leader_email,
-        role: "Primary Leader" as const,
-        name: club.primary_leader,
-    });
-    if (club.secondary_leader && club.secondary_leader_email) {
-        leaders.push({
-            email: club.secondary_leader_email,
-            role: "Secondary Leader" as const,
-            name: club.secondary_leader,
-        });
-    }
-    if (club.treasurer_leader && club.treasurer_leader_email) {
-        leaders.push({
-            email: club.treasurer_leader_email,
-            role: "Treasurer" as const,
-            name: club.treasurer_leader,
-        });
-    }
-    return leaders;
+async function searchClubs(term: string | null, tags: string[]) {
+    const clubs = await db
+        .select({ ...getTableColumns(scrapedClubs) })
+        .from(scrapedClubs)
+        .innerJoin(clubTags, eq(clubTags.clubId, scrapedClubs.id))
+        .where(
+            and(
+                or(
+                    term ? ilike(scrapedClubs.name, `%${term}%`) : undefined,
+                    term
+                        ? ilike(scrapedClubs.purposeStatement, `%${term}%`)
+                        : undefined,
+                ),
+                tags.length > 0 ? inArray(clubTags.tag, tags) : undefined,
+            ),
+        )
+        .groupBy(scrapedClubs.id);
+    if (clubs.length === 0) return [];
+
+    return await mergeAdditionalClubInfo(clubs);
 }
 
-function getClubAdvisors(club: Club) {
-    const advisors = [];
-    if (club.advisor) {
-        advisors.push({ name: club.advisor, role: "Advisor" });
-    }
-    if (club.co_advisor) {
-        advisors.push({ name: club.co_advisor, role: "Co-Advisor" });
-    }
-    return advisors;
-}
+async function getFeaturedClubs() {
+    const popularTags = await tagsService.getMostPopularTags(8);
+    const rows = await db
+        .select({ ...getTableColumns(scrapedClubs) })
+        .from(scrapedClubs)
+        .innerJoin(clubTags, eq(clubTags.clubId, scrapedClubs.id))
+        .where(
+            inArray(
+                clubTags.tag,
+                popularTags.map((t) => t.name),
+            ),
+        )
+        .groupBy(scrapedClubs.id);
 
-function getClubSocials(club: Club) {
-    const socials = [];
-    if (club.instagram) {
-        socials.push({ platform: "Instagram", url: club.instagram });
-    }
-    if (club.facebook_group_page) {
-        socials.push({ platform: "Facebook", url: club.facebook_group_page });
-    }
-    if (club.twitter) {
-        socials.push({ platform: "Twitter", url: club.twitter });
-    }
-    if (club.website) {
-        socials.push({ platform: "Website", url: club.website });
-    }
-    if (club.other) {
-        socials.push({ platform: "Other", url: club.other });
-    }
-    return socials;
-}
-
-function getClubTags(club: Club) {
-    const clubTags = new Set<string>();
-    if (club.affiliation) {
-        club.affiliation
-            .split(",")
-            .map((t) => t.trim())
-            .filter((t) => t && t !== club.campus)
-            .forEach((t) => clubTags.add(t));
-    }
-    if (club.primary_type) {
-        clubTags.add(club.primary_type);
-    }
-    if (club.secondary_type) {
-        club.secondary_type
-            .split(" ")
-            .map((t) => t.trim())
-            .filter(Boolean)
-            .forEach((t) => clubTags.add(t));
-    }
-
-    return Array.from(clubTags).map((tag) => ({
-        tag,
-        isPrimary: tag === club.primary_type,
+    const clubs: ScrapedClub[] = await mergeAdditionalClubInfo(rows);
+    return popularTags.map((tag) => ({
+        name: tag.name,
+        type: tag.type,
+        clubs: clubs.filter((c) => c.tags.find((t) => (tag.name = t.name))),
     }));
+}
+
+async function mergeAdditionalClubInfo(
+    clubs: (typeof scrapedClubs.$inferSelect)[],
+) {
+    // Collect all club IDs to join efficiently
+    const clubIds = clubs.map((c) => c.id);
+
+    // Step 2: Fetch all relations in bulk
+
+    // All leaders for all clubs
+    const allLeaders = await db
+        .select({
+            clubId: clubLeaders.clubId,
+            email: leaders.email,
+            name: leaders.name,
+            role: clubLeaders.role,
+        })
+        .from(clubLeaders)
+        .innerJoin(leaders, eq(leaders.email, clubLeaders.leaderId))
+        .where(inArray(clubLeaders.clubId, clubIds));
+
+    // All social links for all clubs
+    const allSocialLinks = await db
+        .select({
+            clubId: socialLinks.clubId,
+            platform: socialLinks.platform,
+            url: socialLinks.url,
+        })
+        .from(socialLinks)
+        .where(inArray(socialLinks.clubId, clubIds));
+
+    // All tags for all clubs
+    const allTags = await db
+        .select({
+            clubId: clubTags.clubId,
+            name: clubTags.tag,
+        })
+        .from(clubTags)
+        .where(inArray(clubTags.clubId, clubIds));
+
+    // Step 3: Group related info per club (in memory)
+    const leadersMap = new Map<number, typeof allLeaders>();
+    const socialsMap = new Map<number, typeof allSocialLinks>();
+    const tagsMap = new Map<number, typeof allTags>();
+
+    for (const leader of allLeaders) {
+        const list = leadersMap.get(leader.clubId) ?? [];
+        list.push(leader);
+        leadersMap.set(leader.clubId, list);
+    }
+
+    for (const social of allSocialLinks) {
+        const list = socialsMap.get(social.clubId) ?? [];
+        list.push(social);
+        socialsMap.set(social.clubId, list);
+    }
+
+    for (const tag of allTags) {
+        const list = tagsMap.get(tag.clubId) ?? [];
+        list.push(tag);
+        tagsMap.set(tag.clubId, list);
+    }
+
+    // Step 4: Combine everything
+    const result = clubs.map((club) => ({
+        ...club,
+        leaders: leadersMap.get(club.id) ?? [],
+        socialLinks: socialsMap.get(club.id) ?? [],
+        tags: tagsMap.get(club.id) ?? [],
+    }));
+    return result;
 }

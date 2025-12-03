@@ -6,16 +6,13 @@ import { Textarea } from "../ui/textarea";
 import DisplayText from "./DisplayText";
 
 interface EditableTextProps {
-    clubId: number;
     title: string;
     handleSave: (data: string) => Promise<void>;
     handleDelete: () => Promise<void>;
     initialText: string;
-    isCreating: boolean;
 }
 
 export default function EditableText({
-    clubId,
     title,
     handleSave,
     handleDelete,
