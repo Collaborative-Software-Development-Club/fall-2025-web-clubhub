@@ -247,7 +247,7 @@ export function InterestBar({
                                                         {category.name ===
                                                         "MAJOR"
                                                             ? "Majors"
-                                                            : "Interests"}
+                                                            : "Types of Clubs"}
                                                     </span>
                                                     <Badge
                                                         variant="outline"
