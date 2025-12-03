@@ -64,5 +64,5 @@ export default async function Home() {
                   | undefined),
     }));
 
-    return <HomePage tags={tags.map((t) => t.name)} clubsData={clubsData} />;
+    return <HomePage tags={tags} clubsData={clubsData} />;
 }

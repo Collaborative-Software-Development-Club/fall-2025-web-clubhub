@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { InterestBar } from "../interest-bar";
+import { InterestBar } from "./interest-bar";
 import { FeaturedClubs } from "./featured-clubs";
 import { ClubCard } from "@/app/(discovery)/club-card";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tag } from "@/services/discovery/tags-service/Tag";
 
 // Define the ClubData type, matching what page.tsx provides
 type ClubData = {
@@ -45,7 +46,7 @@ export function HomePage({
     tags,
     clubsData,
 }: {
-    tags: string[];
+    tags: Tag[];
     clubsData: ClubData[];
 }) {
     // --- Logic copied from browse.tsx ---
@@ -162,9 +163,7 @@ const SearchResultsList = ({
                         key={club.id}
                         variants={listItemVariants}
                     >
-                        <ClubCard
-                            club={club}
-                        />
+                        <ClubCard club={club} />
                     </motion.div>
                 ))
             )}

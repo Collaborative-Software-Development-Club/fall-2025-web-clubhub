@@ -22,6 +22,7 @@ async function getClub(id: number) {
     const club = (
         await db.select().from(scrapedClubs).where(eq(scrapedClubs.id, id))
     )[0]!;
+
     const leadersFromClub = await db
         .select({
             email: leaders.email,
@@ -31,6 +32,7 @@ async function getClub(id: number) {
         .from(clubLeaders)
         .innerJoin(leaders, eq(leaders.email, clubLeaders.leaderId))
         .where(eq(clubLeaders.clubId, id));
+
     const socialLinksFromClub = await db
         .select({
             platform: socialLinks.platform,
@@ -38,11 +40,14 @@ async function getClub(id: number) {
         })
         .from(socialLinks)
         .where(eq(socialLinks.clubId, id));
+
     const tagsFromClub = await db
         .select({
             name: clubTags.tag,
         })
-        .from(clubTags);
+        .from(clubTags)
+        .where(eq(clubTags.clubId, id));
+
     return {
         ...club,
         leaders: leadersFromClub,
