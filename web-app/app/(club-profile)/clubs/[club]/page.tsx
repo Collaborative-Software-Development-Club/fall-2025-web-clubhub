@@ -9,9 +9,13 @@ import { useClub } from "@/components/club-profile/ClubClientProvider";
 
 export default function ClubPage() {
     const ctx = useClub();
-    if (!ctx) return <div>Loading Club Data...</div>;
+    if (!ctx)
+        return (
+            <div className="w-full text-center py-5 text-gray-500">
+                Loading Club Data...
+            </div>
+        );
     const { clubData, clubId, isLeader } = ctx;
-    console.log(clubData);
 
     const organizationEmail = [
         {

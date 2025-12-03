@@ -36,16 +36,37 @@ export default function MembershipClient({
     const [data, setData] = useState<MembershipData>(initialData);
 
     /* membership application method hooks */
-    const { data: appMethodData } = useMembershipApplicationMethod(clubId);
+    const {
+        data: appMethodData,
+        isLoading: isLoadingAppMethod,
+        error: errorAppMethod,
+    } = useMembershipApplicationMethod(clubId);
     const createAppMethod = useCreateMembershipApplicationMethod();
     const updateAppMethod = useUpdateMembershipApplicationMethod();
     const deleteAppMethod = useDeleteMembershipApplicationMethod();
 
     /* membership window hooks */
-    const { data: windowData } = useMembershipWindow(clubId);
+    const {
+        data: windowData,
+        isLoading: isLoadingWindow,
+        error: errorWindow,
+    } = useMembershipWindow(clubId);
     const createWindow = useCreateMembershipWindow();
     const updateWindow = useUpdateMembershipWindow();
     const deleteWindow = useDeleteMembershipWindow();
+
+    if (isLoadingAppMethod || isLoadingWindow)
+        return (
+            <div className="w-full text-center py-5 text-gray-500">
+                Loading...
+            </div>
+        );
+    if (errorAppMethod || errorWindow)
+        return (
+            <div className="w-full text-center py-5 text-gray-500">
+                Error loading membership information
+            </div>
+        );
 
     const handleSaveApplicationMethod = async (value: string) => {
         const trimmed = value.trim();

@@ -30,15 +30,14 @@ export default async function ClubLeaderLayout({
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
             <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4 gap-3">
-                    <div className="relative w-60 aspect-[4/3]">
                         <Image
                             src={
                                 clubData["imageUrl"] || "/default-club-logo.png"
                             }
                             alt="Club Logo"
-                            fill
+                            width={240}
+                            height={240}
                         />
-                    </div>
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
                             <h1 className="text-xl lg:text-3xl font-bold">
