@@ -5,18 +5,23 @@ import {
     leaders,
     scrapedClubs,
     socialLinks,
+    tags,
 } from "@/db/schema";
 import { ScrapedClubsService } from "@/services/definition";
-import { eq, inArray, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, ilike, inArray, or, sql } from "drizzle-orm";
+import { tagsService } from "../tags-service";
 
 // I couldn't to everything in a single query even though I know it is possible and should be done that way
 
 export const scrapedClubsService: ScrapedClubsService = {
     getClub,
     getAllClubs,
+    getFeaturedClubs,
+    searchClubs,
 };
 
 export type ScrapedClub = Awaited<ReturnType<typeof getClub>>;
+export type FeaturedClubs = Awaited<ReturnType<typeof getFeaturedClubs>>;
 
 async function getClub(id: number) {
     const club = (
@@ -61,6 +66,56 @@ async function getAllClubs() {
     const clubs = await db.select().from(scrapedClubs).limit(20);
     if (clubs.length === 0) return [];
 
+    return await mergeAdditionalClubInfo(clubs);
+}
+
+async function searchClubs(term: string | null, tags: string[]) {
+    const clubs = await db
+        .select({ ...getTableColumns(scrapedClubs) })
+        .from(scrapedClubs)
+        .innerJoin(clubTags, eq(clubTags.clubId, scrapedClubs.id))
+        .where(
+            and(
+                or(
+                    term ? ilike(scrapedClubs.name, `%${term}%`) : undefined,
+                    term
+                        ? ilike(scrapedClubs.purposeStatement, `%${term}%`)
+                        : undefined,
+                ),
+                tags.length > 0 ? inArray(clubTags.tag, tags) : undefined,
+            ),
+        )
+        .groupBy(scrapedClubs.id);
+    if (clubs.length === 0) return [];
+
+    return await mergeAdditionalClubInfo(clubs);
+}
+
+async function getFeaturedClubs() {
+    const popularTags = await tagsService.getMostPopularTags(8);
+    const rows = await db
+        .select({ ...getTableColumns(scrapedClubs) })
+        .from(scrapedClubs)
+        .innerJoin(clubTags, eq(clubTags.clubId, scrapedClubs.id))
+        .where(
+            inArray(
+                clubTags.tag,
+                popularTags.map((t) => t.name),
+            ),
+        )
+        .groupBy(scrapedClubs.id);
+
+    const clubs: ScrapedClub[] = await mergeAdditionalClubInfo(rows);
+    return popularTags.map((tag) => ({
+        name: tag.name,
+        type: tag.type,
+        clubs: clubs.filter((c) => c.tags.find((t) => (tag.name = t.name))),
+    }));
+}
+
+async function mergeAdditionalClubInfo(
+    clubs: (typeof scrapedClubs.$inferSelect)[],
+) {
     // Collect all club IDs to join efficiently
     const clubIds = clubs.map((c) => c.id);
 
@@ -127,6 +182,5 @@ async function getAllClubs() {
         socialLinks: socialsMap.get(club.id) ?? [],
         tags: tagsMap.get(club.id) ?? [],
     }));
-
     return result;
 }

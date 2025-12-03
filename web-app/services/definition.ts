@@ -2,18 +2,21 @@ import { Account } from "./account/user-service/Account";
 import { ClubOverview } from "./club-profile/clubs-service/ClubOverview";
 import { AnnouncementOverview } from "./club-profile/clubs-service/AnnouncementOverview";
 import { ClubPreview } from "./club-profile/clubs-service/ClubPreview";
-import { ScrapedClub } from "./discovery/scraped-clubs";
+import { FeaturedClubs, ScrapedClub } from "./discovery/scraped-clubs";
 import { Tag } from "./discovery/tags-service/Tag";
 
 // --- discovery ---
 
 export interface TagsService {
     getAllTags(): Promise<Tag[]>;
+    getMostPopularTags(limit: number): Promise<Tag[]>;
 }
 
 export interface ScrapedClubsService {
     getClub(id: number): Promise<ScrapedClub>;
     getAllClubs(): Promise<ScrapedClub[]>;
+    getFeaturedClubs(): Promise<FeaturedClubs>;
+    searchClubs(term: string | null, tags: string[]): Promise<ScrapedClub[]>;
 }
 
 /**

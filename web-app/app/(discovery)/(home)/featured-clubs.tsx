@@ -2,37 +2,20 @@ import { ClubCarousel } from "../club-carousel";
 import { ClubCarouselHeader } from "../club-carousel-header";
 import { CarouselItem } from "@/components/ui/carousel";
 import { ClubCard } from "../club-card";
-import Link from "next/link";
-import { ScrapedClub } from "@/services/discovery/scraped-clubs";
+import { FeaturedClubs as FeaturedClubsType } from "@/services/discovery/scraped-clubs";
 
-export function FeaturedClubs({ clubs }: { clubs: ScrapedClub[] }) {
-    const featuredCategories = [
-        "Technology",
-        "Academic/College",
-        "Sports and Recreation",
-    ]; //Can add more
-
-    // Prepare data for category carousels
-    const carouselsData = featuredCategories
-        .map((category) => {
-            const filteredClubs = clubs.filter((club) =>
-                club.tags.find((tag) => tag.name === category),
-            );
-
-            return {
-                name: category.replace("/", " & "),
-                clubs: filteredClubs,
-            };
-        })
-        .filter((carousel) => carousel.clubs.length > 0);
+export function FeaturedClubs({
+    featuredClubs,
+}: {
+    featuredClubs: FeaturedClubsType;
+}) {
     // Get data for the "Featured" carousel
-    const featuredClubs = clubs;
     const sections = [
-        {
-            name: "Featured Clubs",
-            clubs: featuredClubs,
-        },
-        ...carouselsData,
+        // {
+        //     name: "Featured Clubs",
+        //     clubs: featuredClubs,
+        // },
+        ...featuredClubs,
     ];
 
     return (
