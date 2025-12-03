@@ -1,42 +1,45 @@
+"use client";
+
 import MembershipClient from "@/components/club-profile/MembershipClient";
 import PurposeClient from "@/components/club-profile/PurposeClient";
 import SocialClient from "@/components/club-profile/SocialClient";
 import ContactClient from "@/components/club-profile/ContactClient";
 import MeetingInfoClient from "@/components/club-profile/MeetingInfoClient";
-import { scrapedClubsService } from "@/services/discovery/scraped-clubs";
+import { useClub } from "@/components/club-profile/ClubClientProvider";
 
-export default async function ClubPage({
-    params,
-}: {
-    params: { club: string };
-}) {
-    const { club } = params;
-    const clubId = Number(club);
-    const clubData = await scrapedClubsService.getClub(clubId);
+export default function ClubPage() {
+    const ctx = useClub();
+    if (!ctx) return <div>Loading Club Data...</div>;
+    const { clubData, clubId, isLeader } = ctx;
+    console.log(clubData);
 
     const organizationEmail = [
         {
             prop1: "Email",
-            prop2: clubData["organizationEmail"] || "",
+            prop2: clubData?.["organizationEmail"] || "",
         },
     ];
 
     const membership = {
-        membership_type: clubData["membershipType"] || "",
-        membership_contact: clubData["membershipContact"] || "",
+        membership_type: clubData?.["membershipType"] || "",
+        membership_contact: clubData?.["membershipContact"] || "",
         time_of_year_for_new_membership:
-            clubData["timeOfYearForNewMembership"] || "",
+            clubData?.["timeOfYearForNewMembership"] || "",
         how_does_a_prospective_member_apply:
-            clubData["howDoesAProspectiveMemberApply"] || "",
-        charge_dues: clubData["chargeDues"] || "",
+            clubData?.["howDoesAProspectiveMemberApply"] || "",
+        charge_dues:
+            typeof clubData?.["chargeDues"] === "boolean"
+                ? clubData?.["chargeDues"]
+                    ? "Yes"
+                    : "No"
+                : clubData?.["chargeDues"] || "",
     };
-    const isLeader = true; // TODO: Replace with actual authentication logic
 
     return (
         <div className="w-full">
             <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
                 <PurposeClient
-                    purposeStatement={clubData["purposeStatement"] || ""}
+                    purposeStatement={clubData?.["purposeStatement"] || ""}
                     isLeader={isLeader}
                     clubId={clubId}
                 />
@@ -47,7 +50,7 @@ export default async function ClubPage({
                 />
 
                 <MeetingInfoClient
-                    meetingInfo={clubData["meetingTimeAndPlace"] || ""}
+                    meetingInfo={clubData?.["meetingTimeAndPlace"] || ""}
                     clubId={clubId}
                     isLeader={isLeader}
                 />
@@ -64,7 +67,12 @@ export default async function ClubPage({
                     <SocialClient
                         clubId={clubId}
                         socialLinks={
-                            clubData["socialLinks"]?.map((s: any) => ({
+                            (
+                                clubData?.["socialLinks"] as {
+                                    platform: string;
+                                    url: string;
+                                }[]
+                            )?.map((s) => ({
                                 prop1: s.platform,
                                 prop2: s.url,
                             })) || []
