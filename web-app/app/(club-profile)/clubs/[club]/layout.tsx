@@ -27,23 +27,10 @@ export default async function ClubLeaderLayout({
         throw new Error("Invalid club ID");
     }
     let clubData: ScrapedClub | null = null;
-    let error: string | null = null;
     try {
         clubData = await scrapedClubsService.getClub(clubId);
-        if (!clubData) {
-            error = "Club not found.";
-        }
     } catch (e) {
-        error = "Error loading club data.";
-    }
-    if (error) {
-        return (
-            <div className="flex flex-col min-h-screen w-full items-center pt-4 justify-center">
-                <div className="bg-red-100 text-red-700 px-6 py-4 rounded shadow max-w-md text-center">
-                    {error}
-                </div>
-            </div>
-        );
+        throw e;
     }
 
     return (
