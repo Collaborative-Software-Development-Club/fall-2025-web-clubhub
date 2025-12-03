@@ -3,14 +3,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
+import { SignedIn, SignOutButton, useAuth } from "@clerk/nextjs";
 
 export function Navbar() {
+    const { isSignedIn } = useAuth();
     // Detects active link based on current pathname
     const pathname = usePathname();
-    const navLinks = [
+    const navLinks = isSignedIn ? [
         { href: "/", label: "Home" },
         { href: "/browse", label: "Browse" },
         { href: "/dashboard", label: "My Clubs" },
+    ] : [
+        { href: "/", label: "Home" },
+        { href: "/browse", label: "Browse" },
+        { href: "/login", label: "Log In" },
     ];
 
     console.log(pathname);
@@ -38,6 +44,13 @@ export function Navbar() {
                             </Button>
                         );
                     })}
+                    <SignedIn>
+                        <SignOutButton>
+                            <Button>
+                                Sign Out
+                            </Button>
+                        </SignOutButton>
+                    </SignedIn>
                 </nav>
             </Card>
         </header>
