@@ -1,11 +1,11 @@
-import { ProfileVisibility } from "@/db/schema";
+import { ProfileVisibility, Year } from "@/db/schema";
 
 export interface Account {
     id: string;
     firstName: string;
     lastName: string;
     email: string;
-    year: number | null;
+    year: Year | null;
     major: string | null;
     profileVisibility: ProfileVisibility;
     bio: string | null;
