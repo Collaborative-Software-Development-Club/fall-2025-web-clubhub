@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { SaveAccountSetting, getAccountSettings } from "@/app/actions";
+import { saveAccountSetting, getAccountSettings } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { yearValues } from "@/db/account/schema";
 
@@ -22,7 +22,6 @@ export default function ProfileForm() {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string>("");
     const [formData, setFormData] = useState({
-        // username: "",
         major: "",
         year: "",
         bio: "",
@@ -69,7 +68,7 @@ export default function ProfileForm() {
         
         try {
             startTransition(async () => {
-                const result = await SaveAccountSetting(formData);
+                const result = await saveAccountSetting(formData);
                 if (result.ok) {
                     router.refresh(); // Refresh the page to show updated data
                     console.log("✅ Settings saved successfully");
@@ -90,17 +89,6 @@ export default function ProfileForm() {
                     {error}
                 </div>
             )}
-            {/* Username
-            <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                    id="username"
-                    value={formData.username}
-                    onChange={(e) => handleChange("username", e.target.value)}
-                    placeholder="Enter your username"
-                    required
-                />
-            </div> */}
 
             {/* Major */}
             <div className="space-y-2">

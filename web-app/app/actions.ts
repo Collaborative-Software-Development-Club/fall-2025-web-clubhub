@@ -5,28 +5,6 @@ import { db } from '@/db'
 import { eq } from 'drizzle-orm'
 import { ProfileVisibility, userDetails, Year, yearValues } from '@/db/schema'
 
-/** Example functions and import showing how to interact with the database */
-
-// export async function createUserMessage(formData: FormData) {
-//   const { isAuthenticated, userId } = await auth()
-//   if (!isAuthenticated) throw new Error('User not found')
-
-//   const message = formData.get('message') as string
-//   await db.insert(UserMessages).values({
-//     user_id: userId,
-//     message,
-//   })
-// }
-
-// export async function deleteUserMessage() {
-//   const { isAuthenticated, userId } = await auth()
-//   if (!isAuthenticated) throw new Error('User not found')
-
-//   await db.delete(UserMessages).where(eq(UserMessages.user_id, userId))
-// }
-
-// (server actions implemented below)
-
 /**
  * Save account settings for the current user.
  * Accepts either a FormData (from a form action) or a plain object with the
@@ -37,7 +15,7 @@ import { ProfileVisibility, userDetails, Year, yearValues } from '@/db/schema'
  * store account settings as a JSON message in that table under a small
  * envelope: { type: 'account-settings', payload: {...} }.
  */
-export async function SaveAccountSetting(data: FormData | Record<string, any>) {
+export async function saveAccountSetting(data: FormData | Record<string, any>) {
 	const { isAuthenticated, userId } = await auth()
 	if (!isAuthenticated || !userId) throw new Error('User not found')
 
