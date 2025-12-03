@@ -79,3 +79,14 @@ export async function getAccountSettings() {
 		return null
 	}
 }
+
+export async function insertNewUserDetails(userId: string, email: string, firstName: string, lastName: string, profileVisibility: ProfileVisibility = "private") {
+    await db.insert(userDetails).values({
+        userId: userId,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        profileVisibility: profileVisibility,
+        createTs: new Date(),
+    })
+}
