@@ -20,7 +20,13 @@ export const makeUpEnum = pgEnum("make_up", [
     "Graduate",
     "Professional",
 ]);
-export const statusEnum = pgEnum("status", ["Active", "Inactive", "Pending"]);
+export const statusEnum = pgEnum("status", [
+    "Active I",
+    "Active - Established",
+    "Active II",
+    "Inactive",
+    "Pending",
+]);
 export const membershipEnum = pgEnum("membership", [
     "Open Membership",
     "Application/Selection Process",
@@ -33,18 +39,19 @@ export const leaderRoleEnum = pgEnum("leader_role", [
     "Other",
 ]);
 
-export const clubs = createDiscoveryTable("scraped_clubs", {
+export const scrapedClubs = createDiscoveryTable("scraped_clubs", {
     id: serial("id").primaryKey(),
     name: text("name").notNull(),
-    purposeStatement: text("purpose_statement").notNull(),
+    purposeStatement: text("purpose_statement"),
     campus: text("campus"),
     status: statusEnum("status").notNull(),
     imageUrl: text("image_url"),
     url: text("url").notNull(),
-    primaryMakeUp: makeUpEnum("primary_make_up").notNull(),
+    primaryMakeUp: makeUpEnum("primary_make_up"),
     meetingTimeAndPlace: text("meeting_time_and_place"),
     officeLocation: text("office_location"),
-    membershipType: membershipEnum("membership_type").notNull(),
+    // null because some clubs don't have it specified
+    membershipType: membershipEnum("membership_type"),
     membershipContact: text("membership_contact"),
     timeOfYearForNewMembership: text("time_of_year_for_new_membership"),
     howDoesAProspectiveMemberApply: text("how_does_a_prospective_member_apply"),
@@ -65,7 +72,7 @@ export const clubLeaders = createDiscoveryTable(
     "scraped_club_leaders",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         leaderId: text("leader_id")
             .references(() => leaders.email, { onDelete: "no action" })
@@ -79,7 +86,7 @@ export const advisors = createDiscoveryTable(
     "scraped_advisors",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         name: text("name").notNull(),
         role: text("role").notNull(),
@@ -90,7 +97,7 @@ export const advisors = createDiscoveryTable(
 export const socialLinks = createDiscoveryTable("scraped_social_links", {
     id: serial("id").primaryKey(),
     clubId: integer("club_id")
-        .references(() => clubs.id, { onDelete: "cascade" })
+        .references(() => scrapedClubs.id, { onDelete: "cascade" })
         .notNull(),
     platform: text("platform").notNull(),
     url: text("url").notNull(),
@@ -105,7 +112,7 @@ export const clubTags = createDiscoveryTable(
     "scraped_club_tags",
     {
         clubId: integer("club_id")
-            .references(() => clubs.id, { onDelete: "cascade" })
+            .references(() => scrapedClubs.id, { onDelete: "cascade" })
             .notNull(),
         tag: text("tag")
             .references(() => tags.name, { onDelete: "no action" })

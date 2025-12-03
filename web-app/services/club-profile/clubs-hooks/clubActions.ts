@@ -10,6 +10,10 @@ export type MeetingLocationInput = Parameters<
   (typeof clubCommands)["createMeetingLocation"]
 >[0];
 
+export type MeetingTimeInput = Parameters<
+  (typeof clubCommands)["createMeetingTime"]
+>[0];
+
 export type SocialLinksInput = Parameters<
   (typeof clubCommands)["createSocialLinks"]
 >[0];
@@ -20,6 +24,22 @@ export type ClubTagsInput = Parameters<
 
 export type AnnouncementInput = Parameters<
   (typeof clubCommands)["createAnnouncement"]
+>[0];
+
+export type ContactInformationInput = Parameters<
+  (typeof clubCommands)["createContactInformation"]
+>[0];
+
+export type ClubStatusInput = Parameters<
+  (typeof clubCommands)["createClubStatus"]
+>[0];
+
+export type MembershipWindowInput = Parameters<
+  (typeof clubCommands)["createMembershipWindow"]
+>[0];
+
+export type MembershipApplicationMethodInput = Parameters<
+  (typeof clubCommands)["createMembershipApplicationMethod"]
 >[0];
 
 /* ---------------------------- Description actions --------------------------- */
@@ -76,6 +96,24 @@ export async function deleteMeetingLocationAction(clubId: number) {
   return clubCommands.deleteMeetingLocation(clubId);
 }
 
+/* ------------------------- Meeting time actions ------------------------- */
+
+export async function getMeetingTimeAction(clubId: number) {
+  return clubCommands.getMeetingTime(clubId);
+}
+
+export async function createMeetingTimeAction(input: MeetingTimeInput) {
+  return clubCommands.createMeetingTime(input);
+}
+
+export async function updateMeetingTimeAction(input: MeetingTimeInput) {
+  return clubCommands.updateMeetingTime(input);
+}
+
+export async function deleteMeetingTimeAction(clubId: number) {
+  return clubCommands.deleteMeetingTime(clubId);
+}
+
 /* ------------------------------- Tags actions ------------------------------- */
 
 export async function getClubTagsAction(clubId: number) {
@@ -106,4 +144,76 @@ export async function updateAnnouncementAction(input: AnnouncementInput) {
 
 export async function deleteAnnouncementAction(input: AnnouncementInput) {
   return clubCommands.deleteAnnouncement(input);
+}
+
+/* ---------------------------- Contact Information actions --------------------------- */
+
+export async function getContactInformationAction(clubId: number) {
+  return clubCommands.getContactInformation(clubId);
+}
+
+export async function createContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.createContactInformation(input);
+}
+
+export async function updateContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.updateContactInformation(input);
+}
+
+export async function deleteContactInformationAction(input: ContactInformationInput) {
+  return clubCommands.deleteContactInformation(input);
+}
+
+/* ---------------------------- Club Status actions --------------------------- */
+
+export async function getClubStatusAction(clubId: number) {
+  return clubCommands.getClubStatus(clubId);
+}
+
+export async function createClubStatusAction(input: ClubStatusInput) {
+  return clubCommands.createClubStatus(input);
+}
+
+export async function updateClubStatusAction(input: ClubStatusInput) {
+  return clubCommands.updateClubStatus(input);
+}
+
+export async function deleteClubStatusAction(clubId: number) {
+  return clubCommands.deleteClubStatus(clubId);
+}
+
+/* ------------------------ Membership Window actions ------------------------ */
+
+export async function getMembershipWindowAction(clubId: number) {
+  return clubCommands.getMembershipWindow(clubId);
+}
+
+export async function createMembershipWindowAction(input: MembershipWindowInput) {
+  return clubCommands.createMembershipWindow(input);
+}
+
+export async function updateMembershipWindowAction(input: MembershipWindowInput) {
+  return clubCommands.updateMembershipWindow(input);
+}
+
+export async function deleteMembershipWindowAction(clubId: number) {
+  return clubCommands.deleteMembershipWindow(clubId);
+}
+
+/* ------------------ Membership Application Method actions ------------------ */
+
+export async function getMembershipApplicationMethodAction(clubId: number) {
+  return clubCommands.getMembershipApplicationMethod(clubId);
+}
+
+export async function createMembershipApplicationMethodAction(input: MembershipApplicationMethodInput) {
+  return clubCommands.createMembershipApplicationMethod(input);
+}
+
+export async function updateMembershipApplicationMethodAction(input: MembershipApplicationMethodInput) {
+  return clubCommands.updateMembershipApplicationMethod(input);
+}
+
+export async function deleteMembershipApplicationMethodAction(clubId: number) {
+  return clubCommands.deleteMembershipApplicationMethod(clubId);
 }
