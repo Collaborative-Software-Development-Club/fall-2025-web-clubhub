@@ -3,6 +3,7 @@ import Link from "next/link";
 
 interface AttendanceCodeCardProps {
     code: string;
+    meetingId: number;
     meetingDate: Date;
     meetingTitle: string;
     meetingDescription: string | null;
@@ -10,6 +11,7 @@ interface AttendanceCodeCardProps {
 
 export default function AttendanceCodeCard({
     code,
+    meetingId,
     meetingDate,
     meetingTitle,
     meetingDescription,
@@ -29,7 +31,7 @@ export default function AttendanceCodeCard({
                 </p>
             </CardContent>
 
-            <Link href="/attendance/0/response">
+            <Link href={`/attendance/${meetingId}/response`}>
                 <CardAction className="shrink-0">
                     {/* TODO: Replace with dynamically generated QR code for the attendance URL */}
                     <img

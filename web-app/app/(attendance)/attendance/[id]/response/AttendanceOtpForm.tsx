@@ -19,6 +19,7 @@ type AttendanceOtpFormProps = {
     inputRef: Ref<HTMLDivElement>;
     disabled?: boolean;
     isSubmitting?: boolean;
+    emailDisabled?: boolean;
 };
 
 const AttendanceOtpForm = ({
@@ -31,6 +32,7 @@ const AttendanceOtpForm = ({
     inputRef,
     disabled = false,
     isSubmitting = false,
+    emailDisabled = false,
 }: AttendanceOtpFormProps) => {
     const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -48,7 +50,7 @@ const AttendanceOtpForm = ({
                 <Label htmlFor="email">
                     Email address
                     <span className="text-muted-foreground text-sm font-normal ml-1">
-                        (required if not signed in)
+                        {emailDisabled ? "(signed in)" : "(required if not signed in)"}
                     </span>
                 </Label>
                 <Input
@@ -57,7 +59,7 @@ const AttendanceOtpForm = ({
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => onEmailChange(e.target.value)}
-                    disabled={disabled || isSubmitting}
+                    disabled={disabled || isSubmitting || emailDisabled}
                 />
             </div>
             

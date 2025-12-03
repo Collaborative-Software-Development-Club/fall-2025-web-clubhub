@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Calendar, Clock } from "lucide-react";  
 
 import AttendanceCompletionCard from "./AttendanceCompletionCard";
@@ -39,6 +40,8 @@ const AttendanceResponseClient = ({
     endTime,
     code,
 }: AttendanceResponseClientProps) => {
+    const { user, isLoaded } = useUser();
+    
     const [otp, setOtp] = useState("");
     const [status, setStatus] = useState(STATUS_OPTIONS[0]?.value ?? "");
     const [isSubmittingOtp, setIsSubmittingOtp] = useState(false);
@@ -47,6 +50,13 @@ const AttendanceResponseClient = ({
     const [email, setEmail] = useState("");
 
     const otpInputRef = useRef<HTMLDivElement | null>(null);
+
+    // Prefill email when user loads
+    useEffect(() => {
+        if (isLoaded && user?.primaryEmailAddress?.emailAddress) {
+            setEmail(user.primaryEmailAddress.emailAddress);
+        }
+    }, [isLoaded, user]);
 
     const formattedDate = new Date(meetingDate).toLocaleDateString("en-US", {
         weekday: "long",
@@ -191,6 +201,7 @@ const AttendanceResponseClient = ({
                             inputRef={otpInputRef}
                             disabled={hasCompleted || isSubmittingStatus}
                             isSubmitting={isSubmittingOtp}
+                            emailDisabled={isLoaded && !!user}
                         />
                         <Separator />
                         {/* TODO: Only disable due to null email when user is not signed in */}

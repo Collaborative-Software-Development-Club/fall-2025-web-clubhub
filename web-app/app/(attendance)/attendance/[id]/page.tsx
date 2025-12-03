@@ -53,7 +53,7 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
 
     return (
         <AttendanceClient
-            meetingId={id}
+            meetingId={meetingId}
             meetingTitle={meetingData.title}
             meetingDescription={meetingData.description}
             code={meetingData.code}

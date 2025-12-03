@@ -7,7 +7,7 @@ import { AttendanceStatus, AttendanceRecord, NO_RESPONSE } from "./types";
 import { updateAttendanceStatus } from "./action";
 
 interface AttendanceClientProps {
-    meetingId: string;
+    meetingId: number;
     meetingTitle: string;
     meetingDescription: string | null;
     code: string;
@@ -16,6 +16,7 @@ interface AttendanceClientProps {
 }
 
 export default function AttendanceClient({
+    meetingId,
     meetingTitle,
     meetingDescription,
     code,
@@ -85,6 +86,7 @@ export default function AttendanceClient({
             </div>
             <h1 className="text-3xl font-bold mb-8">Attendance</h1>
             <AttendanceCodeCard 
+                meetingId={meetingId}
                 code={code} 
                 meetingDate={meetingDate}
                 meetingTitle={meetingTitle}
