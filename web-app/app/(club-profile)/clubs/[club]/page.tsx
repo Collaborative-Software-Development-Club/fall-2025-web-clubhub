@@ -1,115 +1,98 @@
-"use client";
-
-import EditableMultipleText from "@/components/club-profile/EditableMultipleText";
-import EditableText from "@/components/club-profile/EditableText";
+import MembershipClient from "@/components/club-profile/MembershipClient";
 import clubs from "@/mock/clubs.json";
-import { useClubDescription } from "../../../../services/club-profile/clubs-hooks/useClubProfileData";
-import ContactDialog from "../../../../components/club-profile/ContactDialog";
-import DisplayContact from "@/components/club-profile/DisplayContact";
-import DisplayMultipleText from "@/components/club-profile/DisplayMultipleText";
-import { DisplayText } from "@/components/club-profile/DisplayText";
-import { use } from "react";
+import PurposeClient from "@/components/club-profile/PurposeClient";
+import SocialClient from "@/components/club-profile/SocialClient";
+import ContactClient from "@/components/club-profile/ContactClient";
+import MeetingInfoClient from "@/components/club-profile/MeetingInfoClient";
 
-export default function ClubPage({
-    params,
-}: {
-    params: Promise<{ club: string }>;
-}) {
-    const { club } = use(params);
+export default function ClubPage({ params }: { params: { club: string } }) {
+    //const { club } = params;
+    const club = 1;
     const clubData = clubs[0];
-    const description = useClubDescription(1);
 
     const socialMedia = [
-        clubData["Contact Information"]["Instagram"] || "",
-        clubData["Contact Information"]["Facebook Group Page"] || "",
-        clubData["Contact Information"]["Website"] || "",
-        clubData["Contact Information"]["Other"] || "",
-    ];
+        {
+            prop1: "Instagram",
+            prop2: clubData["Contact Information"]["Instagram"] || "",
+        },
+        {
+            prop1: "Facebook",
+            prop2: clubData["Contact Information"]["Facebook Group Page"] || "",
+        },
+        {
+            prop1: "Website",
+            prop2: clubData["Contact Information"]["Website"] || "",
+        },
+        {
+            prop1: "Other",
+            prop2: clubData["Contact Information"]["Other"] || "",
+        },
+    ].filter((item) => item.prop2.trim() !== "");
 
+    const organizationEmail =
+        clubData["Contact Information"]["Organization Email"]?.map(
+            (email: string) => {
+                return {
+                    prop1: "Email",
+                    prop2: email,
+                };
+            },
+        ) || [];
+
+    const membership = {
+        membership_type: clubData["Membership Details"]["Membership Type"],
+        membership_contact:
+            clubData["Membership Details"]["Membership Contact"],
+        time_of_year_for_new_membership:
+            clubData["Membership Details"]["Time of Year for New Membership"],
+        how_does_a_prospective_member_apply:
+            clubData["Membership Details"][
+                "How does a Prospective Member Apply"
+            ],
+        charge_dues: clubData["Membership Details"]["Charge Dues"],
+    };
     const isLeader = true; // TODO: Replace with actual authentication logic
 
     return (
         <div className="w-full">
-            {isLeader ? (
-                <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
-                    <EditableText
-                        id={club}
-                        title="Purpose Statement"
-                        path="Purpose Statement"
-                        initialText={clubData["Purpose Statement"]}
+            <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
+                <PurposeClient
+                    purposeStatement={clubData["Purpose Statement"]}
+                    isLeader={isLeader}
+                    clubId={club}
+                />
+                <MembershipClient
+                    clubId={club}
+                    isLeader={isLeader}
+                    initialData={membership}
+                />
+
+                <MeetingInfoClient
+                    meetingInfo={
+                        clubData["Meeting Information"][
+                            "Meeting Time and Place"
+                        ]
+                    }
+                    clubId={club}
+                    isLeader={isLeader}
+                />
+
+                <div
+                    id="contact"
+                    className="w-full md:grid md:grid-cols-2 md:items-start"
+                >
+                    <ContactClient
+                        clubId={club}
+                        organizationEmail={organizationEmail}
+                        isLeader={isLeader}
                     />
-                    <EditableMultipleText
-                        id={club}
-                        title="Membership Details"
-                        path="Membership Details"
-                        initialData={clubData["Membership Details"]}
+                    <SocialClient
+                        clubId={club}
+                        socialLinks={socialMedia}
+                        isLeader={isLeader}
                     />
-                    <EditableText
-                        id={club}
-                        title="Meeting Time and Location"
-                        path="Meeting Time and Location"
-                        initialText={
-                            clubData["Meeting Information"][
-                                "Meeting Time and Place"
-                            ]
-                        }
-                    />
-                    <div
-                        id="contact"
-                        className="w-full grid grid-cols-2 items-start px-5 gap-4"
-                    >
-                        <ContactDialog
-                            data={
-                                clubData["Contact Information"][
-                                    "Organization Email"
-                                ]
-                            }
-                            isEmail={true}
-                        />
-                        <ContactDialog data={socialMedia} isEmail={false} />
-                    </div>
                 </div>
-            ) : (
-                <div className="w-full max-w-6xl flex flex-col items-center py-5 gap-4">
-                    <DisplayText
-                        title="Purpose Statement"
-                        text={clubData["Purpose Statement"]}
-                        placeholder="No information provided"
-                    />
-                    <DisplayMultipleText
-                        title="Membership Details"
-                        initialData={clubData["Membership Details"]}
-                    />
-                    <DisplayText
-                        title="Meeting Time and Location"
-                        text={
-                            clubData["Meeting Information"][
-                                "Meeting Time and Place"
-                            ]
-                        }
-                        placeholder="No information provided"
-                    />
-                    <div
-                        id="contact"
-                        className="w-full grid grid-cols-2 items-start px-5 gap-4"
-                    >
-                        <DisplayContact
-                            list={
-                                clubData["Contact Information"][
-                                    "Organization Email"
-                                ]
-                            }
-                            isEmail={true}
-                            placeholder="No information provided"
-                        />
-                        <DisplayContact
-                            list={socialMedia}
-                            isEmail={false}
-                            placeholder="No information provided"
-                        />
-                    </div>
-                </div>
-            )}
+            </div>
         </div>
     );
 }

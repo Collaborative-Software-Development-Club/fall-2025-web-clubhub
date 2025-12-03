@@ -3,8 +3,11 @@ import { and, eq } from "drizzle-orm";
 import {
   meetingLocations, addedTags,
   announcements, descriptions,
-  addedSocialLinks
-} from "@/db/club-addition/schema";
+  addedSocialLinks, contactInformation,
+  clubStatus, meetingTimes,
+  timeOfYearForNewMembership,
+  memberApplicationMethod
+} from "@/db/club-profile/schema";
 import { z } from "zod";
 
 /* ------------------------------- Validation ---------------------------- */
@@ -17,9 +20,9 @@ const ClubDescription = z.object({
   description: z.string().min(1),
 });
 
-const MeetingLocation = z.object({
+const MeetingInformation = z.object({
     clubId: ClubId,
-    location: z.string().min(1),
+    data: z.string().min(1),
 });
 
 const ClubTag = z.object({
@@ -51,18 +54,31 @@ const SocialLinksParam = z.object({
   links: z.array(SocialLink).min(1),
 });
 
-//TODO: Come up with Membership window and requirement schemas
-// const UpsertMembershipWindow = z.object({
-//   clubId: ClubId,
-//
-// });
+const ContactInformation = z.object({
+  contactId: z.number().int().positive().optional(),
+  method: z.string().min(1),
+  detail: z.string().min(1),
+});
 
-// const UpsertMembershipRequirement = z.object({
-//   clubId: ClubId,
-//   requirementId: z.number().int().optional(),
-//   label: z.string().min(1),         // e.g., "Application", "Audition"
-//   details: z.string().optional(),   // free text
-// });
+const ContactInformationParam = z.object({
+  clubId: ClubId,
+  contacts: z.array(ContactInformation).min(1),
+});
+
+const ClubStatusParam = z.object({
+  clubId: ClubId,
+  status: z.enum(["Active", "Inactive", "Pending"]),
+});
+
+const MembershipWindow = z.object({
+  clubId: ClubId,
+  timePeriod: z.enum(["Fall", "Spring", "Anytime"]),
+});
+
+const MembershipApplicationMethod = z.object({
+  clubId: ClubId,
+  method: z.string().min(1),
+});
 
 /* ------------------------------- Command API ------------------------------ */
 
@@ -163,6 +179,62 @@ export const clubCommands = {
     return { ok: true };
   },
 
+  /* Contact Information */
+  async getContactInformation(clubId: number){
+    const records = await db.select()
+      .from(contactInformation)
+      .where(eq(contactInformation.clubId, clubId));
+    return records;
+  },
+
+  async createContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+    const clubId = i.clubId;
+    for (const contact of i.contacts) {
+        if (contact.method && contact.detail) {
+            await db.insert(contactInformation)
+            .values({
+                clubId: clubId,
+                method: contact.method,
+                detail: contact.detail,
+            });
+        }
+    }
+    return { ok: true };
+  },
+
+  async updateContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+    const clubId = i.clubId;
+    for (const contact of i.contacts) {
+        if (contact.contactId) {
+            await db.update(contactInformation)
+            .set({
+                method: contact.method,
+                detail: contact.detail,
+            })
+            .where(and(
+                eq(contactInformation.id, contact.contactId),
+                eq(contactInformation.clubId, clubId)
+            ));
+        }
+    }
+    return { ok: true };
+  },
+
+  async deleteContactInformation(input: z.infer<typeof ContactInformationParam>) {
+    const i = ContactInformationParam.parse(input);
+    for (const contact of i.contacts) {
+        if (contact.contactId) {
+            await db.delete(contactInformation).where(and(
+                eq(contactInformation.clubId, i.clubId),
+                eq(contactInformation.id, contact.contactId),
+            ));
+        }
+    }
+    return { ok: true };
+  },
+
   /* Meeting locations */
   async getMeetingLocation(clubId: number){
     const record = await db.select()
@@ -171,25 +243,25 @@ export const clubCommands = {
     return record.length > 0 ? record[0] : null;
   },
 
-  async createMeetingLocation(input: z.infer<typeof MeetingLocation>) {
-    const i = MeetingLocation.parse(input);
+  async createMeetingLocation(input: z.infer<typeof MeetingInformation>) {
+    const i = MeetingInformation.parse(input);
 
     await db
     .insert(meetingLocations)
     .values({
       clubId: i.clubId,
-      location: i.location,
+      location: i.data,
     });
     return { ok: true };
   },
 
-  async updateMeetingLocation(input: z.infer<typeof MeetingLocation>) {
-    const i = MeetingLocation.parse(input);
+  async updateMeetingLocation(input: z.infer<typeof MeetingInformation>) {
+    const i = MeetingInformation.parse(input);
 
     await db
     .update(meetingLocations)
     .set({
-      location: i.location,
+      location: i.data,
     })
     .where(eq(meetingLocations.clubId, i.clubId));
     
@@ -198,6 +270,44 @@ export const clubCommands = {
 
   async deleteMeetingLocation(clubId: number) {
     await db.delete(meetingLocations).where(eq(meetingLocations.clubId, clubId));
+    return { ok: true };
+  },
+
+    /* Meeting times */
+  async getMeetingTime(clubId: number){
+    const record = await db.select()
+      .from(meetingTimes)
+      .where(eq(meetingTimes.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+
+  async createMeetingTime(input: z.infer<typeof MeetingInformation>) {
+    const i = MeetingInformation.parse(input);
+
+    await db
+    .insert(meetingTimes)
+    .values({
+      clubId: i.clubId,
+      time: i.data,
+    });
+    return { ok: true };
+  },
+
+  async updateMeetingTime(input: z.infer<typeof MeetingInformation>) {
+    const i = MeetingInformation.parse(input);
+
+    await db
+    .update(meetingTimes)
+    .set({
+      time: i.data,
+    })
+    .where(eq(meetingTimes.clubId, i.clubId));
+
+    return { ok: true };
+  },
+
+  async deleteMeetingTime(clubId: number) {
+    await db.delete(meetingTimes).where(eq(meetingTimes.clubId, clubId));
     return { ok: true };
   },
 
@@ -284,5 +394,106 @@ export const clubCommands = {
     return { ok: true };
   },
 
-//TODO: Membership window, Membership requirement, and Meeting time
+  /* Club Status Commands */
+  async getClubStatus(clubId: number){
+    const record = await db.select()
+      .from(clubStatus)
+      .where(eq(clubStatus.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+
+  async createClubStatus(input: z.infer<typeof ClubStatusParam>) {
+    const i = ClubStatusParam.parse(input);
+
+    await db
+    .insert(clubStatus)
+    .values({
+      clubId: i.clubId,
+      status: i.status,
+    });
+
+    return { ok: true };
+  },
+
+  async updateClubStatus(input: z.infer<typeof ClubStatusParam>) {
+    const i = ClubStatusParam.parse(input);
+
+    await db
+    .update(clubStatus)
+    .set({
+      status: i.status,
+    })
+    .where(eq(clubStatus.clubId, i.clubId));
+    
+    return { ok: true };
+  },
+
+  async deleteClubStatus(clubId: number) {
+    await db.delete(clubStatus).where(eq(clubStatus.clubId, clubId));
+    return { ok: true };
+  },
+
+  /* Membership Application Window Commands */
+  async getMembershipWindow(clubId: number){
+    const record = await db.select()
+      .from(timeOfYearForNewMembership)
+      .where(eq(timeOfYearForNewMembership.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+  
+  async createMembershipWindow(input: z.infer<typeof MembershipWindow>) {
+    const i = MembershipWindow.parse(input);
+    await db.insert(timeOfYearForNewMembership).values({
+      clubId: i.clubId,
+      timePeriod: i.timePeriod,
+    });
+    return { ok: true };
+  },
+
+  async updateMembershipWindow(input: z.infer<typeof MembershipWindow>) {
+    const i = MembershipWindow.parse(input);
+    await db.update(timeOfYearForNewMembership)
+    .set({
+      timePeriod: i.timePeriod,
+    })
+    .where(eq(timeOfYearForNewMembership.clubId, i.clubId));
+    return { ok: true };
+  },
+  
+  async deleteMembershipWindow(clubId: number) {
+    await db.delete(timeOfYearForNewMembership).where(eq(timeOfYearForNewMembership.clubId, clubId));
+    return { ok: true };
+  },
+
+  /* Membership Application Method Commands */
+  async getMembershipApplicationMethod(clubId: number){
+    const record = await db.select()
+      .from(memberApplicationMethod)
+      .where(eq(memberApplicationMethod.clubId, clubId));
+    return record.length > 0 ? record[0] : null;
+  },
+  
+  async createMembershipApplicationMethod(input: z.infer<typeof MembershipApplicationMethod>) {
+    const i = MembershipApplicationMethod.parse(input);
+    await db.insert(memberApplicationMethod).values({
+      clubId: i.clubId,
+      method: i.method,
+    });
+    return { ok: true };
+  },  
+
+  async updateMembershipApplicationMethod(input: z.infer<typeof MembershipApplicationMethod>) {
+    const i = MembershipApplicationMethod.parse(input);
+    await db.update(memberApplicationMethod)
+    .set({
+      method: i.method,
+    })
+    .where(eq(memberApplicationMethod.clubId, i.clubId));
+    return { ok: true };
+  }, 
+
+  async deleteMembershipApplicationMethod(clubId: number) {
+    await db.delete(memberApplicationMethod).where(eq(memberApplicationMethod.clubId, clubId));
+    return { ok: true };
+  },
 };
