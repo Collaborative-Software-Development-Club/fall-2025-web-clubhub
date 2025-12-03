@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { yearValues } from "@/db/account/schema";
 
 export default function ProfileForm() {
     const [formData, setFormData] = useState({
@@ -67,11 +68,11 @@ export default function ProfileForm() {
                         <SelectValue placeholder="Select year" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Freshman">Freshman</SelectItem>
-                        <SelectItem value="Sophomore">Sophomore</SelectItem>
-                        <SelectItem value="Junior">Junior</SelectItem>
-                        <SelectItem value="Senior">Senior</SelectItem>
-                        <SelectItem value="Graduate">Graduate</SelectItem>
+                        {yearValues.map((yr) => (
+                            <SelectItem key={yr} value={yr}>
+                                {yr}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>
