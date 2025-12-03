@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import {
+    advisors,
     clubLeaders,
     clubTags,
     leaders,
@@ -133,6 +134,15 @@ async function mergeAdditionalClubInfo(
         .innerJoin(leaders, eq(leaders.email, clubLeaders.leaderId))
         .where(inArray(clubLeaders.clubId, clubIds));
 
+    const allAdvisors = await db
+        .select({
+            clubId: advisors.clubId,
+            name: advisors.name,
+            role: advisors.role,
+        })
+        .from(advisors)
+        .where(inArray(advisors.clubId, clubIds));
+
     // All social links for all clubs
     const allSocialLinks = await db
         .select({
@@ -156,6 +166,7 @@ async function mergeAdditionalClubInfo(
     const leadersMap = new Map<number, typeof allLeaders>();
     const socialsMap = new Map<number, typeof allSocialLinks>();
     const tagsMap = new Map<number, typeof allTags>();
+    const advisorsMap = new Map<number, typeof allAdvisors>();
 
     for (const leader of allLeaders) {
         const list = leadersMap.get(leader.clubId) ?? [];
@@ -175,12 +186,19 @@ async function mergeAdditionalClubInfo(
         tagsMap.set(tag.clubId, list);
     }
 
+    for (const advisor of allAdvisors) {
+        const list = advisorsMap.get(advisor.clubId) ?? [];
+        list.push(advisor);
+        advisorsMap.set(advisor.clubId, list);
+    }
+
     // Step 4: Combine everything
     const result = clubs.map((club) => ({
         ...club,
         leaders: leadersMap.get(club.id) ?? [],
         socialLinks: socialsMap.get(club.id) ?? [],
         tags: tagsMap.get(club.id) ?? [],
+        advisors: advisorsMap.get(club.id) ?? [],
     }));
     return result;
 }
