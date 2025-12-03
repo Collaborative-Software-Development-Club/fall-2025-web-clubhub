@@ -50,3 +50,10 @@ export const attendance = pgTable(withPrefix("attendance"), {
     status: attendanceStatusEnum("attendance_status").notNull(),
     timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
+
+export const roster = pgTable(withPrefix("attendance"), {
+    id: serial("id").primaryKey().notNull(),
+    user_id: integer("user_id"),
+    email: text("email").notNull(),
+    club_id: integer("club_id").notNull()
+});
