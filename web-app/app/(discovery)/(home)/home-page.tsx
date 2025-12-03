@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { InterestBar } from "../interest-bar";
+import { InterestBar } from "./interest-bar";
 import { FeaturedClubs } from "./featured-clubs";
 import { ClubCard } from "@/app/(discovery)/club-card";
 import { motion, AnimatePresence } from "framer-motion";

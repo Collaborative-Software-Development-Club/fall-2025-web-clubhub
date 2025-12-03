@@ -10,25 +10,12 @@ import {
 } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
-import {
-    X,
-    Plus,
-    Filter,
-    Search,
-    ChevronDown,
-    ChevronRight,
-    GraduationCap,
-    Tag as TagIcon,
-} from "lucide-react";
-import { useState, useMemo } from "react";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { X, Plus, Filter, Search } from "lucide-react";
+import { useState } from "react";
 import { Tag } from "@/services/discovery/tags-service/Tag";
+import { useInterestCategories } from "./(interests)/use-interest-categories";
+import { CategorizedInterestList } from "./(interests)/categorized-list";
 
 type Category = Tag["type"];
 
@@ -45,6 +32,12 @@ export function InterestBar({
     const [searchValue, setSearchValue] = useState("");
     const [openCategories, setOpenCategories] = useState<Set<Category>>(
         new Set(["DIRECTORY"]),
+    );
+
+    const { availableQuickFilters, categorizedTags } = useInterestCategories(
+        allTags,
+        searchValue,
+        selectedInterests,
     );
 
     const clearAllInterests = () => {
@@ -65,59 +58,21 @@ export function InterestBar({
         setOpenCategories(newOpenCategories);
     };
 
-    // Get available quick filter interests (exclude already selected ones)
-    const availableQuickFilters = useMemo(() => {
-        return allTags
-            .filter((tag) => tag.type === "DIRECTORY")
-            .slice(0, 12)
-            .map((tag) => tag.name)
-            .filter((interest) => !selectedInterests.includes(interest));
-    }, [allTags, selectedInterests]);
-
-    // Group tags by category and apply search filter
-    const categorizedTags = useMemo(() => {
-        const filtered = allTags.filter((tag) =>
-            tag.name.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-
-        const grouped = filtered.reduce(
-            (acc, tag) => {
-                const category = tag.type;
-                if (!acc[category]) {
-                    acc[category] = [];
-                }
-                acc[category].push(tag.name);
-                return acc;
-            },
-            {} as Record<Category, string[]>,
-        );
-
-        // Sort categories with Interests first, then Majors, then others alphabetically
-        const sortedCategories = Object.keys(grouped).sort((a, b) => {
-            if (a === "DIRECTORY") return -1;
-            if (b === "DIRECTORY") return 1;
-            if (a === "MAJOR") return -1;
-            if (b === "MAJOR") return 1;
-            return a.localeCompare(b);
-        }) as Category[];
-
-        return sortedCategories.map((category) => ({
-            name: category,
-            tags: grouped[category].sort(),
-        }));
-    }, [allTags, searchValue]);
-
-    // Get category icons
-    const CategoryIcon = ({ categoryName }: { categoryName: Category }) => {
-        switch (categoryName) {
-            case "MAJOR":
-                return <GraduationCap className="h-4 w-4" />;
-            case "DIRECTORY":
-                return <TagIcon className="h-4 w-4" />;
-            default:
-                return <TagIcon className="h-4 w-4" />;
-        }
-    };
+    const renderInterest = (interest: string, isSelected: boolean) => (
+        <div
+            key={interest}
+            className="flex items-center space-x-2 p-2 hover:bg-accent rounded-md cursor-pointer"
+            onClick={() => onToggleInterest(interest)}
+        >
+            <Checkbox
+                checked={isSelected}
+                onChange={() => onToggleInterest(interest)}
+            />
+            <label className="text-sm leading-none cursor-pointer flex-1">
+                {interest}
+            </label>
+        </div>
+    );
 
     return (
         <div className="flex flex-col w-full max-w-5xl space-y-3">
@@ -225,83 +180,15 @@ export function InterestBar({
                                 <Separator />
 
                                 {/* Categorized interest list */}
-                                <div className="space-y-3">
-                                    {categorizedTags.map((category) => (
-                                        <Collapsible
-                                            key={category.name}
-                                            open={openCategories.has(
-                                                category.name,
-                                            )}
-                                            onOpenChange={() =>
-                                                toggleCategory(category.name)
-                                            }
-                                        >
-                                            <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-accent rounded-md">
-                                                <div className="flex items-center space-x-2">
-                                                    <CategoryIcon
-                                                        categoryName={
-                                                            category.name
-                                                        }
-                                                    />
-                                                    <span className="font-medium text-sm">
-                                                        {category.name ===
-                                                        "MAJOR"
-                                                            ? "Majors"
-                                                            : "Types of Clubs"}
-                                                    </span>
-                                                    <Badge
-                                                        variant="outline"
-                                                        className="text-xs"
-                                                    >
-                                                        {category.tags.length}
-                                                    </Badge>
-                                                </div>
-                                                {openCategories.has(
-                                                    category.name,
-                                                ) ? (
-                                                    <ChevronDown className="h-4 w-4" />
-                                                ) : (
-                                                    <ChevronRight className="h-4 w-4" />
-                                                )}
-                                            </CollapsibleTrigger>
-                                            <CollapsibleContent className="space-y-1 ml-4 mt-2">
-                                                {category.tags.map(
-                                                    (interest) => (
-                                                        <div
-                                                            key={interest}
-                                                            className="flex items-center space-x-2 p-2 hover:bg-accent rounded-md cursor-pointer"
-                                                            onClick={() =>
-                                                                onToggleInterest(
-                                                                    interest,
-                                                                )
-                                                            }
-                                                        >
-                                                            <Checkbox
-                                                                checked={selectedInterests.includes(
-                                                                    interest,
-                                                                )}
-                                                                onChange={() =>
-                                                                    onToggleInterest(
-                                                                        interest,
-                                                                    )
-                                                                }
-                                                            />
-                                                            <label className="text-sm leading-none cursor-pointer flex-1">
-                                                                {interest}
-                                                            </label>
-                                                        </div>
-                                                    ),
-                                                )}
-                                            </CollapsibleContent>
-                                        </Collapsible>
-                                    ))}
-                                    {categorizedTags.length === 0 && (
-                                        <p className="text-sm text-muted-foreground text-center py-8">
-                                            No interests found matching "
-                                            {searchValue}".
-                                        </p>
-                                    )}
-                                </div>
+                                <CategorizedInterestList
+                                    categorizedTags={categorizedTags}
+                                    openCategories={openCategories}
+                                    onToggleCategory={toggleCategory}
+                                    selectedInterests={selectedInterests}
+                                    onToggleInterest={onToggleInterest}
+                                    renderInterest={renderInterest}
+                                    searchValue={searchValue}
+                                />
 
                                 {/* Quick stats at bottom */}
                                 {selectedInterests.length > 0 && (
@@ -323,7 +210,7 @@ export function InterestBar({
                 </div>
             </div>
 
-            {/* Quick select interests - only show unselected ones */}
+            {/* Quick select interests */}
             {availableQuickFilters.length > 0 && (
                 <div className="flex flex-wrap gap-2 py-2 border-t pt-3">
                     <span className="text-sm text-muted-foreground self-center mr-2">
