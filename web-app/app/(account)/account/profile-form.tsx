@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,20 +13,51 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { SaveAccountSetting } from "@/app/actions";
+import { SaveAccountSetting, getAccountSettings } from "@/app/actions";
 import { useRouter } from "next/navigation";
+import { yearValues } from "@/db/account/schema";
 
 export default function ProfileForm() {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string>("");
     const [formData, setFormData] = useState({
-        username: "",
+        // username: "",
         major: "",
         year: "",
         bio: "",
         isPublic: true,
     });
+
+    useEffect(() => {
+        let mounted = true;
+        (async () => {
+            try {
+                const settings: any = await getAccountSettings();
+                if (!settings || !mounted) return;
+
+                setFormData((prev) => ({
+                    ...prev,
+                    major: settings.major ?? prev.major,
+                    year: settings.year ?? prev.year,
+                    bio: settings.bio ?? prev.bio,
+                    isPublic:
+                        typeof settings.isPublic === "boolean"
+                            ? settings.isPublic
+                            : settings.profileVisibility
+                            ? settings.profileVisibility === "public"
+                            : prev.isPublic,
+                }));
+            } catch (err) {
+                console.error("Failed to load account settings:", err);
+                setError(err instanceof Error ? err.message : "Failed to load account settings");
+            }
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     const handleChange = (name: string, value: string | boolean) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -58,7 +90,7 @@ export default function ProfileForm() {
                     {error}
                 </div>
             )}
-            {/* Username */}
+            {/* Username
             <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
@@ -68,7 +100,7 @@ export default function ProfileForm() {
                     placeholder="Enter your username"
                     required
                 />
-            </div>
+            </div> */}
 
             {/* Major */}
             <div className="space-y-2">
@@ -92,11 +124,11 @@ export default function ProfileForm() {
                         <SelectValue placeholder="Select year" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="Freshman">Freshman</SelectItem>
-                        <SelectItem value="Sophomore">Sophomore</SelectItem>
-                        <SelectItem value="Junior">Junior</SelectItem>
-                        <SelectItem value="Senior">Senior</SelectItem>
-                        <SelectItem value="Graduate">Graduate</SelectItem>
+                        {yearValues.map((yr) => (
+                            <SelectItem key={yr} value={yr}>
+                                {yr}
+                            </SelectItem>
+                        ))}
                     </SelectContent>
                 </Select>
             </div>

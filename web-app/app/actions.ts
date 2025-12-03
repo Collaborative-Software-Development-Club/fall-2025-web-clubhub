@@ -1,9 +1,9 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
-import { users } from './db/schema'
-import { db } from './db'
+import { db } from '@/db'
 import { eq } from 'drizzle-orm'
+import { ProfileVisibility, userDetails, Year, yearValues } from '@/db/schema'
 
 /** Example functions and import showing how to interact with the database */
 
@@ -46,31 +46,28 @@ export async function SaveAccountSetting(data: FormData | Record<string, any>) {
 	if (data instanceof FormData) {
 		payload = {
 			major: (data.get('major') as string) || '',
-			year: (data.get('year') as string) || '',
+			year: (data.get('year') as Year) || null,
 			bio: (data.get('bio') as string) || '',
-			profile_visibility: ['true', 'on', 'public'].includes(String(data.get('isPublic')))
-				? 'public'
-				: 'private',
+			isPublic: ['true', 'on'].includes(String(data.get('isPublic'))),
 		}
 	} else {
 		payload = {
 			major: data.major || '',
-			year: data.year || '',
+			year: data.year || null,
 			bio: data.bio || '',
-			profile_visibility: data.isPublic ? 'public' : 'private',
+			isPublic: typeof data.isPublic === 'boolean' ? data.isPublic : !!data.isPublic,
 		}
 	}
 	
 	await db
-		.insert(users)
-		.values({
-			id: userId,
-			...payload,
+		.update(userDetails)
+		.set({
+			major: payload.major,
+			year: payload.year && yearValues.includes(payload.year as any) ? payload.year : null,
+			bio: payload.bio,
+			profileVisibility: payload.isPublic ? 'public' as ProfileVisibility : 'private' as ProfileVisibility,
 		})
-		.onConflictDoUpdate({
-			target: users.id,
-			set: payload,
-		})
+		.where(eq(userDetails.userId, userId))
 
 	return { ok: true }
 }
@@ -83,16 +80,24 @@ export async function getAccountSettings() {
 	const { isAuthenticated, userId } = await auth()
 	if (!isAuthenticated || !userId) return null
 
-	const rows = await db.select().from(users).where(eq(users.user_id, userId))
+	const rows = await db.select().from(userDetails).where(eq(userDetails.userId, userId))
 	if (!rows || rows.length === 0) return null
 
 	// take the last entry (most recently inserted)
 	const last = rows[rows.length - 1]
-	try {
-		const parsed = JSON.parse(last.message as string)
-		if (parsed && parsed.type === 'account-settings') return parsed.payload
-	} catch (e) {
-	}
+	// Map the DB row into the shape the client form expects.
+	// Return: { major: string, year: string, bio: string, isPublic: boolean }
 
-	return null
+	try {
+		const yearVal = last.year != null && yearValues.includes(last.year as any) ? String(last.year) : ''
+
+		return {
+			major: typeof last.major === 'string' ? last.major : (last.major ?? ''),
+			year: yearVal,
+			bio: typeof last.bio === 'string' ? last.bio : (last.bio ?? ''),
+			isPublic: last.profileVisibility === 'public',
+		}
+	} catch (e) {
+		return null
+	}
 }
