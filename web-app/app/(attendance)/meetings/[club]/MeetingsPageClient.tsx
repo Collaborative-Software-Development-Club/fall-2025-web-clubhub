@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,27 +14,19 @@ import { format } from "date-fns";
 import { Plus, Calendar as CalendarIcon, Edit } from "lucide-react";
 import { MeetingCard } from "./MeetingCard";
 import { Meeting } from "./types";
+import { createMeeting, updateMeeting, deleteMeeting as deleteMeetingAction } from "./action";
 
 interface MeetingsPageClientProps {
     meetingsData: Meeting[];
+    clubId: number;
 }
 
-type MeetingTemp = {
-    id: number;
-    title: string;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    description?: string;
-    location?: string;
-};
-
-let ID_COUNTER = 0;
-
-export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientProps) {
+export default function MeetingsPageClient({ meetingsData, clubId }: MeetingsPageClientProps) {
+    const { user } = useUser();
+    
     const [meetings, setMeetings] = useState<Meeting[]>(meetingsData);
 
-    const [title, setTitle] = useState(`Meeting #${meetings.length}`);
+    const [title, setTitle] = useState(`Meeting #${meetings.length + 1}`);
     const [date, setDate] = useState<Date | undefined>(new Date(Date.now()));
     const [startTime, setStartTime] = useState<string>("18:00");
     const [endTime, setEndTime] = useState<string>("19:00");
@@ -57,45 +50,67 @@ export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientP
     const [editDescription, setEditDescription] = useState("");
     const [editLocation, setEditLocation] = useState("");
 
-    const addMeeting = (): void => {
-        if (!title || !date || !startTime || !endTime) return;
+    // Add error state after existing state declarations
+    const [formError, setFormError] = useState<string | null>(null);
 
-        // setMeetings((prev) => [
-        //     ...prev,
-        //     {
-        //         id: ID_COUNTER++,
-        //         title,
-        //         date,
-        //         startTime,
-        //         endTime,
-        //         description,
-        //         location,
-        //     },
-        // ]);
-        // setTitle(`Meeting #${meetings.length + 1}`);
-        // setDate(new Date(Date.now()));
-        // setStartTime("18:00");
-        // setEndTime("19:00");
-        // setDescription("");
-        // setLocation("");
-        // setFormOpen(false);
+    const addMeeting = async (): Promise<void> => {
+        // Validate and show specific errors
+        const missingFields: string[] = [];
+        if (!title) missingFields.push("title");
+        if (!date) missingFields.push("date");
+        if (!startTime) missingFields.push("start time");
+        if (!endTime) missingFields.push("end time");
+        if (!location) missingFields.push("location");
+        if (!user) missingFields.push("user (please sign in)");
+
+        if (missingFields.length > 0) {
+            setFormError(`Missing required fields: ${missingFields.join(", ")}`);
+            return;
+        }
+
+        setFormError(null);  // Clear any previous error
+
+        const result = await createMeeting({
+            club_id: clubId,
+            title,
+            description: description || undefined,
+            date: format(date!, "yyyy-MM-dd"),
+            location,
+            start_time: startTime,
+            end_time: endTime,
+            created_by_user_id: user!.id,
+        });
+
+        if (result.success && result.meeting) {
+            setMeetings((prev) => [...prev, result.meeting!]);
+            // Reset form...
+            setTitle(`Meeting #${meetings.length + 2}`);
+            setDate(new Date());
+            setStartTime("18:00");
+            setEndTime("19:00");
+            setDescription("");
+            setLocation("");
+            setFormOpen(false);
+        } else {
+            setFormError(result.error || "Failed to create meeting");
+        }
     };
 
     const editMeeting = (id: number): void => {
         const meeting = meetings.find((m) => m.id === id);
-        // if (meeting) {
-        //     setEditingMeetingId(id);
-        //     setEditTitle(meeting.title);
-        //     setEditDate(meeting.date);
-        //     setEditStartTime(meeting.startTime);
-        //     setEditEndTime(meeting.endTime);
-        //     setEditDescription(meeting.description || "");
-        //     setEditLocation(meeting.location || "");
-        //     setEditFormOpen(true);
-        // }
+        if (meeting) {
+            setEditingMeetingId(id);
+            setEditTitle(meeting.title);
+            setEditDate(new Date(meeting.date));
+            setEditStartTime(meeting.start_time);
+            setEditEndTime(meeting.end_time);
+            setEditDescription(meeting.description || "");
+            setEditLocation(meeting.location || "");
+            setEditFormOpen(true);
+        }
     };
 
-    const saveEditMeeting = (): void => {
+    const saveEditMeeting = async (): Promise<void> => {
         if (
             !editTitle ||
             !editDate ||
@@ -105,23 +120,27 @@ export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientP
         )
             return;
 
-        // setMeetings((prev) =>
-        //     prev.map((meeting) =>
-        //         meeting.id === editingMeetingId
-        //             ? {
-        //                   ...meeting,
-        //                   title: editTitle,
-        //                   date: editDate,
-        //                   startTime: editStartTime,
-        //                   endTime: editEndTime,
-        //                   description: editDescription,
-        //                   location: editLocation,
-        //               }
-        //             : meeting,
-        //     ),
-        // );
+        const result = await updateMeeting({
+            id: editingMeetingId,
+            title: editTitle,
+            date: format(editDate, "yyyy-MM-dd"),
+            start_time: editStartTime,
+            end_time: editEndTime,
+            description: editDescription || undefined,
+            location: editLocation || undefined,
+        });
 
-        cancelEdit();
+        if (result.success && result.meeting) {
+            // Update local state with the returned meeting
+            setMeetings((prev) =>
+                prev.map((meeting) =>
+                    meeting.id === editingMeetingId ? result.meeting! : meeting
+                )
+            );
+            cancelEdit();
+        } else {
+            console.error("Failed to update meeting:", result.error);
+        }
     };
 
     const cancelEdit = (): void => {
@@ -135,8 +154,14 @@ export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientP
         setEditFormOpen(false);
         setEditCalendarOpen(false);
     };
-    const deleteMeeting = (id: number): void => {
-        setMeetings((prev) => prev.filter((m) => m.id !== id));
+    const deleteMeeting = async (id: number): Promise<void> => {
+        const result = await deleteMeetingAction(id);
+
+        if (result.success) {
+            setMeetings((prev) => prev.filter((m) => m.id !== id));
+        } else {
+            console.error("Failed to delete meeting:", result.error);
+        }
     };
 
     return (
@@ -224,6 +249,10 @@ export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientP
                                 onChange={(e) => setLocation(e.target.value)}
                             />
                         </div>
+
+                        {formError && (
+                            <p className="text-sm text-destructive">{formError}</p>
+                        )}
 
                         <Button
                             onClick={addMeeting}
@@ -366,14 +395,16 @@ export default function MeetingsPageClient({ meetingsData }: MeetingsPageClientP
                         No meetings scheduled.
                     </p>
                 )}
-                {meetings.map((meeting) => (
-                    <MeetingCard
-                        key={meeting.id}
-                        meeting={meeting}
-                        editMeeting={editMeeting}
-                        deleteMeeting={deleteMeeting}
-                    />
-                ))}
+                {[...meetings]
+                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                    .map((meeting) => (
+                        <MeetingCard
+                            key={meeting.id}
+                            meeting={meeting}
+                            editMeeting={editMeeting}
+                            deleteMeeting={deleteMeeting}
+                        />
+                    ))}
             </div>
         </main>
     );

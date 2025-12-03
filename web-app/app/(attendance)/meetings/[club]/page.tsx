@@ -32,6 +32,9 @@ export default async function MeetingsPage({ params }: MeetingsPageProps) {
     }));
 
     return (
-        <MeetingsPageClient meetingsData={meetingData} />
+        <MeetingsPageClient 
+            meetingsData={meetingData}
+            clubId={clubId}
+        />
     );
 }
