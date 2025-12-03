@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     Card,
     CardContent,
@@ -10,31 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Toggle } from "@/components/ui/toggle";
-import { useSelectedInterests } from "./use-selected-interests";
+import { fetchInterests } from "./actions";
+import { useQuery } from "@tanstack/react-query";
+import { Tag } from "@/services/discovery/tags-service/Tag";
 
-/* Mock interests data - in real app, this might come from an API or database */
-const INTERESTS = [
-    "Technology",
-    "Sports",
-    "Music",
-    "Art",
-    "Science",
-    "Food",
-    "Travel",
-    "Gaming",
-    "Photography",
-    "Fitness",
-    "Literature",
-    "Movies",
-    "Politics",
-    "Fashion",
-    "Education",
-    "Volunteer",
-    "Entrepreneurship",
-    "Design",
-    "Animals",
-    "Nature",
-];
+const REQUIRED = 3;
 
 export function InterestSelection({
     setDoneSelecting,
@@ -45,7 +25,10 @@ export function InterestSelection({
     interests: string[];
     setInterests: (interests: string[]) => void;
 }) {
-    const REQUIRED = 3;
+    const { data: allInterests, isLoading } = useQuery({
+        queryKey: ["interests"],
+        queryFn: () => fetchInterests(),
+    });
 
     /* toggle interest selection */
     function toggleInterest(interest: string) {
@@ -73,17 +56,28 @@ export function InterestSelection({
                 {/* Interest Selection Buttons */}
                 <CardContent>
                     <div className="flex flex-wrap gap-3 mb-6">
+                        {isLoading &&
+                            [0, 1, 2].map((_, i) => (
+                                <Toggle
+                                    key={i}
+                                    variant="outline"
+                                    className="w-10 animate-pulse"
+                                ></Toggle>
+                            ))}
                         {selected &&
-                            INTERESTS.map((interest) => {
-                                const active = selected.includes(interest);
+                            allInterests &&
+                            allInterests.map((interest) => {
+                                const active = selected.includes(interest.name);
                                 return (
                                     <Toggle
-                                        key={interest}
-                                        onClick={() => toggleInterest(interest)}
+                                        key={interest.name}
+                                        onClick={() =>
+                                            toggleInterest(interest.name)
+                                        }
                                         pressed={active}
                                         variant="outline"
                                     >
-                                        {interest}
+                                        {interest.name}
                                     </Toggle>
                                 );
                             })}
