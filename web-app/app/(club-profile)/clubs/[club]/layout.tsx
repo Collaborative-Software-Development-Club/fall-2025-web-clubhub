@@ -1,18 +1,21 @@
 import { TagDialog } from "@/components/club-profile/TagDialog";
-import clubs from "@/mock/clubs.json";
 import Image from "next/image";
 import Link from "next/link";
 import ChangeStatus from "@/components/club-profile/ChangeStatus";
+import { scrapedClubsService } from "@/services/discovery/scraped-clubs";
+
 export default async function ClubLeaderLayout({
     children,
     params,
 }: {
     children: React.ReactNode;
-    params: Promise<{ club: string }>;
+    params: { club: string };
 }) {
-    const { club } = await params;
+    const { club } = params;
     const isLeader = true; // TODO: Replace with actual authentication logic
-    const clubData = clubs[0]; //use mock data until we setup the database
+    const clubId = Number(club);
+    const clubData = await scrapedClubsService.getClub(clubId);
+    console.log(clubData);
 
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
@@ -27,21 +30,21 @@ export default async function ClubLeaderLayout({
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
                             <h1 className="text-xl lg:text-3xl font-bold">
-                                {clubData["Club Name"] + "(Leader)"}
+                                {clubData["name"]}
                             </h1>
                             {isLeader ? (
                                 <ChangeStatus
-                                    initialText={clubData["Status"]}
+                                    initialText={clubData["status"]}
                                 />
                             ) : (
                                 <div className="rounded-full bg-gray-200 px-3 py-1 w-fit text-sm font-medium text-gray-700">
                                     {/* Status Badge (Todo: Implement pop up for changing status) */}
-                                    {clubData["Status"]}
+                                    {clubData["status"]}
                                 </div>
                             )}
                         </div>
                         <h2 className="text-xl font-semibold">
-                            {"Campus: " + clubData["Campus"]}
+                            {"Campus: " + clubData["campus"]}
                         </h2>
                         <div className="flex flex-wrap pt-4 gap-2 mb-6">
                             {/* Club Tags(eg. rounded badges and modify button when hovered) */}
