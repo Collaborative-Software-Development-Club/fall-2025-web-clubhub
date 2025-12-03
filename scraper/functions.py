@@ -89,7 +89,6 @@ def extract_club_info_from_url(
         href = link["href"] if link and "href" in link.attrs else ""
         url = urljoin(base_url or page_url, href) if href else ""
 
-        purpose = cols[1].get_text(strip=True)
         affiliation = cols[2].get_text(strip=True)
 
         # Search subpage for more information
@@ -104,7 +103,7 @@ def extract_club_info_from_url(
         clubs.append(
             Club(
                 name=name,
-                purpose_statement=purpose,
+                purpose_statement=subpage_dict["purpose statement"],
                 affiliation=affiliation,
                 url=url,
                 image_url=subpage_dict["image_url"],

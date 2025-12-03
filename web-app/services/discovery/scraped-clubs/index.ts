@@ -86,7 +86,8 @@ async function searchClubs(term: string | null, tags: string[]) {
                 tags.length > 0 ? inArray(clubTags.tag, tags) : undefined,
             ),
         )
-        .groupBy(scrapedClubs.id);
+        .groupBy(scrapedClubs.id)
+        .limit(50);
     if (clubs.length === 0) return [];
 
     return await mergeAdditionalClubInfo(clubs);
@@ -104,13 +105,14 @@ async function getFeaturedClubs() {
                 popularTags.map((t) => t.name),
             ),
         )
+        .limit(50)
         .groupBy(scrapedClubs.id);
 
     const clubs: ScrapedClub[] = await mergeAdditionalClubInfo(rows);
     return popularTags.map((tag) => ({
         name: tag.name,
         type: tag.type,
-        clubs: clubs.filter((c) => c.tags.find((t) => (tag.name = t.name))),
+        clubs: clubs.filter((c) => c.tags.find((t) => tag.name == t.name)),
     }));
 }
 

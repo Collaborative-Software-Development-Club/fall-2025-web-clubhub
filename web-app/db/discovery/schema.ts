@@ -26,6 +26,7 @@ export const statusEnum = pgEnum("status", [
     "Active II",
     "Inactive",
     "Pending",
+    "Center Cohort Programs",
 ]);
 export const membershipEnum = pgEnum("membership", [
     "Open Membership",
