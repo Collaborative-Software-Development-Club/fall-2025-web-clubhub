@@ -1,5 +1,3 @@
-"use client";
-import React from "react";
 import {
     Card,
     CardContent,
@@ -8,178 +6,194 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { PopularClubData } from "./PopularClubData";
+import Image from "next/image";
+import { Calendar, Clock } from "lucide-react";
+import { ScrapedClub } from "@/services/discovery/scraped-clubs";
+import Link from "next/link";
 
-// Support two usages:
-// - Popular page: <ClubCard club={club} />
-// - Browse page:  <ClubCard name=.. description=.. interests=.. />
-type BrowseProps = {
-    name: string;
-    description: string;
-    interests: string[];
-    leader?: string;
-    contact?: string;
+type ClubCardProps = {
+    club: ScrapedClub;
+    mode?: "vertical" | "side";
 };
 
-type PopularProps = {
-    club: PopularClubData;
-};
-
-type ClubCardProps = PopularProps | BrowseProps;
-/*
-We should have an image, title, and some other information that would be useful
-to display on the main page. I was thinking we could make some kind of clickable or hover
-popout to show additional information but we need to define those types before I can
-add it into this ClubCard.
-*/
-
-export function ClubCard(props: ClubCardProps) {
-    // Normalize props into a `club` object used by this component
-    let club: PopularClubData;
-
-    if ("club" in props) {
-        club = props.club;
-    } else {
-        // props is BrowseProps
-        club = {
-            name: props.name,
-            description: props.description,
-            tags: props.interests,
-            leader: props.leader,
-            contactEmail: props.contact,
-        };
-    }
-
-    // Formats attendance rate to percentage
-    const formatAttendanceRate = (rate?: number) => {
-        return rate ? `${(rate * 100).toFixed(1)}%` : null;
+export function ClubCard({ club, mode = "vertical" }: ClubCardProps) {
+    const getStatusColor = (status: string) => {
+        switch (status.toLowerCase()) {
+            case "active":
+                return "bg-green-100 text-green-800";
+            case "inactive":
+                return "bg-red-100 text-red-800";
+            case "pending":
+                return "bg-yellow-100 text-yellow-800";
+            default:
+                return "bg-gray-100 text-gray-800";
+        }
     };
 
-    // Formats meeting frequency to readable
-    const formatMeetingFrequency = (frequency?: number) => {
-        if (!frequency) return null;
-        if (frequency === 1) return "Weekly";
-        if (frequency === 2) return "Bi-weekly";
-        if (frequency === 4) return "Monthly";
-        return `Every ${frequency} weeks`;
-    };
+    const hasImage = Boolean(club.imageUrl);
 
-    // Displays a particular field of info
-    const statField = (
-        key: string | number,
-        fieldTitle: string,
-        value: string | number,
-    ) => {
-        return (
+    /** ─────────────────────────────
+     * Shared subcomponents
+     * ───────────────────────────── */
+    const ClubImage = () =>
+        hasImage ? (
             <div
-                key={String(key)}
-                className="flex justify-between items-center"
+                className={
+                    mode === "side"
+                        ? "relative sm:w-36 sm:h-auto w-full h-32 flex items-center justify-center"
+                        : "relative flex items-center justify-center w-full px-3 pt-3"
+                }
             >
-                <span className="text-gray-600">{fieldTitle}</span>
-                <span className="font-semibold text-gray-900">{value}</span>
+                <div
+                    className={
+                        mode === "side"
+                            ? "relative w-20 h-20 sm:w-24 sm:h-24 rounded-md overflow-hidden"
+                            : "relative w-24 h-24 rounded-md overflow-hidden"
+                    }
+                >
+                    <Image
+                        src={club.imageUrl!}
+                        alt={club.name}
+                        fill
+                        className="object-contain"
+                        sizes="96px"
+                    />
+                </div>
             </div>
+        ) : null;
+
+    const ClubHeader = () => (
+        <CardHeader className="p-0">
+            <div className="flex items-start justify-between gap-2">
+                <CardTitle className="text-lg font-bold text-gray-900 leading-tight flex-1">
+                    {club.name}
+                </CardTitle>
+                <Badge className={getStatusColor(club.status)}>
+                    {club.status}
+                </Badge>
+            </div>
+
+            {club.purposeStatement && (
+                <CardDescription
+                    className={`${mode === "side" ? "line-clamp-2" : "line-clamp-3"} text-sm`}
+                >
+                    {club.purposeStatement}
+                </CardDescription>
+            )}
+        </CardHeader>
+    );
+
+    const ClubTags = () =>
+        club.tags.length > 0 ? (
+            <div className="flex flex-wrap gap-1">
+                {club.tags
+                    .slice(0, mode === "side" ? 3 : 5)
+                    .map((tag, index) => (
+                        <Badge
+                            variant="secondary"
+                            key={index}
+                            className="text-xs"
+                        >
+                            {tag.name}
+                        </Badge>
+                    ))}
+                {club.tags.length > (mode === "side" ? 3 : 5) && (
+                    <Badge variant="outline" className="text-xs">
+                        +{club.tags.length - (mode === "side" ? 3 : 5)}
+                    </Badge>
+                )}
+            </div>
+        ) : null;
+
+    const ClubInfo = () => (
+        <div className="space-y-3 text-sm">
+            {club.meetingTimeAndPlace && (
+                <div className="flex items-start gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <span
+                        className={
+                            mode === "side" ? "line-clamp-1" : "line-clamp-2"
+                        }
+                    >
+                        {club.meetingTimeAndPlace}
+                    </span>
+                </div>
+            )}
+
+            {club.timeOfYearForNewMembership && (
+                <div className="flex items-start gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <span
+                        className={`text-muted-foreground ${
+                            mode === "side" ? "line-clamp-1" : "line-clamp-2"
+                        }`}
+                    >
+                        Recruitment: {club.timeOfYearForNewMembership}
+                    </span>
+                </div>
+            )}
+        </div>
+    );
+
+    const ClubMembership = () =>
+        club.membershipType || club.chargeDues ? (
+            <div className="space-y-2">
+                {club.membershipType && (
+                    <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">
+                            Membership:
+                        </span>
+                        <Badge variant="outline" className="text-xs">
+                            {club.membershipType}
+                        </Badge>
+                    </div>
+                )}
+                {club.chargeDues && (
+                    <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Dues:</span>
+                        <span className="text-amber-600 font-medium">
+                            Required
+                        </span>
+                    </div>
+                )}
+            </div>
+        ) : null;
+
+    const ClubContent = () => (
+        <CardContent className="space-y-4 p-0">
+            <ClubTags />
+            <ClubInfo />
+            <ClubMembership />
+        </CardContent>
+    );
+
+    /** ─────────────────────────────
+     * Layout logic
+     * ───────────────────────────── */
+    if (mode === "side") {
+        return (
+            <Link href={`/clubs/${club.id}`}>
+                <Card className="z-10 h-full gap-0 p-0 group flex flex-col sm:flex-row items-stretch  transition-all duration-200 cursor-pointer overflow-hidden">
+                    <ClubImage />
+                    <div className="flex-1 min-w-0 p-6 space-y-4">
+                        <ClubHeader />
+                        <ClubContent />
+                    </div>
+                </Card>
+            </Link>
         );
-    };
-
-    // inside ClubCard component, after helpers
-    type StatItem = { fieldTitle: string; value: string | number };
-
-    function buildStatList(club: PopularClubData): StatItem[] {
-        const out: StatItem[] = [];
-
-        if (club.memberCount != null)
-            out.push({ fieldTitle: "Members:", value: club.memberCount });
-        const attendance = formatAttendanceRate(club.attendanceRate);
-        if (attendance != null)
-            out.push({ fieldTitle: "Attendance:", value: attendance });
-        if (club.avgAttendance != null)
-            out.push({
-                fieldTitle: "Avg. Turnout:",
-                value: club.avgAttendance,
-            });
-        const meeting = formatMeetingFrequency(club.meetingFrequency);
-        if (meeting != null)
-            out.push({ fieldTitle: "Meetings:", value: meeting });
-
-        return out;
     }
 
-    const statList = buildStatList(club);
+    // Default (vertical)
     return (
-        <Card className="h-full hover:shadow-lg transition-shadow duration-200 cursor-pointer gap-3">
-            <CardHeader>
-                <CardTitle className="text-lg font-bold text-gray-900 leading-tight pb-1 border-b border-gray-300">
-                    {club.name || "Unknown Club Name"}
-                </CardTitle>
-                {club.description && (
-                    <CardDescription className="line-clamp-3">
-                        {club.description}
-                    </CardDescription>
-                )}
-            </CardHeader>
-
-            <CardContent>
-                {/* Tags */}
-                {club.tags && club.tags.length > 0 && (
-                    <div className="mb-3">
-                        {/* Display 3 tags in blue bubbles */}
-                        <div className="flex flex-row flex-wrap gap-1">
-                            {club.tags.map((tag: string, index: number) => (
-                                <Badge variant="secondary" key={index}>
-                                    {tag}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Stats Grid (render only when there's at least one stat) */}
-                {statList.length > 0 && (
-                    <div className="flex-1 space-y-2 text-sm">
-                        {statList.map((item, index) =>
-                            statField(
-                                `stat-${index}`,
-                                item.fieldTitle,
-                                item.value,
-                            ),
-                        )}
-                    </div>
-                )}
-
-                {/* Registration Status Badge */}
-                {club.isOpen !== undefined && (
-                    <div className="mt-3 pt-3 border-t border-gray-300">
-                        <div className="flex justify-center">
-                            <Badge
-                                className={`h-8 text-xs font-medium ${
-                                    club.isOpen
-                                        ? "bg-green-100 text-green-800"
-                                        : "bg-red-100 text-red-800"
-                                }`}
-                            >
-                                {club.isOpen
-                                    ? "✓ Open for Registration"
-                                    : "✗ Registration Closed"}
-                            </Badge>
-                        </div>
-                    </div>
-                )}
-
-                {club.leader && (
-                    <p className="text-sm font-medium">Leader: {club.leader}</p>
-                )}
-                {club.contactEmail && (
-                    <p className="text-sm text-muted-foreground">
-                        Contact:{" "}
-                        <a
-                            href={`mailto:${club.contactEmail}`}
-                            className="underline"
-                        >
-                            {club.contactEmail}
-                        </a>
-                    </p>
-                )}
-            </CardContent>
-        </Card>
+        <Link href={`/clubs/${club.id}`}>
+            <Card className="z-10  transition-shadow duration-200 cursor-pointer overflow-hidden p-0 gap-0 h-full">
+                <ClubImage />
+                <div className="p-4 space-y-4">
+                    <ClubHeader />
+                    <ClubContent />
+                </div>
+            </Card>
+        </Link>
     );
 }
