@@ -5,6 +5,7 @@ import { ClubPreview } from "./club-profile/clubs-service/ClubPreview";
 import { FeaturedClubs, ScrapedClub } from "./discovery/scraped-clubs";
 import { Tag } from "./discovery/tags-service/Tag";
 import { ClubData } from "./club-profile/clubs-service";
+import { Meeting } from "@/app/(attendance)/meetings/[club]/types";
 
 // --- discovery ---
 
@@ -49,14 +50,14 @@ export interface MembershipService {
     getAllMembersFromClub(clubId: string): Promise<Account[]>;
 }
 export interface AttendanceService {
-    getPopularClubs(): Promise<string[]>;
+    getPopularClubs(limit: number): Promise<ScrapedClub[]>;
 }
 export interface MeetingsService {
     getMeetingsForDateRange(
-        clubIds: string[],
+        clubIds: number[],
         start: Date,
         end: Date,
-    ): Promise<Meeting>;
+    ): Promise<Meeting[]>;
 }
 
 // --- account ---
@@ -64,7 +65,3 @@ export interface MeetingsService {
 export interface AccountService {
     getUserForId(userId: string): Promise<Account>;
 }
-
-// temporary types (remove when an actual one is created)
-type Meeting = { _temp: "Meeting" };
-type Member = { _temp: "Member" };
