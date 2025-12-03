@@ -26,7 +26,7 @@ export default function RegisterForm() {
     const router = useRouter();
     const [errors, setErrors] = useState<ClerkAPIError[]>()
 
-    const handleChange = (name: string, value: string | boolean) => {
+    const handleChange = (name: string, value: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
