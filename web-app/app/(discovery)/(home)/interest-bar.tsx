@@ -213,9 +213,6 @@ export function InterestBar({
             {/* Quick select interests */}
             {availableQuickFilters.length > 0 && (
                 <div className="flex flex-wrap gap-2 py-2 border-t pt-3">
-                    <span className="text-sm text-muted-foreground self-center mr-2">
-                        Quick filters:
-                    </span>
                     {availableQuickFilters.map((interest) => (
                         <Badge
                             key={interest}
