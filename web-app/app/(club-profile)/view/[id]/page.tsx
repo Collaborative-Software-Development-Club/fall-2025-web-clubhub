@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,9 +22,13 @@ import {
     CheckCircle2Icon,
     CirclePlus,
     UserCog,
+    Check,
 } from "lucide-react";
 import { ClubData, clubsService } from "@/services/club-profile/clubs-service";
 import Link from "next/link";
+import { membershipService } from "@/services/attendance";
+import { revalidatePath } from "next/cache";
+import { leadershipVerificationService } from "@/services/discovery/leadership-verification-service";
 
 interface ClubProfilePageProps {
     params: Promise<{
@@ -89,6 +93,11 @@ export default async function ClubProfilePage({
         notFound();
     }
 
+    let isMember = false;
+    try {
+        isMember = await membershipService.isMember(clubId);
+    } catch (error) {}
+
     // Generate initials for avatar fallback
     const initials = club.name
         .split(" ")
@@ -96,6 +105,29 @@ export default async function ClubProfilePage({
         .join("")
         .substring(0, 2)
         .toUpperCase();
+
+    const handleJoin = async () => {
+        "use server";
+        try {
+            membershipService.joinClub(clubId);
+            revalidatePath("/view/" + clubId);
+        } catch (error) {
+            redirect("/login");
+        }
+    };
+
+    const handleManage = async () => {
+        "use server";
+        const isLeader =
+            await leadershipVerificationService.isCurrentUserALeaderOfClub(
+                clubId,
+            );
+        if (isLeader) {
+            redirect("/clubs/" + clubId);
+        } else {
+            redirect("/login");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50/50 pb-12">
@@ -147,9 +179,12 @@ export default async function ClubProfilePage({
 
                             {/* Action Buttons */}
                             <div className="flex gap-3">
-                                <Button>
-                                    <CirclePlus />
-                                    Join
+                                <Button
+                                    onClick={handleJoin}
+                                    disabled={isMember}
+                                >
+                                    {isMember ? <Check /> : <CirclePlus />}
+                                    {isMember ? "Joined" : "Join"}
                                 </Button>
                                 {club.url && (
                                     <Button asChild variant="secondary">
@@ -163,7 +198,10 @@ export default async function ClubProfilePage({
                                         </Link>
                                     </Button>
                                 )}
-                                <Button variant="secondary">
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleManage}
+                                >
                                     <UserCog />
                                     Manage
                                 </Button>
