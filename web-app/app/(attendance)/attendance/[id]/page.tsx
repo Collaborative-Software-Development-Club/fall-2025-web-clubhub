@@ -11,9 +11,7 @@ interface AttendancePageProps {
 export default async function AttendancePage({ params }: AttendancePageProps) {
     const { id } = await params;
 
-    // TODO: Use path param when dynamic club url is club id instead of club name
-    // const meetingId = parseInt(id);
-    const meetingId = 1;
+    const meetingId = parseInt(id);
 
     const meeting = await db
         .select()

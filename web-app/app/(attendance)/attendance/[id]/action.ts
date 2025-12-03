@@ -24,7 +24,7 @@ export async function submitAttendanceCode(
     code: number,
     meetingId: number,
     email: string,
-    userId?: number
+    userId?: string
 ) {
     if (parseInt(inputCode) !== code) {
         return { success: false, error: "Invalid code" };
@@ -88,7 +88,7 @@ export async function submitAttendanceStatus(
     status: AttendanceStatus,
     meetingId: number,
     email: string,
-    userId?: number,
+    userId?: string,
 ) {
     if (status === PRESENT) {
         return { success: false, error: "Must use code to submit present status" };

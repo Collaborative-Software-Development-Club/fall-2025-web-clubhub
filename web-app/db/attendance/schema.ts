@@ -30,6 +30,7 @@ export const meetings = pgTable(withPrefix("meeting"), {
     description: text("description"),
 
     date: date("date").notNull(),
+    location: text("location").notNull(),
     start_time: time("start_time", { precision: 0 }).notNull(),
     end_time: time("end_time", { precision: 0 }).notNull(),
 
@@ -39,13 +40,13 @@ export const meetings = pgTable(withPrefix("meeting"), {
 
     // metadata
     created_at: timestamp("created_at").defaultNow().notNull(),
-    created_by_user_id: integer("created_by_user_id").notNull(),
+    created_by_user_id: text("created_by_user_id").notNull(),
 });
 
 export const attendance = pgTable(withPrefix("attendance"), {
     id: serial("id").primaryKey().notNull(),
     email: text("email").notNull(),
-    user_id: integer("user_id"),
+    user_id: text("user_id"),
     meeting_id: integer("meeting_id").notNull(),
     status: attendanceStatusEnum("attendance_status").notNull(),
     timestamp: timestamp("timestamp").defaultNow().notNull(),
@@ -53,7 +54,7 @@ export const attendance = pgTable(withPrefix("attendance"), {
 
 export const roster = pgTable(withPrefix("roster"), {
     id: serial("id").primaryKey().notNull(),
-    user_id: integer("user_id"),
+    user_id: text("user_id"),
     email: text("email").notNull(),
     club_id: integer("club_id").notNull()
 });

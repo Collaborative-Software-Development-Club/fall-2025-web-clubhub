@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { format } from "date-fns";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -10,17 +10,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Trash2, Edit } from "lucide-react";
-
-export type Meeting = {
-    id: number;
-    title: string;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    description?: string;
-    location?: string;
-};
+import { MoreHorizontal, Trash2, Edit, MapPin, Clock } from "lucide-react";
+import { Meeting } from "./types";
 
 type MeetingCardProps = {
     meeting: Meeting;
@@ -33,58 +24,83 @@ export function MeetingCard({
     deleteMeeting,
     editMeeting,
 }: MeetingCardProps) {
-    
+    const formatTime = (time: string) => {
+        const [hours, minutes] = time.split(":");
+        const date = new Date();
+        date.setHours(parseInt(hours), parseInt(minutes));
+        return date.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+    };
+
+    const meetingDate = new Date(meeting.date);
+
     return (
-        <Card key={meeting.id}>
-            <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                    <CardTitle className="pb-2">{meeting.title}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                        {format(meeting.date, "PPP")} &middot;{" "}
-                        {meeting.startTime} - {meeting.endTime}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                        {meeting.description ? ` · ${meeting.description}` : ""}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                        {meeting.location ? ` · ${meeting.location}` : ""}
-                    </p>
+        <Card className="p-4">
+            <div className="flex items-center gap-4">
+                {/* Date block */}
+                <div className="flex-shrink-0 w-14 text-center">
+                    <div className="text-xs font-medium text-muted-foreground uppercase">
+                        {format(meetingDate, "MMM")}
+                    </div>
+                    <div className="text-2xl font-bold leading-none">
+                        {format(meetingDate, "d")}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                        {format(meetingDate, "EEE")}
+                    </div>
                 </div>
-                <div className="flex gap-2">
-                    <Button className="cursor-pointer" variant="link">
+
+                {/* Meeting info */}
+                <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold truncate">{meeting.title}</h3>
+                    {meeting.description && (
+                            <p className="text-sm text-muted-foreground truncate mb-0.5">
+                                {meeting.description}
+                            </p>
+                        )}
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            {formatTime(meeting.start_time)} – {formatTime(meeting.end_time)}
+                        </span>
+                        {meeting.location && (
+                            <span className="flex items-center gap-1 truncate">
+                                <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                                {meeting.location}
+                            </span>
+                        )}
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                    <Button variant="outline" size="sm" asChild>
                         <Link href={`/attendance/${meeting.id}`}>
-                            Take Attendance
+                            Attendance
                         </Link>
                     </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button
-                                className="cursor-pointer"
-                                variant="ghost"
-                                size="icon"
-                            >
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
                                 <MoreHorizontal className="w-4 h-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                                onClick={() => editMeeting(meeting.id)}
-                            >
+                            <DropdownMenuItem onClick={() => editMeeting(meeting.id)}>
                                 <Edit className="w-4 h-4 mr-2" />
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                                onClick={() => deleteMeeting(meeting.id)}
-                            >
+                            <DropdownMenuItem onClick={() => deleteMeeting(meeting.id)}>
                                 <Trash2 className="w-4 h-4 mr-2" />
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-            </CardHeader>
+            </div>
         </Card>
     );
 }
