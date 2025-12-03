@@ -11,16 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Trash2, Edit } from "lucide-react";
-
-export type Meeting = {
-    id: number;
-    title: string;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    description?: string;
-    location?: string;
-};
+import { Meeting } from "./types";
 
 type MeetingCardProps = {
     meeting: Meeting;
@@ -41,7 +32,7 @@ export function MeetingCard({
                     <CardTitle className="pb-2">{meeting.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">
                         {format(meeting.date, "PPP")} &middot;{" "}
-                        {meeting.startTime} - {meeting.endTime}
+                        {meeting.start_time} - {meeting.end_time}
                     </p>
                     <p className="text-sm text-muted-foreground">
                         {meeting.description ? ` · ${meeting.description}` : ""}
