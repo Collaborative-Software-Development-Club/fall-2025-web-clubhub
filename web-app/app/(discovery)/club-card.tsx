@@ -172,7 +172,7 @@ export function ClubCard({ club, mode = "vertical" }: ClubCardProps) {
      * ───────────────────────────── */
     if (mode === "side") {
         return (
-            <Link href={`/clubs/${club.id}`}>
+            <Link href={`/view/${club.id}`}>
                 <Card className="z-10 h-full gap-0 p-0 group flex flex-col sm:flex-row items-stretch  transition-all duration-200 cursor-pointer overflow-hidden">
                     <ClubImage />
                     <div className="flex-1 min-w-0 p-6 space-y-4">

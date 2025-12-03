@@ -4,6 +4,7 @@ import { AnnouncementOverview } from "./club-profile/clubs-service/AnnouncementO
 import { ClubPreview } from "./club-profile/clubs-service/ClubPreview";
 import { FeaturedClubs, ScrapedClub } from "./discovery/scraped-clubs";
 import { Tag } from "./discovery/tags-service/Tag";
+import { ClubData } from "./club-profile/clubs-service";
 
 // --- discovery ---
 
@@ -37,6 +38,7 @@ export interface LeadershipVerificationService {
 export interface ClubsService {
     getClubPreviews(clubIds: string[]): Promise<ClubPreview[]>;
     getClubAnnouncements(clubId: string): Promise<AnnouncementOverview[]>;
+    getClubData(clubId: number): Promise<ClubData>;
 }
 
 // --- attendance ---
