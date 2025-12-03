@@ -300,7 +300,7 @@ export default function RegisterForm() {
 
             {/* Terms Agreement */}
             <div className="flex items-start space-x-2 pt-2">
-                <Checkbox id="terms" className="mt-1" />
+                <Checkbox id="terms" name="terms" className="mt-1" required aria-required="true" />
                 <Label htmlFor="terms" className="text-xs text-gray-600">
                     I agree to the{" "}
                     <Link href="/terms" className="text-blue-600 hover:text-blue-800 hover:underline">
