@@ -26,7 +26,7 @@ export default function RegisterForm() {
     const router = useRouter();
     const [errors, setErrors] = useState<ClerkAPIError[]>()
 
-    const handleChange = (name: string, value: string | boolean) => {
+    const handleChange = (name: string, value: string) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -36,7 +36,8 @@ export default function RegisterForm() {
 
         if (!isLoaded) return <div>Loading...</div>
 
-        try {// Use the code the user provided to attempt verification
+        // Use the code the user provided to attempt verification
+        try {
             const signUpAttempt = await signUp.attemptEmailAddressVerification({code,})
 
             // If verification was completed, set the session to active

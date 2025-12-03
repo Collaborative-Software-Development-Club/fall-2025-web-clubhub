@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/account(.*)'])
 
 export default clerkMiddleware(async (auth, req) => {
-  const { isAuthenticated} = await auth()
+  const { isAuthenticated } = await auth()
   if (!isAuthenticated && isProtectedRoute(req)) {
     return NextResponse.redirect(new URL('/login', req.url))
   }

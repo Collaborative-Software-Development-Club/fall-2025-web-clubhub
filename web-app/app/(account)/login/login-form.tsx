@@ -89,7 +89,7 @@ export default function LoginForm(): React.JSX.Element {
             </Label>
             <Input
                 id="email"
-                type="text"
+                type="email"
                 placeholder="Enter your email"
                 className="w-full"
                 value={email}
