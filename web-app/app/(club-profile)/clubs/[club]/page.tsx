@@ -71,15 +71,17 @@ export default function ClubPage() {
                     <SocialClient
                         clubId={clubId}
                         socialLinks={
-                            (
-                                clubData?.["socialLinks"] as {
-                                    platform: string;
-                                    url: string;
-                                }[]
-                            )?.map((s) => ({
-                                prop1: s.platform,
-                                prop2: s.url,
-                            })) || []
+                            Array.isArray(clubData?.["socialLinks"])
+                                ? (
+                                      clubData["socialLinks"] as {
+                                          platform: string;
+                                          url: string;
+                                      }[]
+                                  ).map((s) => ({
+                                      prop1: s.platform,
+                                      prop2: s.url,
+                                  }))
+                                : []
                         }
                         isLeader={isLeader}
                     />

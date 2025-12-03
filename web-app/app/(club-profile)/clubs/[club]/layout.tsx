@@ -23,21 +23,39 @@ export default async function ClubLeaderLayout({
     const { club } = params;
     const isLeader = true; // TODO: Replace with actual authentication logic
     const clubId = Number(club);
-    const clubData = await scrapedClubsService.getClub(clubId);
-    console.log(children);
+    if (isNaN(clubId)) {
+        throw new Error("Invalid club ID");
+    }
+    let clubData: ScrapedClub | null = null;
+    let error: string | null = null;
+    try {
+        clubData = await scrapedClubsService.getClub(clubId);
+        if (!clubData) {
+            error = "Club not found.";
+        }
+    } catch (e) {
+        error = "Error loading club data.";
+    }
+    if (error) {
+        return (
+            <div className="flex flex-col min-h-screen w-full items-center pt-4 justify-center">
+                <div className="bg-red-100 text-red-700 px-6 py-4 rounded shadow max-w-md text-center">
+                    {error}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col min-h-screen w-full items-center pt-4">
             <header className="w-full max-w-5xl">
                 <div className="flex w-full justify-start p-4 gap-3">
-                        <Image
-                            src={
-                                clubData["imageUrl"] || "/default-club-logo.png"
-                            }
-                            alt="Club Logo"
-                            width={240}
-                            height={240}
-                        />
+                    <Image
+                        src={clubData["imageUrl"] || "/default-club-logo.png"}
+                        alt="Club Logo"
+                        width={240}
+                        height={240}
+                    />
                     <div className="flex flex-col w-full justify-center gap-3">
                         <div className="flex items-center gap-5">
                             <h1 className="text-xl lg:text-3xl font-bold">
