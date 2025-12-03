@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { ClerkAPIError } from "@clerk/types";
-import { isClerkAPIResponseError } from "@clerk/shared";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function RegisterForm() {
@@ -24,7 +24,6 @@ export default function RegisterForm() {
     const [code, setCode] = useState('');
     const { isLoaded, signUp, setActive } = useSignUp();
     const router = useRouter();
-    const [submitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState<ClerkAPIError[]>()
 
     const handleChange = (name: string, value: string | boolean) => {
@@ -80,7 +79,6 @@ export default function RegisterForm() {
             return;
         }
 
-        setSubmitting(true);
         try {
             // Clerk's signUp.create expects arrays for some identifiers (like emailAddress)
             const createParams: any = {
@@ -135,14 +133,13 @@ export default function RegisterForm() {
                     </div>
 
                     <div className="flex items-center space-x-3">
-                        <Button type="submit" className="flex-1" size="lg" disabled={submitting}>
-                            {submitting ? "Verifying…" : "Verify"}
+                        <Button type="submit" className="flex-1" size="lg">
+                            Verify
                         </Button>
                         <Button
                             type="button"
                             variant="ghost"
                             onClick={() => setVerifying(false)}
-                            disabled={submitting}
                         >
                             Edit Info
                         </Button>
