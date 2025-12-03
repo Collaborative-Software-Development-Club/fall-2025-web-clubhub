@@ -36,7 +36,8 @@ export default function RegisterForm() {
 
         if (!isLoaded) return <div>Loading...</div>
 
-        try {// Use the code the user provided to attempt verification
+        // Use the code the user provided to attempt verification
+        try {
             const signUpAttempt = await signUp.attemptEmailAddressVerification({code,})
 
             // If verification was completed, set the session to active
