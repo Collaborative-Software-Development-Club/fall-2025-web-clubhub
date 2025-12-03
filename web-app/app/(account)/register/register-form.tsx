@@ -49,7 +49,7 @@ export default function RegisterForm() {
                     signUpAttempt.createdUserId!,
                     formData.email,
                     formData.firstName,
-                    formData.lastName
+                    formData.lastName,
                 )
                 await setActive({
                 session: signUpAttempt.createdSessionId,
@@ -72,9 +72,9 @@ export default function RegisterForm() {
                 console.error('Sign-up attempt status:', signUpAttempt.status)
             }
         } catch (err: any) {
-        // See https://clerk.com/docs/guides/development/custom-flows/error-handling
-        // for more info on error handling
-        console.error(JSON.stringify(err, null, 2))
+            // See https://clerk.com/docs/guides/development/custom-flows/error-handling
+            // for more info on error handling
+            console.error(JSON.stringify(err, null, 2))
         }
     }
 
