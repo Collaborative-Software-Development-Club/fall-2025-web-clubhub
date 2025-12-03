@@ -1,4 +1,8 @@
-import { AttendanceService, MeetingsService, MembershipService } from "@/services/definition";
+import {
+    AttendanceService,
+    MeetingsService,
+    MembershipService,
+} from "@/services/definition";
 import { db } from "@/db";
 import { meetings, roster } from "@/db/attendance/schema";
 import { Meeting } from "@/app/(attendance)/meetings/[club]/types";
@@ -75,7 +79,11 @@ async function getAllMembersFromClub(clubId: string): Promise<Account[]> {
 
     if (userIds.length === 0 || userIds[0].user_id === null) return [];
 
-    return await Promise.all(userIds.map((row) => actualAccountService.getUserForId(row.user_id!.toString())));
+    return await Promise.all(
+        userIds.map((row) =>
+            actualAccountService.getUserForId(row.user_id!.toString()),
+        ),
+    );
 }
 
 async function getPopularClubs(limit: number): Promise<ScrapedClub[]> {
@@ -96,29 +104,33 @@ async function getPopularClubs(limit: number): Promise<ScrapedClub[]> {
 
     // Fetch club details for each
     return await Promise.all(
-        popularClubIds.map((row) => scrapedClubsService.getClub(row.club_id))
+        popularClubIds.map((row) => scrapedClubsService.getClub(row.club_id)),
     );
 }
 
-async function getMeetingsForDateRange(clubIds: number[], start: Date, end: Date): Promise<Meeting[]> {
+async function getMeetingsForDateRange(
+    clubIds: number[],
+    start: Date,
+    end: Date,
+): Promise<Meeting[]> {
     if (clubIds.length === 0) return [];
 
     const meetingRecords = await db
         .select()
         .from(meetings)
-        .where(and(
-            inArray(meetings.club_id, clubIds),
-            between(meetings.date, format(start, "yyyy-MM-dd"), format(end, "yyyy-MM-dd"))
-        ))
+        .where(
+            and(
+                inArray(meetings.club_id, clubIds),
+                between(
+                    meetings.date,
+                    format(start, "yyyy-MM-dd"),
+                    format(end, "yyyy-MM-dd"),
+                ),
+            ),
+        )
         .orderBy(meetings.date);
 
     return meetingRecords;
-}
-    return await Promise.all(
-        userIds.map((row) =>
-            actualAccountService.getUserForId(row.user_id!.toString()),
-        ),
-    );
 }
 
 async function getUserEmail() {
