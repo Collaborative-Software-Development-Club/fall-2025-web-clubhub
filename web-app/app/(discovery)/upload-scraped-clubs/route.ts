@@ -1,4 +1,4 @@
-import { scrapedClubsUploadService } from "@/services/discovery/scraped-clubs";
+import { scrapedClubsUploadService } from "@/services/discovery/scraped-clubs-upload";
 import { NextResponse } from "next/server";
 
 export async function GET() {
