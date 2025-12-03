@@ -44,7 +44,7 @@ export interface ClubsService {
 // --- attendance ---
 
 export interface MembershipService {
-    addUserToRoster(email: string, clubId: number, userId?: number): Promise<void>;
+    addUserToRoster(email: string, clubId: number, userId?: string): Promise<void>;
     getClubsUserIsAMemberOf(userId: string): Promise<ScrapedClub[]>;
     getAllMembersFromClub(clubId: string): Promise<Account[]>;
 }
