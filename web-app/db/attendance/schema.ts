@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
     date,
     integer,
+    pgEnum,
     pgTable,
     serial,
     text,
@@ -10,6 +11,13 @@ import {
 } from "drizzle-orm/pg-core";
 
 const withPrefix = (name: string) => "attendance_" + name;
+
+export const attendanceStatusEnum = pgEnum("attendance_status", [
+    "present",
+    "absent",
+    "late",
+    "no-response",
+]);
 
 /**
  * Run npx drizzle-kit push to push the schema to the database
@@ -35,10 +43,17 @@ export const meetings = pgTable(withPrefix("meeting"), {
 });
 
 export const attendance = pgTable(withPrefix("attendance"), {
-    attendanceID: serial("attendanceID").notNull(),
-    userEmail: text("userEmail").notNull(),
-    userID: integer("userID"),
-    meetingID: integer("meetingID").notNull(),
-    status: text("status").notNull(),
+    id: serial("id").primaryKey().notNull(),
+    email: text("email").notNull(),
+    user_id: integer("user_id"),
+    meeting_id: integer("meeting_id").notNull(),
+    status: attendanceStatusEnum("attendance_status").notNull(),
     timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const roster = pgTable(withPrefix("attendance"), {
+    id: serial("id").primaryKey().notNull(),
+    user_id: integer("user_id"),
+    email: text("email").notNull(),
+    club_id: integer("club_id").notNull()
 });

@@ -2,7 +2,8 @@
 
 import {
     AttendanceStatus,
-    StudentProps,
+    AttendanceRecord,
+    ATTENDANCE_STATUSES,
 } from "@/app/(attendance)/attendance/[id]/types";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Clock, XCircle, HelpCircle, Flame } from "lucide-react";
@@ -13,13 +14,13 @@ import {
     SelectTrigger,
 } from "@/components/ui/select";
 
-interface StudentRowProps extends StudentProps {
+interface StudentRowProps extends AttendanceRecord {
     onStatusChange?: (newStatus: AttendanceStatus) => void;
 }
 
 export function StudentRow({
     name,
-    dotNumber,
+    email,
     status,
     timestamp,
     streak,
@@ -30,13 +31,13 @@ export function StudentRow({
             <div className="flex items-baseline gap-2 basis-1/2 shrink-0 grow-0">
                 <p className="font-medium">{name}</p>
                 <p className="text-sm text-gray-400">
-                    {dotNumber.toLowerCase()}
+                    {email.toLowerCase()}
                 </p>
             </div>
 
             <div className="flex items-center gap-6 basis-1/2 shrink-0 grow-0 justify-end">
                 <StatusBadge status={status} onStatusChange={onStatusChange} />
-                <p className="text-sm text-gray-600 basis-3/20 shrink-0 grow-0">
+                <p className="text-sm text-gray-600 basis-3/20 shrink-0 grow-0 whitespace-nowrap">
                     {timestamp ?? "--:--"}
                 </p>
                 <Badge
@@ -106,29 +107,27 @@ const StatusBadge = ({
     return (
         <Select value={status} onValueChange={onStatusChange}>
             <SelectTrigger
-                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[100px] hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100`}
-            >
+                className={`${statusConfig.className} basis-3/20 shrink-0 grow-0 min-w-[120px] hover:cursor-pointer [&>svg:last-child]:text-white [&>svg:last-child]:opacity-100 h-auto py-0.5 px-2.5 text-xs font-small`}>
                 {statusConfig.icon}
                 {statusConfig.text}
             </SelectTrigger>
             <SelectContent>
-                {(
-                    Object.entries(statusConfigs) as [
-                        AttendanceStatus,
-                        (typeof statusConfigs)["present"],
-                    ][]
-                ).map(([key, config]) => (
-                    <SelectItem
-                        key={key}
-                        value={key}
-                        className={`${config.className} my-1 cursor-pointer`}
-                    >
-                        <div className="flex items-center gap-2">
-                            {config.icon}
-                            {config.text}
-                        </div>
-                    </SelectItem>
-                ))}
+                {ATTENDANCE_STATUSES.map((key) => {
+                    const config = statusConfigs[key];
+                    return (
+                        <SelectItem
+                            key={key}
+                            value={key}
+                            className={`my-1 cursor-pointer ${config.className.replace('hover:', 'focus:')}
+                                focus:brightness-90 hover:brightness-110 focus:text-white`}
+                        >
+                            <div className="flex items-center gap-2">
+                                {config.icon}
+                                {config.text}
+                            </div>
+                        </SelectItem>
+                    );
+                })}
             </SelectContent>
         </Select>
     );
