@@ -1,26 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { InterestSelection } from "../interest-selection/interest-selection";
+import { InterestSelection } from "./interest-selection";
 import { ForYouPageComponent } from "./for-you-page";
+import { useSelectedInterests } from "./use-selected-interests";
 
 export default function ForYouPage() {
-  const [needsInterests, setNeedsInterests] = useState<boolean | null>(null);
+    const { interests, setInterests } = useSelectedInterests();
+    const needsInterests = interests ? interests.length > 0 : undefined;
+    const [selecting, setSelecting] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("selectedInterests");
+    useEffect(() => {
+        if (needsInterests == false) {
+            setSelecting(true);
+        }
+    }, [needsInterests]);
 
-    if(stored === null || JSON.parse(stored).length < 3) {
-      setNeedsInterests(true);
-    } else {
-      setNeedsInterests(false);
-    }
+    if (interests === null) return null; // loading until localStorage is read
 
-  }, []);
-
-  if (needsInterests === null) return null; // loading until localStorage is read
-
-  console.log("Needs interests:", needsInterests);
-
-  return needsInterests ? <InterestSelection/> : <ForYouPageComponent />;
+    return selecting ? (
+        <InterestSelection
+            setDoneSelecting={() => setSelecting(false)}
+            interests={interests}
+            setInterests={setInterests}
+        />
+    ) : (
+        <ForYouPageComponent />
+    );
 }
